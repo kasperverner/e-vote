@@ -1,0 +1,4 @@
+The pages folder is used by the router to load the feature modules.
+The pages module is a module that contains the components, services, and other code that is related to a specific feature.
+The pages module is lazy loaded by the router when the user navigates to the feature.
+The pages module is also used to organize the code and to make the code easier to maintain.
