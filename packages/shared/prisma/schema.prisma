@@ -144,7 +144,7 @@ model Vote {
   id                String   @id @default(uuid())
   election          Election @relation(fields: [election_id], references: [id])
   election_id       String
-  voted_at          DateTime
+  voted_at          DateTime @default(now())
   ballot_proof      String
   proposition_proof String
   validation_proof  String
