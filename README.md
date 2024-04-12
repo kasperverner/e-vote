@@ -188,14 +188,13 @@ propositions
 
 ## Pages
 
-/
-/organizations                                <-- list of organizations user is part of
-/organizations/:slug                          <-- organization details and management
-/organizations/:slug/elections                <-- list of elections for organization
-/organizations/:slug/elections/:slug          <-- election details and management
-/organizations/:slug/elections/new            <-- create election
-/organizations/:slug/elections/:slug/vote     <-- vote in election
-/organizations/:slug/elections/:slug/results  <-- election results
-
-/organizations/:slug/users                    <-- list of users for organization
-/organizations/:slug/users/invite             <-- invite user to organization
+- /
+- /organizations                                <-- list of organizations user is part of
+- /organizations/:slug                          <-- organization details and management
+- /organizations/:slug/elections                <-- list of elections for organization
+- /organizations/:slug/elections/:slug          <-- election details and management
+- /organizations/:slug/elections/new            <-- create election
+- /organizations/:slug/elections/:slug/vote     <-- vote in election
+- /organizations/:slug/elections/:slug/results  <-- election results
+- /organizations/:slug/users                    <-- list of users for organization
+- /organizations/:slug/users/invite             <-- invite user to organization
