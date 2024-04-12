@@ -153,3 +153,49 @@ git push origin feature/<feature-name>
 Open a pull request on GitHub and describe the changes made in the pull request.
 
 Assign a reviewer to the pull request for approval to have your changes merged into the main branch.
+
+## Features
+
+organizations
+
+- create organization
+- update organization if organisation admin
+- invite users
+- modify users roles
+- get list of organisations user is part of
+
+users
+
+- create new user account
+- accept/decline invitation
+
+elections
+
+- create election if organisation admin
+- update election if not started and organisation admin
+- see elections for organisations user is part of
+- vote if elegible
+- get results
+
+- add question to election if not started and organisation admin
+- allow each questions to have multiple propositions to allow the system to be used for surveys
+
+propositions
+
+- add proposition to election if not started and organisation admin
+- update proposition to election if not started and organisation admin
+- delete proposition to election if not started and organisation admin
+
+## Pages
+
+/
+/organizations                                <-- list of organizations user is part of
+/organizations/:slug                          <-- organization details and management
+/organizations/:slug/elections                <-- list of elections for organization
+/organizations/:slug/elections/:slug          <-- election details and management
+/organizations/:slug/elections/new            <-- create election
+/organizations/:slug/elections/:slug/vote     <-- vote in election
+/organizations/:slug/elections/:slug/results  <-- election results
+
+/organizations/:slug/users                    <-- list of users for organization
+/organizations/:slug/users/invite             <-- invite user to organization
