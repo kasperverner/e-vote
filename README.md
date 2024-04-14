@@ -191,8 +191,8 @@ propositions
 - [x] /
 - [x] /organizations                                <-- list of organizations user is part of
 - [x] /organizations/:slug                          <-- organization details and management
-- [ ] /organizations/:slug/elections                <-- list of elections for organization
-- [ ] /organizations/:slug/elections/:slug          <-- election details and management
+- [x] /organizations/:slug/elections                <-- list of elections for organization
+- [x] /organizations/:slug/elections/:slug          <-- election details and management
 - [ ] /organizations/:slug/elections/new            <-- create election
 - [ ] /organizations/:slug/elections/:slug/vote     <-- vote in election
 - [ ] /organizations/:slug/elections/:slug/results  <-- election results

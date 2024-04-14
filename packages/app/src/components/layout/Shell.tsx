@@ -1,7 +1,6 @@
 import Container from "./Container";
 import { Outlet } from "@tanstack/react-router";
 import Navbar from "./Navbar";
-import { SignInButton, SignOutButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 // import Sidebar from "./Sidebar";
 // import Footer from "./Footer";
 
@@ -15,13 +14,6 @@ const Shell = () => (
       <section className="py-4">
         {/* The Outlet is where the router will place the page content */}
         <Outlet />
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <SignOutButton />
-          <UserButton />
-        </SignedIn>
       </section>
 
       {/* <Footer /> */}
