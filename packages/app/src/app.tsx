@@ -1,9 +1,14 @@
-function App() {
-  return (
-    <>
-      <h1>e-vote</h1>
-    </>
-  );
-}
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { RouterProvider } from "@tanstack/react-router";
+import RootRouter from "./routes/RootRouter";
 
-export default App
+const queryClient = new QueryClient();
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={RootRouter} />
+    </QueryClientProvider>
+  );
+};
+
+export default App;
