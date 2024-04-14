@@ -1,1 +1,0 @@
-The utilities folder is used for storing shared utilities and helper functions like authentication and api client.

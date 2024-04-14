@@ -1,2 +1,0 @@
-The components folder is used for storing the non feature components of the application like buttons and inputs.
-The components are the building blocks of the application.
