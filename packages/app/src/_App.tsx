@@ -3,6 +3,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import RootRouter from "./routes/RootRouter";
 import { ClerkProvider } from "@clerk/clerk-react";
 
+// This is the publishable key thats used to authenticate with Clerk
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
