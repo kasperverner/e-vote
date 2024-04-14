@@ -1,9 +1,15 @@
 import { Outlet, createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../RootRouter";
-import OrganizationsRoute from "./OrganizationListRoute";
+import OrganizationCreateRoute from "./OrganizationCreateRoute";
 import OrganizationDetailsRoute from "./OrganizationDetailsRoute";
-import OrganizationElectionListRoute from "./OrganizationElectionListRoute";
+import OrganizationElectionCreateRoute from "./OrganizationElectionCreateRoute";
 import OrganizationElectionDetailsRoute from "./OrganizationElectionDetailsRoute";
+import OrganizationElectionListRoute from "./OrganizationElectionListRoute";
+import OrganizationElectionResultsRoute from "./OrganizationElectionResultsRoute";
+import OrganizationElectionVoteRoute from "./OrganizationElectionVoteRoute";
+import OrganizationListRoute from "./OrganizationListRoute";
+import OrganizationMemberInviteRoute from "./OrganizationMemberInviteRoute";
+import OrganizationMemberListRoute from "./OrganizationMemberListRoute";
 
 const OrganizationIndexRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -19,10 +25,16 @@ function OrganizationIndexPage() {
 }
 
 OrganizationIndexRoute.addChildren([
-  OrganizationsRoute,
+  OrganizationCreateRoute,
   OrganizationDetailsRoute,
-  OrganizationElectionListRoute,
+  OrganizationElectionCreateRoute,
   OrganizationElectionDetailsRoute,
+  OrganizationElectionListRoute,
+  OrganizationElectionResultsRoute,
+  OrganizationElectionVoteRoute,
+  OrganizationListRoute,
+  OrganizationMemberInviteRoute,
+  OrganizationMemberListRoute,
 ]);
 
 export default OrganizationIndexRoute;

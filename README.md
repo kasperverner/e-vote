@@ -140,6 +140,17 @@ git add .
 git commit -m "feature: <feature-name> added"
 ```
 
+### Merge the main branch
+
+Before you push your changes, you need to merge the main branch into your branch to avoid conflicts.
+
+```bash
+git switch main
+git pull
+git switch feature/<feature-name>
+git merge main
+```
+
 ### Push your changes
 
 Push your changes to the remote repository with the following command:
@@ -189,12 +200,12 @@ propositions
 ## Pages
 
 - [x] /
-- [x] /organizations                                <-- list of organizations user is part of
+- [x] /organizations                                <-- list of organizations user is member of
 - [x] /organizations/:slug                          <-- organization details and management
 - [x] /organizations/:slug/elections                <-- list of elections for organization
 - [x] /organizations/:slug/elections/:slug          <-- election details and management
-- [ ] /organizations/:slug/elections/new            <-- create election
-- [ ] /organizations/:slug/elections/:slug/vote     <-- vote in election
-- [ ] /organizations/:slug/elections/:slug/results  <-- election results
-- [ ] /organizations/:slug/users                    <-- list of users for organization
-- [ ] /organizations/:slug/users/invite             <-- invite user to organization
+- [x] /organizations/:slug/elections/new            <-- create election
+- [x] /organizations/:slug/elections/:slug/vote     <-- vote in election
+- [x] /organizations/:slug/elections/:slug/results  <-- election results
+- [x] /organizations/:slug/members                  <-- list of members for organization
+- [x] /organizations/:slug/members/invite           <-- invite members to organization
