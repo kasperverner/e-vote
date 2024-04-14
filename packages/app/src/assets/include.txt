@@ -1,1 +1,0 @@
-The assets folder is used for images etc, and is copied to the output folder as is.
