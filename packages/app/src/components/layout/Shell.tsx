@@ -1,11 +1,13 @@
 import Container from "./Container";
+import Footer from "./Footer";
 import { Outlet } from "@tanstack/react-router";
 import Navbar from "./Navbar";
 // import Sidebar from "./Sidebar";
 // import Footer from "./Footer";
 
 const Shell = () => (
-  <div className="bg-slate-100 min-h-screen">
+  <div className="bg-slate-100 min-h-screen flex flex-col justify-between">
+    <div>
     <Navbar />
     <Container>
       {/* Note sure if Sidebar and Footer is needed, but I've added them just in case */}
@@ -15,9 +17,12 @@ const Shell = () => (
         {/* The Outlet is where the router will place the page content */}
         <Outlet />
       </section>
+      
 
       {/* <Footer /> */}
     </Container>
+    </div>
+    <Footer/>
   </div>
 );
 
