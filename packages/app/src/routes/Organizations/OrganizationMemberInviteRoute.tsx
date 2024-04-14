@@ -8,7 +8,6 @@ const OrganizationMemberInviteRoute = createRoute({
 });
 
 function OrganizationMemberInvitePage() {
-  const { organization_slug } = OrganizationMemberInviteRoute.useParams();
 
   return (
     <div className="">

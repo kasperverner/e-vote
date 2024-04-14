@@ -3,13 +3,11 @@ import OrganizationIndexRoute from "./OrganizationIndexRoute";
 
 const OrganizationMemberListRoute = createRoute({
   getParentRoute: () => OrganizationIndexRoute,
-  path: "$organization_slug/members",
+  path: "$organization_slug/members/invite",
   component: OrganizationMemberListPage,
 });
 
 function OrganizationMemberListPage() {
-  const { organization_slug } = OrganizationMemberListRoute.useParams();
-
   return (
     <div className="">
       <h3>Steffiboys side!</h3>
