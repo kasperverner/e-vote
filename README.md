@@ -140,6 +140,17 @@ git add .
 git commit -m "feature: <feature-name> added"
 ```
 
+### Merge the main branch
+
+Before you push your changes, you need to merge the main branch into your branch to avoid conflicts.
+
+```bash
+git switch main
+git pull
+git switch feature/<feature-name>
+git merge main
+```
+
 ### Push your changes
 
 Push your changes to the remote repository with the following command:
