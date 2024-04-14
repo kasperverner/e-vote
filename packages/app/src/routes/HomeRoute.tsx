@@ -10,7 +10,7 @@ const HomeRoute = createRoute({
 function HomePage() {
   return (
     <div className="">
-      <h3>HomePage</h3>
+      <h3>HomePage bla bla bla</h3>
     </div>
   );
 }

@@ -1,4 +1,10 @@
 import { Link } from "@tanstack/react-router";
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/clerk-react";
 import Container from "./Container";
 
 const Navbar = () => {
@@ -28,6 +34,12 @@ const Navbar = () => {
             <Link to="/not-found-page" className="hover:underline">
               404 Page
             </Link>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
         </div>
       </Container>

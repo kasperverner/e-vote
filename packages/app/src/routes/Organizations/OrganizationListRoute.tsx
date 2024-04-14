@@ -8,10 +8,11 @@ const OrganizationListRoute = createRoute({
 });
 
 function OrganizationListPage() {
-  // add auth check here and redirect to / if not authenticated
   return (
     <div className="">
       <h3>OrganizationListPage</h3>
+
+
     </div>
   );
 }

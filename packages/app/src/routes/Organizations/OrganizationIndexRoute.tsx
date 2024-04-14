@@ -2,6 +2,8 @@ import { Outlet, createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../RootRouter";
 import OrganizationsRoute from "./OrganizationListRoute";
 import OrganizationDetailsRoute from "./OrganizationDetailsRoute";
+import OrganizationElectionListRoute from "./OrganizationElectionListRoute";
+import OrganizationElectionDetailsRoute from "./OrganizationElectionDetailsRoute";
 
 const OrganizationIndexRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -19,6 +21,8 @@ function OrganizationIndexPage() {
 OrganizationIndexRoute.addChildren([
   OrganizationsRoute,
   OrganizationDetailsRoute,
+  OrganizationElectionListRoute,
+  OrganizationElectionDetailsRoute,
 ]);
 
 export default OrganizationIndexRoute;
