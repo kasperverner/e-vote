@@ -193,9 +193,9 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 ### propositions
 
-- add proposition to election if not started and organisation admin
-- update proposition to election if not started and organisation admin
-- delete proposition to election if not started and organisation admin
+- [ ] add proposition to election if not started and organisation admin
+- [ ] update proposition to election if not started and organisation admin
+- [ ] delete proposition to election if not started and organisation admin
 
 ## Pages
 
