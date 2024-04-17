@@ -167,31 +167,31 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 ## Features
 
-organizations
+### organizations
 
-- create organization
-- update organization if organisation admin
-- invite users
-- modify users roles
-- get list of organisations user is part of
+- [ ] create organization
+- [ ] update organization if organisation admin
+- [ ] invite users
+- [ ] modify users roles
+- [ ] get list of organisations user is part of
 
-users
+### users
 
-- create new user account
-- accept/decline invitation
+- [ ] create new user account
+- [ ] accept/decline invitation
 
-elections
+### elections
 
-- create election if organisation admin
-- update election if not started and organisation admin
-- see elections for organisations user is part of
-- vote if elegible
-- get results
+- [ ] create election if organisation admin
+- [ ] update election if not started and organisation admin
+- [ ] see elections for organisations user is part of
+- [ ] vote if elegible
+- [ ] get results
 
-- add question to election if not started and organisation admin
-- allow each questions to have multiple propositions to allow the system to be used for surveys
+- [ ] add question to election if not started and organisation admin
+- [ ] allow each questions to have multiple propositions to allow the system to be used for surveys
 
-propositions
+### propositions
 
 - add proposition to election if not started and organisation admin
 - update proposition to election if not started and organisation admin
