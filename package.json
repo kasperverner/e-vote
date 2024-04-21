@@ -9,7 +9,8 @@
       "./packages/app",
       "./packages/backend/api",
       "./packages/backend/ballot-service",
-      "./packages/backend/proposition-service"
+      "./packages/backend/proposition-service",
+      "./packages/backend/validation-service"
     ]
   },
   "scripts": {

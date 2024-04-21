@@ -1,5 +1,8 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
+import { generateBallotProof } from "../utilities/ballotClient";
+import { generatePropositionProof } from "../utilities/propositionClient";
+import { generateValidationProof } from "../utilities/validationClient";
 
 /**
  * Get all elections of the team
@@ -57,6 +60,7 @@ export const getElection: RequestHandler = async (req, res) => {
  */
 export const voteInElection: RequestHandler = async (req, res) => {
   const { election_slug, team_id, user_id } = req.params;
+  const { proposition_id } = req.body;
 
   try {
     // check if the election is open
@@ -89,14 +93,9 @@ export const voteInElection: RequestHandler = async (req, res) => {
       },
     });
 
-    // TODO: get the ballot proof from the ballot-service
-    const ballotProof = "proof of ballot";
-
-    // TODO: get the proposition proof from the proposition-service
-    const propositionProof = "proof of proposition";
-
-    // TODO: get the validation proof from the validation-service
-    const validationProof = "proof of validation";
+    const ballotProof = await generateBallotProof(ballot.id);
+    const propositionProof = await generatePropositionProof(proposition_id);
+    const validationProof = await generateValidationProof(ballotProof, propositionProof);
 
     const vote = await db.votes.create({
       data: {

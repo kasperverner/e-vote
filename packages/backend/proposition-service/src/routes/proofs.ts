@@ -4,13 +4,13 @@ import hasher from "../utilities/hasher";
 const router = express.Router();
 
 /**
- * GET /proofs/:ballot_id
- * generate a ballot proof for a vote
+ * GET /proofs/:proposition_id
+ * generate a proposition proof for a vote
  */
-router.get("/:ballot_id", async (req, res) => {
+router.get("/:proposition_id", async (req, res) => {
   try {
-    const { ballot_id } = req.params;
-    const proof = hasher(ballot_id, process.env.SECRET as string);
+    const { proposition_id } = req.params;
+    const proof = hasher(proposition_id, process.env.SECRET as string);
 
     return res.status(200).json(proof);
   } catch (error) {
