@@ -8,7 +8,7 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
     // Extract the token from the Authorization header
     const token = req.headers.authorization?.split(" ")[1] as string;
 
-    // Verify the authentication token
+    // Verify the authentication token using jsonwebtoken
     const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY as string, {
       algorithms: ["RS256"],
       issuer: process.env.JWT_ISSUER,
@@ -22,6 +22,7 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
       email: payload.email as string,
     };
 
+    // Continue to the next RequestHandler
     return next();
   } catch (error) {
     console.error("error", error);
@@ -45,11 +46,13 @@ export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
       },
     });
 
+    // Add the team_id to the request parameters
     req.params = {
       ...req.params,
       team_id: team.id,
     };
 
+    // Continue to the next RequestHandler
     return next();
   } catch (error) {
     return res.status(403).json({ message: "Forbidden" });
@@ -73,11 +76,13 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
       },
     });
 
+    // Add the team_id to the request parameters
     req.params = {
       ...req.params,
       team_id: team.id,
     };
 
+    // Continue to the next RequestHandler
     return next();
   } catch (error) {
     return res.status(403).json({ message: "Forbidden" });
@@ -89,22 +94,21 @@ export const isEligibleToVote: RequestHandler = async (req, res, next) => {
     const { user_id, election_slug } = req.params;
 
     // Check if the user has already voted
-    const hasVoted = await db.elections.findUnique({
+    const ballot = await db.ballots.findFirst({
       where: {
-        slug: election_slug,
-        ballots: {
-          some: {
-            user_id,
-            is_used: true,
-          },
+        user_id,
+        is_used: true,
+        election: {
+          slug: election_slug,
         },
       },
     });
 
     // If the user has already voted, return a 403 Forbidden response
-    if (hasVoted)
+    if (ballot)
       return res.status(403).json({ message: "User has already voted" });
 
+    // Continue to the next RequestHandler
     return next();
   } catch (error) {
     return res.status(403).json({ message: "Forbidden" });
@@ -138,11 +142,13 @@ export const isEligibleToEditElection: RequestHandler = async (
       },
     });
 
+    // Add the election_id to the request parameters
     req.params = {
       ...req.params,
       election_id: election.id,
     };
 
+    // Continue to the next RequestHandler
     return next();
   } catch (error) {
     return res.status(403).json({ message: "Forbidden" });
