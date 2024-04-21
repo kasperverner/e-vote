@@ -5,31 +5,58 @@ import { acceptInvitation, declineInvitation, deleteInvitation, editInvitation, 
 const router = express.Router();
 router.use(isAuthorized);
 
-// list members of the team if the user is a member of the team
+/**
+ * GET /teams/:team_id/members
+ * get all members of the team if the user is a member of the team
+ */
 router.get("/", isMemberOfTeam, getTeamMembers);
 
-// edit member role if the user is an admin of the team
+/**
+ * PUT /teams/:team_id/members/:member_id
+ * edit member role if the user is an admin of the team
+ */
 router.put("/:member_id", isAdminOfTeam, editMemberRole);
 
-// remove member from team if the user is an admin of the team
+/**
+ * DELETE /teams/:team_id/members/:member_id
+ * remove member from team if the user is an admin of the team
+ */
 router.delete("/:member_id", isAdminOfTeam, removeMember);
 
-// list invitations of the team if the user is an admin of the team
+/**
+ * GET /teams/:team_id/invitations
+ * list invitations of the team if the user is an admin of the team
+ */
 router.get("/invitations", isAdminOfTeam, getInvitations);
 
-// invite members to the team if the user is an admin of the team
+/**
+ * POST /teams/:team_id/invitations
+ * invite members to the team if the user is an admin of the team
+ */
 router.post("/invitations", isAdminOfTeam, inviteMembers);
 
-// edit a pending invitation if the user is an admin of the team
+/**
+ * PUT /teams/:team_id/invitations/:invitation_id
+ * edit pending invitation if the user is an admin of the team
+ */
 router.put("/invitations/:invitation_id", isAdminOfTeam, editInvitation);
 
-// delete a pending invitation if the user is an admin of the team
+/**
+ * DELETE /teams/:team_id/invitations/:invitation_id
+ * delete pending invitation if the user is an admin of the team
+ */
 router.delete("/invitations/:invitation_id", isAdminOfTeam, deleteInvitation);
 
-// accept pending invitation
+/**
+ * PUT /teams/:team_id/invitations/:invitation_id/accept
+ * accept pending invitation if the user is an admin of the team
+ */
 router.put("/invitations/:invitation_id/accept", isAdminOfTeam, acceptInvitation);
 
-// decline pending invitation
+/**
+ * PUT /teams/:team_id/invitations/:invitation_id/decline
+ * decline pending invitation if the user is an admin of the team
+ */
 router.put("/invitations/:invitation_id/decline", isAdminOfTeam, declineInvitation);
 
 export default router;

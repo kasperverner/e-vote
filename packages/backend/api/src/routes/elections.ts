@@ -6,25 +6,41 @@ import { createElection, editElection, getElection, getElectionResults, getElect
 const router = express.Router();
 router.use(isAuthorized);
 
-// get all elections of the team
+/**
+ * GET /teams/:team_id/elections
+ * get all elections of the team if the user is a member of the team
+ */
 router.get("/", isMemberOfTeam, getElections);
 
-// get election by id if the user is a member of the team
+/**
+ * GET /teams/:team_id/elections/:election_id
+ * get election by id if the user is a member of the team
+ */
 router.get("/:election_id", isMemberOfTeam, getElection);
 
-// vote in an election if the user is elegible to vote
+/**
+ * POST /teams/:team_id/elections/:election_id/vote
+ * vote in an election if the user is elegible to vote
+ */
 router.post("/:election_id/vote", isMemberOfTeam, isEligibleToVote, voteInElection);
 
-// get election results by id
+
+/**
+ * GET /teams/:team_id/elections/:election_id/results
+ * get election results if the user is a member of the team
+ */
 router.get("/:election_id/results", isMemberOfTeam, getElectionResults);
 
-// create a new election
+/**
+ * POST /teams/:team_id/elections
+ * create a new election if the user is an admin of the team
+ */
 router.post("/", isAdminOfTeam, createElection);
 
-// edit a pending election
+/**
+ * PUT /teams/:team_id/elections/:election_id
+ * edit an election if the user is an admin of the team
+ */
 router.put("/:election_id", isAdminOfTeam, isEligibleToEditElection, editElection);
-
-
-
 
 export default router;

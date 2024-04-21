@@ -1,6 +1,13 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
 
+/**
+ * Get the authenticated user
+ * @param user_id: string
+ * @param name: string
+ * @param email: string
+ * @returns user: User
+ */
 export const getAuthenticatedUser: RequestHandler = async (req, res) => {
   const { user_id, name, email } = req.params;
 
