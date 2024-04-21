@@ -1,7 +1,6 @@
 import express from "express";
 import { isAdminOfTeam, isAuthorized, isMemberOfTeam } from "../services/middleware";
 import { acceptInvitation, declineInvitation, deleteInvitation, editInvitation, editMemberRole, getInvitations, getTeamMembers, inviteMembers, removeMember } from "../services/members";
-import { get } from "http";
 
 const router = express.Router();
 router.use(isAuthorized);

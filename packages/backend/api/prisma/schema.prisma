@@ -14,6 +14,7 @@ model Elections {
   name         String
   slug         String         @unique
   description  String?
+  created_at   DateTime       @default(now())
   start_at     DateTime
   end_at       DateTime?
   propositions Propositions[]

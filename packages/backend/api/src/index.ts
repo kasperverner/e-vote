@@ -4,6 +4,7 @@ import cors from "cors";
 import teamsRoutes from "./routes/teams";
 import usersRoutes from "./routes/users";
 import membersRoutes from "./routes/members";
+import electionsRoutes from "./routes/elections";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("users", usersRoutes);
 app.use("teams", teamsRoutes);
 app.use("teams/:slug/members", membersRoutes);
+app.use("teams/:slug/elections", electionsRoutes);
 
 app.listen(PORT, async () => {
   console.log(`Gateway API started on http://localhost:${PORT}`);
