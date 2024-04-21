@@ -188,12 +188,6 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 - [x] vote if elegible
 - [x] get results
 
-### propositions
-
-- [ ] add proposition to election if not started and team admin
-- [ ] update proposition to election if not started and team admin
-- [ ] delete proposition to election if not started and team admin
-
 ## Pages
 
 - [x] /
