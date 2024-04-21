@@ -182,11 +182,11 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 ### elections
 
-- [ ] create election if team admin
-- [ ] update election if not started and team admin
-- [ ] see elections for team user is part of
-- [ ] vote if elegible
-- [ ] get results 
+- [x] create election if team admin
+- [x] update election if not started and team admin
+- [x] see elections for team user is part of
+- [x] vote if elegible
+- [x] get results
 
 ### propositions
 

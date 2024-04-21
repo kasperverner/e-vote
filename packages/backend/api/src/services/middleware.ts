@@ -86,12 +86,12 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
 
 export const isEligibleToVote: RequestHandler = async (req, res, next) => {
   try {
-    const { user_id, slug } = req.params;
+    const { user_id, election_slug } = req.params;
 
     // Check if the user has already voted
-    const hasVotes = await db.elections.findUnique({
+    const hasVoted = await db.elections.findUnique({
       where: {
-        slug,
+        slug: election_slug,
         ballots: {
           some: {
             user_id,
@@ -102,7 +102,7 @@ export const isEligibleToVote: RequestHandler = async (req, res, next) => {
     });
 
     // If the user has already voted, return a 403 Forbidden response
-    if (hasVotes)
+    if (hasVoted)
       return res.status(403).json({ message: "User has already voted" });
 
     return next();
@@ -117,13 +117,13 @@ export const isEligibleToEditElection: RequestHandler = async (
   next
 ) => {
   try {
-    const { user_id, slug } = req.params;
+    const { user_id, election_slug } = req.params;
 
     // Check if the user is an admin of the team that the election belongs to
     // and if the election has not started yet
-    await db.elections.findFirstOrThrow({
+    var election = await db.elections.findFirstOrThrow({
       where: {
-        slug,
+        slug: election_slug,
         team: {
           members: {
             some: {
@@ -137,6 +137,11 @@ export const isEligibleToEditElection: RequestHandler = async (
         },
       },
     });
+
+    req.params = {
+      ...req.params,
+      election_id: election.id,
+    };
 
     return next();
   } catch (error) {
