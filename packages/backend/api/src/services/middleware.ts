@@ -12,6 +12,7 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY as string, {
       algorithms: ["RS256"],
       issuer: process.env.JWT_ISSUER,
+      ignoreExpiration: true
     }) as JwtPayload;
 
     // Add the user_id, name, and email to the request parameters
