@@ -39,11 +39,11 @@ export const getElections: RequestHandler = async (req, res) => {
  * @returns election: Election
  */
 export const getElection: RequestHandler = async (req, res) => {
-  const { election_slug, team_id } = req.params;
+  const { election_id, team_id } = req.params;
 
   const election = await db.elections.findUnique({
     where: {
-      slug: election_slug,
+      id: election_id,
       team_id,
     },
   });
@@ -59,28 +59,38 @@ export const getElection: RequestHandler = async (req, res) => {
  * @returns ballot: Ballot
  */
 export const voteInElection: RequestHandler = async (req, res) => {
-  const { election_slug, team_id, user_id } = req.params;
+  const { election_id, team_id, user_id } = req.params;
   const { proposition_id } = req.body;
 
   try {
     // check if the election is open
     const election = await db.elections.findUnique({
       where: {
-        slug: election_slug,
+        id: election_id,
         team_id,
       },
     });
 
     if (!election) {
-      return res.status(404).json({ message: `Election with slug ${election_slug} not found` });
+      return res
+        .status(404)
+        .json({ message: `Election with ID ${election_id} not found` });
     }
 
     if (election.start_at > new Date()) {
-      return res.status(400).json({ message: `Election with slug ${election_slug} has not started yet` });
+      return res
+        .status(400)
+        .json({
+          message: `Election with ID ${election_id} has not started yet`,
+        });
     }
 
     if (election.end_at && election.end_at < new Date()) {
-      return res.status(400).json({ message: `Election with slug ${election_slug} has already ended` });
+      return res
+        .status(400)
+        .json({
+          message: `Election with ID ${election_id} has already ended`,
+        });
     }
 
     // Add the ballot
@@ -119,17 +129,19 @@ export const voteInElection: RequestHandler = async (req, res) => {
  * @returns election: Election
  */
 export const getElectionResults: RequestHandler = async (req, res) => {
-  const { election_slug, team_id } = req.params;
+  const { election_id, team_id } = req.params;
 
   const election = await db.elections.findUnique({
     where: {
-      slug: election_slug,
+      id: election_id,
       team_id,
     },
   });
 
   if (!election) {
-    return res.status(404).json({ message: `Election with slug ${election_slug} not found` });
+    return res
+      .status(404)
+      .json({ message: `Election with ID ${election_id} not found` });
   }
 
   // TODO: validate the votes
@@ -156,7 +168,6 @@ export const createElection: RequestHandler = async (req, res) => {
     data: {
       team_id,
       name,
-      slug: name.toLowerCase().replace(" ", "-"),
       description,
       start_at,
       end_at,
@@ -181,22 +192,26 @@ export const createElection: RequestHandler = async (req, res) => {
  * @returns 204
  */
 export const editElection: RequestHandler = async (req, res) => {
-  const { election_slug, team_id } = req.params;
+  const { election_id, team_id } = req.params;
   const { name, description, start_at, end_at, propositions } = req.body;
 
   const election = await db.elections.findUnique({
     where: {
-      slug: election_slug,
+      id: election_id,
       team_id,
     },
   });
 
   if (!election) {
-    return res.status(404).json({ message: `Election with slug ${election_slug} not found` });
+    return res
+      .status(404)
+      .json({ message: `Election with ID ${election_id} not found` });
   }
 
   if (election.start_at < new Date()) {
-    return res.status(400).json({ message: `Election with slug ${election_slug} has already started` });
+    return res
+      .status(400)
+      .json({ message: `Election with ID ${election_id} has already started` });
   }
 
   await db.elections.update({

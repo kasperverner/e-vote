@@ -40,7 +40,7 @@ export const editMemberRole: RequestHandler = async (req, res) => {
     const { user_id, member_id } = req.params;
     const { isAdmin } = req.body;
 
-    // Update the team member role
+    // Update the team member role if the user is not the member
     const teamMember = await db.teamMembers.update({
       where: {
         id: member_id,
@@ -141,6 +141,8 @@ export const inviteMembers: RequestHandler = async (req, res) => {
       },
     });
 
+    // TODO: Send an email to the invited user
+
     return res.status(201).json({ invitation });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
@@ -208,12 +210,12 @@ export const deleteInvitation: RequestHandler = async (req, res) => {
  */
 export const acceptInvitation: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { invitation_id } = req.params;
 
     // Find the invitation
     const invitation = await db.invitations.findUnique({
       where: {
-        token: token,
+        id: invitation_id,
         state: "PENDING",
       },
     });
@@ -254,12 +256,12 @@ export const acceptInvitation: RequestHandler = async (req, res) => {
  */
 export const declineInvitation: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { invitation_id } = req.params;
 
     // Find the invitation
     const invitation = await db.invitations.findUnique({
       where: {
-        token: token,
+        id: invitation_id,
         state: "PENDING",
       },
     });

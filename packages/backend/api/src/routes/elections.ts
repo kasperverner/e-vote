@@ -6,7 +6,6 @@ import { createElection, editElection, getElection, getElectionResults, getElect
 const router = express.Router();
 router.use(isAuthorized);
 
-
 /**
  * GET /teams/:team_id/elections
  * get all elections of the team if the user is a member of the team

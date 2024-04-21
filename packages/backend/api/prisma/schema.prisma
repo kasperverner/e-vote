@@ -12,7 +12,6 @@ model Elections {
   team         Teams          @relation(fields: [team_id], references: [id])
   team_id      String
   name         String
-  slug         String         @unique
   description  String?
   created_at   DateTime       @default(now())
   start_at     DateTime
@@ -25,7 +24,6 @@ model Elections {
 model Teams {
   id          String        @id @default(uuid())
   name        String        @unique
-  slug        String        @unique
   elections   Elections[]
   members     TeamMembers[]
   invitations Invitations[]
@@ -53,7 +51,6 @@ model Invitations {
   invited_by_member    TeamMembers  @relation(fields: [invited_by_member_id], references: [id])
   invited_by_member_id String
   email                String
-  token                String       @unique
   is_admin             Boolean      @default(false)
   created_at           DateTime     @default(now())
   updated_at           DateTime?    @updatedAt

@@ -59,12 +59,12 @@ export const getTeam: RequestHandler = async (req, res) => {
  */
 export const createTeam: RequestHandler = async (req, res) => {
   const { user_id } = req.params;
+  const { name } = req.body;
   try {
     // Create a new team and add the authenticated user as an admin
     const team = await db.teams.create({
       data: {
-        name: req.body.name,
-        slug: generateTeamSlug(req.body.name),
+        name,
         members: {
           create: {
             user_id,
@@ -86,8 +86,9 @@ export const createTeam: RequestHandler = async (req, res) => {
  * @returns team: Team
  */
 export const updateTeam: RequestHandler = async (req, res) => {
-  const slug = req.params.slug.toLowerCase();
-
+  const { team_id } = req.params;
+  const { name } req.body;
+  
   try {
     // Update the team with the new name
     const team = await db.teams.update({
@@ -95,7 +96,7 @@ export const updateTeam: RequestHandler = async (req, res) => {
         id: team_id,
       },
       data: {
-        name: req.body.name,
+        name,
       },
     });
 

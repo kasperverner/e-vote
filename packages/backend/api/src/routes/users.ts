@@ -4,6 +4,7 @@ import { getAuthenticatedUser } from "../services/users";
 
 const router = express.Router();
 
+
 /**
  * GET /users
  * get the authenticated user
