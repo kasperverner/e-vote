@@ -22,6 +22,20 @@ Install the dependencies with the following command:
 yarn
 ```
 
+Update the `.env` file in the `/packages/backend/api` package with the following content:
+
+```dotenv
+DATABASE_URL=<CONNECTION_STRING>
+JWT_ISSUER=<ISSUER_URL>
+JWT_PUBLIC_KEY=<PUBLIC_KEY>
+```
+
+Then open a console in the `/packages/backend/api` package and run the following command:
+
+```bash
+npx prisma generate
+```
+
 Then, you can start the project with the following command:
 
 ```bash
