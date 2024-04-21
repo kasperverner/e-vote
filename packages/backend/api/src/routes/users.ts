@@ -4,8 +4,10 @@ import { getAuthenticatedUser } from "../services/users";
 
 const router = express.Router();
 
-// Any authenticated user can access this route
-router.get("", isAuthorized, getAuthenticatedUser);
+/**
+ * GET /users
+ * get the authenticated user
+ */
+router.get("/", isAuthorized, getAuthenticatedUser);
 
 export default router;
-

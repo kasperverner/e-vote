@@ -6,25 +6,42 @@ import { createElection, editElection, getElection, getElectionResults, getElect
 const router = express.Router();
 router.use(isAuthorized);
 
-// get all elections of the team
-router.get("", isMemberOfTeam, getElections);
 
-// get election by slug if the user is a member of the team
-router.get(":election_slug", isMemberOfTeam, getElection);
+/**
+ * GET /teams/:team_id/elections
+ * get all elections of the team if the user is a member of the team
+ */
+router.get("/", isMemberOfTeam, getElections);
 
-// vote in an election if the user is elegible to vote
-router.post(":election_slug/vote", isMemberOfTeam, isEligibleToVote, voteInElection);
+/**
+ * GET /teams/:team_id/elections/:election_id
+ * get election by id if the user is a member of the team
+ */
+router.get("/:election_id", isMemberOfTeam, getElection);
 
-// get election results by slug
-router.get(":election_slug/results", isMemberOfTeam, getElectionResults);
-
-// create a new election
-router.post("", isAdminOfTeam, createElection);
-
-// edit a pending election
-router.put(":election_slug", isAdminOfTeam, isEligibleToEditElection, editElection);
+/**
+ * POST /teams/:team_id/elections/:election_id/vote
+ * vote in an election if the user is elegible to vote
+ */
+router.post("/:election_id/vote", isMemberOfTeam, isEligibleToVote, voteInElection);
 
 
+/**
+ * GET /teams/:team_id/elections/:election_id/results
+ * get election results if the user is a member of the team
+ */
+router.get("/:election_id/results", isMemberOfTeam, getElectionResults);
 
+/**
+ * POST /teams/:team_id/elections
+ * create a new election if the user is an admin of the team
+ */
+router.post("/", isAdminOfTeam, createElection);
+
+/**
+ * PUT /teams/:team_id/elections/:election_id
+ * edit an election if the user is an admin of the team
+ */
+router.put("/:election_id", isAdminOfTeam, isEligibleToEditElection, editElection);
 
 export default router;

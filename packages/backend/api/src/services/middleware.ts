@@ -3,6 +3,9 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 import db from "../utilities/db.server";
 
+/**
+ * Middleware to check if the user is authorized
+ */
 export const isAuthorized: RequestHandler = async (req, res, next) => {
   try {
     // Extract the token from the Authorization header
@@ -12,6 +15,7 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY as string, {
       algorithms: ["RS256"],
       issuer: process.env.JWT_ISSUER,
+      ignoreExpiration: true,
     }) as JwtPayload;
 
     // Add the user_id, name, and email to the request parameters
@@ -30,6 +34,9 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Middleware to check if the user is a member of the team
+ */
 export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
   try {
     const { user_id, slug } = req.params;
@@ -59,6 +66,9 @@ export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Middleware to check if the user is an admin of the team
+ */
 export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
   try {
     const { user_id, slug } = req.params;
@@ -89,6 +99,9 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Middleware to check if the user is eligible to vote
+ */
 export const isEligibleToVote: RequestHandler = async (req, res, next) => {
   try {
     const { user_id, election_slug } = req.params;
@@ -115,6 +128,9 @@ export const isEligibleToVote: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Middleware to check if the user is eligible to edit the election
+ */
 export const isEligibleToEditElection: RequestHandler = async (
   req,
   res,

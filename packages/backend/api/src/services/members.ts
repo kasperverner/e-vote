@@ -1,49 +1,68 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
 
-// list members of the team
+/**
+ * Get all members of the team
+ * @param team_id: string
+ * @returns members: TeamMember[]
+ */
 export const getTeamMembers: RequestHandler = async (req, res) => {
-  const { user_id, slug } = req.params;
+  const { team_id } = req.params;
 
   // Find all members of the team
   const members = await db.teamMembers.findMany({
     where: {
-      team: {
-        slug,
-      },
+      team_id,
     },
     select: {
       user: true,
       is_admin: true,
       created_at: true,
     },
+    orderBy: {
+      is_admin: "desc",
+      created_at: "desc",
+    },
   });
 
   return res.status(200).json({ members });
 };
 
-// edit member role
+/**
+ * Update the role of a team member
+ * @param user_id: string
+ * @param member_id: string
+ * @param isAdmin: boolean
+ * @returns teamMember: TeamMember
+ */
 export const editMemberRole: RequestHandler = async (req, res) => {
   try {
     const { user_id, member_id } = req.params;
+    const { isAdmin } = req.body;
 
     // Update the team member role
     const teamMember = await db.teamMembers.update({
       where: {
         id: member_id,
+        user_id: {
+          not: user_id,
+        },
       },
       data: {
-        is_admin: req.body.is_admin,
+        is_admin: isAdmin,
       },
     });
 
-    return res.status(200).json({ teamMember });
+    return res.status(204).send();
   } catch (error) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// remove member from team
+/**
+ * Remove a team member
+ * @param member_id: string
+ */
 export const removeMember: RequestHandler = async (req, res) => {
   try {
     const { member_id } = req.params;
@@ -57,69 +76,87 @@ export const removeMember: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// list invitations of the team
+/**
+ * Get all invitations of the team
+ * @param team_id: string
+ * @returns invitations: Invitation[]
+ */
 export const getInvitations: RequestHandler = async (req, res) => {
-  const { user_id, slug } = req.params;
+  try {
+    const { team_id } = req.params;
 
-  // Find all invitations of the team
-  const invitations = await db.invitations.findMany({
-    where: {
-      team: {
-        slug,
+    // Find all invitations of the team
+    const invitations = await db.invitations.findMany({
+      where: {
+        team_id,
       },
-    },
-    select: {
-      email: true,
-      is_admin: true,
-      created_at: true,
-      updated_at: true,
-      state: true,
-      invited_by_member: {
-        select: {
-          user: {
-            select: {
-              name: true,
-            }
+      select: {
+        email: true,
+        is_admin: true,
+        created_at: true,
+        updated_at: true,
+        state: true,
+        invited_by_member: {
+          select: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
           },
-        }
+        },
       },
-    }
-  });
+    });
 
-  return res.status(200).json({ invitations });
+    return res.status(200).json({ invitations });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
-
-// invite members to the team
+/**
+ * Invite members to the team
+ * @param user_id: string
+ * @param team_id: string
+ * @param email: string
+ * @param is_admin: boolean
+ * @returns invitation: Invitation
+ */
 export const inviteMembers: RequestHandler = async (req, res) => {
   try {
     const { user_id, team_id } = req.params;
+    const { email, isAdmin } = req.body;
 
     // Create a new invitation
     const invitation = await db.invitations.create({
       data: {
         team_id: team_id,
         invited_by_member_id: user_id,
-        email: req.body.email,
-        token: Math.random().toString(36).substring(2),
-        is_admin: req.body.is_admin || false,
+        email,
+        is_admin: isAdmin,
       },
     });
 
     return res.status(201).json({ invitation });
   } catch (error) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// edit pending invitation
+/**
+ * Edit pending invitation
+ * @param invitation_id: string
+ * @param isAdmin: boolean
+ * @returns 204
+ */
 export const editInvitation: RequestHandler = async (req, res) => {
   try {
     const { invitation_id } = req.params;
+    const { isAdmin } = req.body;
 
     // Update the invitation
     const invitation = await db.invitations.update({
@@ -128,17 +165,21 @@ export const editInvitation: RequestHandler = async (req, res) => {
         state: "PENDING",
       },
       data: {
-        is_admin: req.body.is_admin,
+        is_admin: isAdmin,
       },
     });
 
-    return res.status(200).json({ invitation });
+    return res.status(204).send();
   } catch (error) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// delete pending invitation
+/**
+ * Delete pending invitation
+ * @param invitation_id: string
+ * @returns 204
+ */
 export const deleteInvitation: RequestHandler = async (req, res) => {
   try {
     const { invitation_id } = req.params;
@@ -151,17 +192,20 @@ export const deleteInvitation: RequestHandler = async (req, res) => {
       },
       data: {
         state: "DELETED",
-      }
+      },
     });
 
     return res.status(204).send();
   } catch (error) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-
 };
 
-// accept pending invitation
+/**
+ * Accept an invitation
+ * @param invitation_id: string
+ * @returns teamMember: TeamMember
+ */
 export const acceptInvitation: RequestHandler = async (req, res) => {
   try {
     const { token } = req.params;
@@ -199,11 +243,15 @@ export const acceptInvitation: RequestHandler = async (req, res) => {
 
     return res.status(201).json({ teamMember });
   } catch (error) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// decline pending invitation
+/**
+ * Decline pending invitation
+ * @param invitation_id: string
+ * @returns 204
+ */
 export const declineInvitation: RequestHandler = async (req, res) => {
   try {
     const { token } = req.params;
@@ -232,6 +280,6 @@ export const declineInvitation: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
