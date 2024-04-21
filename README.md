@@ -171,14 +171,14 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 - [x] create team
 - [x] update team if team admin
-- [ ] invite users
-- [ ] modify users roles
+- [x] invite users
+- [x] modify users roles
 - [x] get list of team user is part of
 
 ### users
 
 - [x] create new user account
-- [ ] accept/decline invitation
+- [x] accept/decline invitation
 
 ### elections
 
@@ -186,9 +186,7 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 - [ ] update election if not started and team admin
 - [ ] see elections for team user is part of
 - [ ] vote if elegible
-- [ ] get results
-
-- [ ] add propositions to election if not started and team admin
+- [ ] get results 
 
 ### propositions
 
