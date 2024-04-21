@@ -1,14 +1,11 @@
 import express from "express";
-import { authorization } from "../middleware/authorization";
-import { createUser, deleteUser, getUserById, updateUser } from "../services/users";
+import { isAuthorized } from "../services/middleware";
+import { getAuthenticatedUser } from "../services/users";
 
 const router = express.Router();
-router.use(authorization);
 
-router.get("/:id", getUserById);
-router.post("/", createUser);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
+// Any authenticated user can access this route
+router.get("", isAuthorized, getAuthenticatedUser);
 
 export default router;
 

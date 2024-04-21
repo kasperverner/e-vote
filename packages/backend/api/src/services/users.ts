@@ -1,32 +1,26 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
 
-export const getUserById: RequestHandler = async (req, res) => {
-  console.log('getting user with id', req.params.id);
+export const getAuthenticatedUser: RequestHandler = async (req, res) => {
+  const { user_id, name, email } = req.params;
 
-  // const user = await db.user.findUnique({
-  //   where: {
-  //     id: parseInt(req.params.id)
-  //   }
-  // });
+  // Check if user exists in the database
+  let user = await db.users.findUnique({
+    where: {
+      principal_id: user_id,
+    },
+  });
 
-  res.status(200).send();
-}
+  // If user does not exist, create a new user in the database
+  if (!user) {
+    user = await db.users.create({
+      data: {
+        principal_id: user_id,
+        name,
+        email,
+      },
+    });
+  }
 
-export const createUser: RequestHandler = async (req, res) => {
-  console.log("creating new user");
-
-  res.status(201).send();
+  return res.status(200).json({ user });
 };
-
-export const updateUser: RequestHandler = async (req, res) => {
-  console.log("updating user with id", req.params.id);
-
-  res.status(204).send();
-}
-
-export const deleteUser: RequestHandler = async (req, res) => {
-  console.log("deleting user with id", req.params.id);
-
-  res.status(204).send();
-}
