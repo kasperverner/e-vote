@@ -167,45 +167,44 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 ## Features
 
-### organizations
+### teams
 
-- [ ] create organization
-- [ ] update organization if organisation admin
+- [x] create team
+- [x] update team if team admin
 - [ ] invite users
 - [ ] modify users roles
-- [ ] get list of organisations user is part of
+- [x] get list of team user is part of
 
 ### users
 
-- [ ] create new user account
+- [x] create new user account
 - [ ] accept/decline invitation
 
 ### elections
 
-- [ ] create election if organisation admin
-- [ ] update election if not started and organisation admin
-- [ ] see elections for organisations user is part of
+- [ ] create election if team admin
+- [ ] update election if not started and team admin
+- [ ] see elections for team user is part of
 - [ ] vote if elegible
 - [ ] get results
 
-- [ ] add question to election if not started and organisation admin
-- [ ] allow each questions to have multiple propositions to allow the system to be used for surveys
+- [ ] add propositions to election if not started and team admin
 
 ### propositions
 
-- [ ] add proposition to election if not started and organisation admin
-- [ ] update proposition to election if not started and organisation admin
-- [ ] delete proposition to election if not started and organisation admin
+- [ ] add proposition to election if not started and team admin
+- [ ] update proposition to election if not started and team admin
+- [ ] delete proposition to election if not started and team admin
 
 ## Pages
 
 - [x] /
-- [x] /organizations                                <-- list of organizations user is member of
-- [x] /organizations/:slug                          <-- organization details and management
-- [x] /organizations/:slug/elections                <-- list of elections for organization
-- [x] /organizations/:slug/elections/:slug          <-- election details and management
-- [x] /organizations/:slug/elections/new            <-- create election
-- [x] /organizations/:slug/elections/:slug/vote     <-- vote in election
-- [x] /organizations/:slug/elections/:slug/results  <-- election results
-- [x] /organizations/:slug/members                  <-- list of members for organization
-- [x] /organizations/:slug/members/invite           <-- invite members to organization
+- [x] /team                                <-- list of team user is member of
+- [x] /team/:slug                          <-- team details and management
+- [x] /team/:slug/elections                <-- list of elections for team
+- [x] /team/:slug/elections/:slug          <-- election details and management
+- [x] /team/:slug/elections/new            <-- create election
+- [x] /team/:slug/elections/:slug/vote     <-- vote in election
+- [x] /team/:slug/elections/:slug/results  <-- election results
+- [x] /team/:slug/members                  <-- list of members for team
+- [x] /team/:slug/members/invite           <-- invite members to team

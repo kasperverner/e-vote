@@ -1,3 +1,0 @@
-The middleware folder is used so store all the middleware functions that are used in the application.
-The middleware functions are used to perform some operations before the request is passed to the route handler.
-The middleware functions are used to perform some operations like authentication, logging, etc.

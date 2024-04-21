@@ -1,4 +1,0 @@
-The routes folder is used to store the api routes.
-The routes are defined in the index.ts file.
-The routes are defined using the express router.
-The routes are then exported to be used in the server.ts file.
