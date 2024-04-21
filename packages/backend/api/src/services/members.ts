@@ -3,20 +3,22 @@ import db from "../utilities/db.server";
 
 // list members of the team
 export const getTeamMembers: RequestHandler = async (req, res) => {
-  const { user_id, slug } = req.params;
+  const { user_id, team_id } = req.params;
 
   // Find all members of the team
   const members = await db.teamMembers.findMany({
     where: {
-      team: {
-        slug,
-      },
+      team_id
     },
     select: {
       user: true,
       is_admin: true,
       created_at: true,
     },
+    orderBy: {
+      is_admin: "desc",
+      created_at: "desc",
+    }
   });
 
   return res.status(200).json({ members });
@@ -27,10 +29,13 @@ export const editMemberRole: RequestHandler = async (req, res) => {
   try {
     const { user_id, member_id } = req.params;
 
-    // Update the team member role
+    // Update the team member role if the user is not the member
     const teamMember = await db.teamMembers.update({
       where: {
         id: member_id,
+        user_id: {
+          not: user_id,
+        }
       },
       data: {
         is_admin: req.body.is_admin,
@@ -63,14 +68,12 @@ export const removeMember: RequestHandler = async (req, res) => {
 
 // list invitations of the team
 export const getInvitations: RequestHandler = async (req, res) => {
-  const { user_id, slug } = req.params;
+  const { user_id, team_id } = req.params;
 
   // Find all invitations of the team
   const invitations = await db.invitations.findMany({
     where: {
-      team: {
-        slug,
-      },
+      team_id,
     },
     select: {
       email: true,
@@ -105,10 +108,11 @@ export const inviteMembers: RequestHandler = async (req, res) => {
         team_id: team_id,
         invited_by_member_id: user_id,
         email: req.body.email,
-        token: Math.random().toString(36).substring(2),
         is_admin: req.body.is_admin || false,
       },
     });
+
+    // TODO: Send an email to the invited user
 
     return res.status(201).json({ invitation });
   } catch (error) {
@@ -164,12 +168,12 @@ export const deleteInvitation: RequestHandler = async (req, res) => {
 // accept pending invitation
 export const acceptInvitation: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { invitation_id } = req.params;
 
     // Find the invitation
     const invitation = await db.invitations.findUnique({
       where: {
-        token: token,
+        id: invitation_id,
         state: "PENDING",
       },
     });
@@ -206,12 +210,12 @@ export const acceptInvitation: RequestHandler = async (req, res) => {
 // decline pending invitation
 export const declineInvitation: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { invitation_id } = req.params;
 
     // Find the invitation
     const invitation = await db.invitations.findUnique({
       where: {
-        token: token,
+        id: invitation_id,
         state: "PENDING",
       },
     });

@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
-import { generateTeamSlug } from "../utilities/tools";
 
 export const getTeamsForAuthenticatedUser: RequestHandler = async (
   req,
@@ -28,28 +27,28 @@ export const getTeamsForAuthenticatedUser: RequestHandler = async (
 };
 
 export const getTeamBySlug: RequestHandler = async (req, res) => {
-  const slug = req.params.slug.toLowerCase();
+  const { team_id } = req.params;
 
   // Find the team by the slug
   const team = await db.teams.findUnique({
     where: {
-      slug,
+      id: team_id,
     },
   });
 
-  if (!team) return res.status(404).send(`Team with slug ${slug} not found`);
+  if (!team) return res.status(404).send(`Team with ID ${team_id} not found`);
 
   return res.status(200).json(team);
 };
 
 export const createTeam: RequestHandler = async (req, res) => {
   const { user_id } = req.params;
+  const { name } = req.body;
   try {
     // Create a new team and add the authenticated user as an admin
     const team = await db.teams.create({
       data: {
-        name: req.body.name,
-        slug: generateTeamSlug(req.body.name),
+        name,
         members: {
           create: {
             user_id,
@@ -65,17 +64,16 @@ export const createTeam: RequestHandler = async (req, res) => {
 };
 
 export const updateTeam: RequestHandler = async (req, res) => {
-  const slug = req.params.slug.toLowerCase();
+  const { team_id } = req.params;
 
   try {
     // Update the team with the new name
     const team = await db.teams.update({
       where: {
-        slug,
+        id: team_id
       },
       data: {
-        name: req.body.name,
-        slug: generateTeamSlug(req.body.name),
+        name: req.body.name
       },
     });
 
