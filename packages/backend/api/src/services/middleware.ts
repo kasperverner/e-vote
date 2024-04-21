@@ -12,6 +12,7 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY as string, {
       algorithms: ["RS256"],
       issuer: process.env.JWT_ISSUER,
+      ignoreExpiration: true
     }) as JwtPayload;
 
     // Add the user_id, name, and email to the request parameters
@@ -32,12 +33,12 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
 
 export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
   try {
-    const { user_id, slug } = req.params;
+    const { user_id, team_id } = req.params;
 
     // Check if the user is a member of the team
     const team = await db.teams.findUniqueOrThrow({
       where: {
-        slug,
+        id: team_id,
         members: {
           some: {
             user_id,
@@ -45,12 +46,6 @@ export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
         },
       },
     });
-
-    // Add the team_id to the request parameters
-    req.params = {
-      ...req.params,
-      team_id: team.id,
-    };
 
     // Continue to the next RequestHandler
     return next();
@@ -61,12 +56,12 @@ export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
 
 export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
   try {
-    const { user_id, slug } = req.params;
+    const { user_id, team_id } = req.params;
 
     // Check if the user is an admin of the team
     const team = await db.teams.findUniqueOrThrow({
       where: {
-        slug,
+        id: team_id,
         members: {
           some: {
             user_id,
@@ -75,12 +70,6 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
         },
       },
     });
-
-    // Add the team_id to the request parameters
-    req.params = {
-      ...req.params,
-      team_id: team.id,
-    };
 
     // Continue to the next RequestHandler
     return next();
@@ -91,16 +80,14 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
 
 export const isEligibleToVote: RequestHandler = async (req, res, next) => {
   try {
-    const { user_id, election_slug } = req.params;
+    const { user_id, election_id } = req.params;
 
     // Check if the user has already voted
     const ballot = await db.ballots.findFirst({
       where: {
         user_id,
         is_used: true,
-        election: {
-          slug: election_slug,
-        },
+        election_id,
       },
     });
 
@@ -121,13 +108,13 @@ export const isEligibleToEditElection: RequestHandler = async (
   next
 ) => {
   try {
-    const { user_id, election_slug } = req.params;
+    const { user_id, election_id } = req.params;
 
     // Check if the user is an admin of the team that the election belongs to
     // and if the election has not started yet
     var election = await db.elections.findFirstOrThrow({
       where: {
-        slug: election_slug,
+        id: election_id,
         team: {
           members: {
             some: {
@@ -141,12 +128,6 @@ export const isEligibleToEditElection: RequestHandler = async (
         },
       },
     });
-
-    // Add the election_id to the request parameters
-    req.params = {
-      ...req.params,
-      election_id: election.id,
-    };
 
     // Continue to the next RequestHandler
     return next();
