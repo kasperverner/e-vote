@@ -34,7 +34,7 @@ export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
     const { user_id, slug } = req.params;
 
     // Check if the user is a member of the team
-    await db.teams.findUniqueOrThrow({
+    const team = await db.teams.findUniqueOrThrow({
       where: {
         slug,
         members: {
@@ -44,6 +44,11 @@ export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
         },
       },
     });
+
+    req.params = {
+      ...req.params,
+      team_id: team.id,
+    };
 
     return next();
   } catch (error) {
@@ -56,7 +61,7 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
     const { user_id, slug } = req.params;
 
     // Check if the user is an admin of the team
-    await db.teams.findUniqueOrThrow({
+    const team = await db.teams.findUniqueOrThrow({
       where: {
         slug,
         members: {
@@ -67,6 +72,11 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
         },
       },
     });
+
+    req.params = {
+      ...req.params,
+      team_id: team.id,
+    };
 
     return next();
   } catch (error) {

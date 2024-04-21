@@ -9,13 +9,13 @@ router.use(isAuthorized);
 router.get("", getTeamsForAuthenticatedUser);
 
 // Only members of the team can access this routes
-router.get("/:slug", isMemberOfTeam, getTeamBySlug);
+router.get(":slug", isMemberOfTeam, getTeamBySlug);
 
 // Any authenticated user can access this route
-router.post("/", createTeam);
+router.post("", createTeam);
 
 // Only admins of the team can access this route
-router.put("/:slug", isAdminOfTeam, updateTeam);
+router.put(":slug", isAdminOfTeam, updateTeam);
 
 export default router;
 

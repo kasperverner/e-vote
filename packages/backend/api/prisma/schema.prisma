@@ -45,22 +45,24 @@ model TeamMembers {
 }
 
 model Invitations {
-  id                   String      @id @default(uuid())
-  team                 Teams       @relation(fields: [team_id], references: [id])
+  id                   String       @id @default(uuid())
+  team                 Teams        @relation(fields: [team_id], references: [id])
   team_id              String
-  invited_by_member    TeamMembers @relation(fields: [invited_by_member_id], references: [id])
+  state                InviteStates @default(PENDING)
+  invited_by_member    TeamMembers  @relation(fields: [invited_by_member_id], references: [id])
   invited_by_member_id String
   email                String
-  token                String      @unique
-  is_admin             Boolean     @default(false)
-  created_at           DateTime    @default(now())
-  updated_at           DateTime?   @updatedAt
+  token                String       @unique
+  is_admin             Boolean      @default(false)
+  created_at           DateTime     @default(now())
+  updated_at           DateTime?    @updatedAt
 }
 
 enum InviteStates {
   PENDING
   ACCEPTED
   DECLINED
+  DELETED
 }
 
 model Users {
