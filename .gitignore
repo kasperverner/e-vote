@@ -3,6 +3,7 @@
 .DS_Store
 
 *.local
+packages/backend/api/.env
 .env.local
 
 node_modules
