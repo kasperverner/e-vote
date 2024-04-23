@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
-import { generateBallotProof } from "../utilities/ballotClient";
-import { generatePropositionProof } from "../utilities/propositionClient";
-import { generateValidationProof } from "../utilities/validationClient";
+import { generateBallotProof, validateBallotProofsForElection } from "../utilities/ballotClient";
+import { generatePropositionProof, validatePropositionProofsForElection, getResultForElection } from "../utilities/propositionClient";
+import { generateValidationProof, validateValidationProofsForElection } from "../utilities/validationClient";
 
 /**
  * Get all elections of the team
@@ -146,10 +146,30 @@ export const getElectionResults: RequestHandler = async (req, res) => {
       .json({ message: `Election with ID ${election_id} not found` });
   }
 
-  // TODO: validate the votes
-  // TODO: get the results from the proposition-service
+  var validationResult = await validateValidationProofsForElection(election_id);
 
-  return res.json(election);
+  if (!validationResult.success) {
+    return res.status(400).json(validationResult.message);
+  }
+
+  var propositionResult = await validatePropositionProofsForElection(election_id);
+
+  if (!propositionResult.success) {
+    return res.status(400).json(propositionResult.message);
+  }
+
+  var ballotResult = await validateBallotProofsForElection(election_id);
+
+  if (!ballotResult.success) {
+    return res.status(400).json(ballotResult.message);
+  }
+
+  var result = await getResultForElection(election_id);
+
+  if (!result.results)
+    return res.status(400).json(result.message);
+
+  return res.status(200).json(result.results);
 };
 
 /**
