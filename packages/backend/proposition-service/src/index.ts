@@ -4,7 +4,7 @@ import cors from "cors";
 import proofRoutes from "./routes/proofs";
 import resultRoutes from "./routes/results";
 
-dotenv.config();
+dotenv.config({override: true});
 
 const PORT = process.env.PORT || 3000;
 
