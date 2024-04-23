@@ -15,14 +15,16 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
       team_id,
     },
     select: {
-      user: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       is_admin: true,
       created_at: true,
-    },
-    orderBy: {
-      is_admin: "desc",
-      created_at: "desc",
-    },
+    }
   });
 
   return res.status(200).json({ members });
@@ -37,8 +39,9 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
  */
 export const editMemberRole: RequestHandler = async (req, res) => {
   try {
-    const { user_id, member_id } = req.params;
+    const { member_id } = req.params;
     const { isAdmin } = req.body;
+    const { user_id } = res.locals;
 
     // Update the team member role if the user is not the member
     const teamMember = await db.teamMembers.update({
@@ -128,8 +131,9 @@ export const getInvitations: RequestHandler = async (req, res) => {
  */
 export const inviteMembers: RequestHandler = async (req, res) => {
   try {
-    const { user_id, team_id } = req.params;
+    const { team_id } = req.params;
     const { email, isAdmin } = req.body;
+    const { user_id } = res.locals;
 
     // Create a new invitation
     const invitation = await db.invitations.create({
