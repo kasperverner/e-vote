@@ -1,21 +1,41 @@
 import express from "express";
-import { isAdminOfTeam, isAuthorized, isMemberOfTeam } from "../services/middleware";
-import { getTeamsForAuthenticatedUser, getTeamBySlug, createTeam, updateTeam } from "../services/teams";
+import {
+  isAdminOfTeam,
+  isAuthorized,
+  isMemberOfTeam,
+} from "../services/middleware";
+import {
+  getTeams,
+  getTeam,
+  createTeam,
+  updateTeam,
+} from "../services/teams";
 
 const router = express.Router();
 router.use(isAuthorized);
 
-// Any authenticated user can access this route
-router.get("/", getTeamsForAuthenticatedUser);
+/**
+ * GET /teams
+ * get all teams that the authenticated user is a member of
+ */
+router.get("/", getTeams);
 
-// Only members of the team can access this routes
-router.get("/:team_id", isMemberOfTeam, getTeamBySlug);
+/**
+ * GET /teams/:team_id
+ * get team by id if the user is a member of the team
+ */
+router.get("/:team_id", isMemberOfTeam, getTeam);
 
-// Any authenticated user can access this route
+/**
+ * POST /teams
+ * create a new team
+ */
 router.post("/", createTeam);
 
-// Only admins of the team can access this route
+/**
+ * PUT /teams/:team_id
+ * update team if the user is an admin of the team
+ */
 router.put("/:team_id", isAdminOfTeam, updateTeam);
 
 export default router;
-

@@ -7,7 +7,6 @@ This is the monorepository for the E-Vote project. It contains the following pac
 - backend/ballot: Zero Knowledge Proof service for the ballot proof. Only accessible by the gateway.
 - backend/proposition: Zero Knowledge Proof service for the proposition proof. Only accessible by the gateway.
 - backend/validation: Zero Knowledge Proof service for the validation proof. Only accessible by the gateway.
-- shared: Shared code between the backend services. It contains the models and the database connection.
 
 ## Prerequisites
 
@@ -71,14 +70,6 @@ To stop the services press `ctrl + c` in the terminal.
 - Language: TypeScript
 - Database: PostgreSQL
 - ORM: Prisma
-
-## Shared
-
-When changes are made to the shared package, you need to build the package with the following command, before the changes are reflected in the other packages:
-
-```bash
-yarn
-```
 
 ## Conventions
 

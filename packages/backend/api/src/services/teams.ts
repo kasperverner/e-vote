@@ -1,14 +1,15 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
 
-export const getTeamsForAuthenticatedUser: RequestHandler = async (
-  req,
-  res
-) => {
+/**
+ * Get all teams that the authenticated user is a member of
+ * @param user_id: string
+ * @returns teams: Team[]
+ */
+export const getTeams: RequestHandler = async (req, res) => {
   const { user_id } = req.params;
 
   try {
-
     // Find all teams that the authenticated user is a member of
     const teams = await db.teams.findMany({
       where: {
@@ -26,23 +27,38 @@ export const getTeamsForAuthenticatedUser: RequestHandler = async (
   }
 };
 
-export const getTeamBySlug: RequestHandler = async (req, res) => {
+/**
+ * Get team by id
+ * @param team_id: string
+ * @returns team: Team
+ */
+export const getTeam: RequestHandler = async (req, res) => {
   const { team_id } = req.params;
 
-  // Find the team by the slug
-  const team = await db.teams.findUnique({
-    where: {
-      id: team_id,
-    },
-  });
+  try {
+    // Find the team by the slug
+    const team = await db.teams.findUnique({
+      where: {
+        id: team_id,
+      },
+    });
 
-  if (!team) return res.status(404).send(`Team with ID ${team_id} not found`);
+    if (!team) return res.status(404).send(`Team with ID ${team_id} not found`);
 
-  return res.status(200).json(team);
+    return res.status(200).json(team);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
+/**
+ * Create a new team
+ * @param user_id: string
+ * @param name: string
+ * @returns team: Team
+ */
 export const createTeam: RequestHandler = async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = res.locals;
   const { name } = req.body;
   try {
     // Create a new team and add the authenticated user as an admin
@@ -57,27 +73,35 @@ export const createTeam: RequestHandler = async (req, res) => {
         },
       },
     });
+
     return res.status(201).json(team);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
+/**
+ * Update team by id
+ * @param team_id: string
+ * @param name: string
+ * @returns team: Team
+ */
 export const updateTeam: RequestHandler = async (req, res) => {
   const { team_id } = req.params;
+  const { name } = req.body;
 
   try {
     // Update the team with the new name
     const team = await db.teams.update({
       where: {
-        id: team_id
+        id: team_id,
       },
       data: {
-        name: req.body.name
+        name,
       },
     });
 
-    return res.status(200).json(team);
+    return res.status(204).send();
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }

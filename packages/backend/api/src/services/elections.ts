@@ -1,10 +1,18 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
+import { generateBallotProof, validateBallotProofsForElection } from "../utilities/ballotClient";
+import { generatePropositionProof, validatePropositionProofsForElection, getResultForElection } from "../utilities/propositionClient";
+import { generateValidationProof, validateValidationProofsForElection } from "../utilities/validationClient";
 
-// get all elections of the team
-// include if the user has voted in the election
+/**
+ * Get all elections of the team
+ * @param team_id: string
+ * @param user_id: string
+ * @returns elections: Election[]
+ */
 export const getElections: RequestHandler = async (req, res) => {
-  const { team_id, user_id } = req.params;
+  const { team_id } = req.params;
+  const { user_id } = res.locals;
 
   const elections = await db.elections.findMany({
     where: {
@@ -25,7 +33,12 @@ export const getElections: RequestHandler = async (req, res) => {
   return res.json(elections);
 };
 
-// get election by slug if the user is a member of the team
+/**
+ * Get election by id
+ * @param election_id: string
+ * @param team_id: string
+ * @returns election: Election
+ */
 export const getElection: RequestHandler = async (req, res) => {
   const { election_id, team_id } = req.params;
 
@@ -39,12 +52,20 @@ export const getElection: RequestHandler = async (req, res) => {
   return res.json(election);
 };
 
-// vote in an election if the user is elegible to vote
+/**
+ * Vote in an election
+ * @param election_id: string
+ * @param team_id: string
+ * @param user_id: string
+ * @returns ballot: Ballot
+ */
 export const voteInElection: RequestHandler = async (req, res) => {
-  const { election_id, team_id, user_id } = req.params;
+  const { election_id, team_id } = req.params;
+  const { proposition_id } = req.body;
+  const { user_id } = res.locals;
 
   try {
-    // check if the election is open
+    // check if the election exists and is open
     const election = await db.elections.findUnique({
       where: {
         id: election_id,
@@ -84,14 +105,9 @@ export const voteInElection: RequestHandler = async (req, res) => {
       },
     });
 
-    // TODO: get the ballot proof from the ballot-service
-    const ballotProof = "proof of ballot";
-
-    // TODO: get the proposition proof from the proposition-service
-    const propositionProof = "proof of proposition";
-
-    // TODO: get the validation proof from the validation-service
-    const validationProof = "proof of validation";
+    const ballotProof = await generateBallotProof(ballot.id);
+    const propositionProof = await generatePropositionProof(proposition_id);
+    const validationProof = await generateValidationProof(ballotProof, propositionProof);
 
     const vote = await db.votes.create({
       data: {
@@ -108,7 +124,12 @@ export const voteInElection: RequestHandler = async (req, res) => {
   }
 };
 
-// get election results by election_id
+/**
+ * Get election results
+ * @param election_id: string
+ * @param team_id: string
+ * @returns election: Election
+ */
 export const getElectionResults: RequestHandler = async (req, res) => {
   const { election_id, team_id } = req.params;
 
@@ -125,13 +146,42 @@ export const getElectionResults: RequestHandler = async (req, res) => {
       .json({ message: `Election with ID ${election_id} not found` });
   }
 
-  // TODO: validate the votes
-  // TODO: get the results from the proposition-service
+  var validationResult = await validateValidationProofsForElection(election_id);
 
-  return res.json(election);
+  if (!validationResult.success) {
+    return res.status(400).json(validationResult.message);
+  }
+
+  var propositionResult = await validatePropositionProofsForElection(election_id);
+
+  if (!propositionResult.success) {
+    return res.status(400).json(propositionResult.message);
+  }
+
+  var ballotResult = await validateBallotProofsForElection(election_id);
+
+  if (!ballotResult.success) {
+    return res.status(400).json(ballotResult.message);
+  }
+
+  var result = await getResultForElection(election_id);
+
+  if (!result.results)
+    return res.status(400).json(result.message);
+
+  return res.status(200).json(result.results);
 };
 
-// create a new election
+/**
+ * Create a new election
+ * @param team_id: string
+ * @param name: string
+ * @param description: string
+ * @param start_at: Date
+ * @param end_at: Date
+ * @param propositions: Proposition[]
+ * @returns election: Election
+ */
 export const createElection: RequestHandler = async (req, res) => {
   const { team_id } = req.params;
   const { name, description, start_at, end_at, propositions } = req.body;
@@ -152,11 +202,22 @@ export const createElection: RequestHandler = async (req, res) => {
   return res.json(election);
 };
 
-// edit a pending election
+/**
+ * Edit an election
+ * @param election_id: string
+ * @param team_id: string
+ * @param name: string
+ * @param description: string
+ * @param start_at: Date
+ * @param end_at: Date
+ * @param propositions: Proposition[]
+ * @returns 204
+ */
 export const editElection: RequestHandler = async (req, res) => {
   const { election_id, team_id } = req.params;
   const { name, description, start_at, end_at, propositions } = req.body;
 
+  // check if the election exists and has not started
   const election = await db.elections.findUnique({
     where: {
       id: election_id,
@@ -176,6 +237,7 @@ export const editElection: RequestHandler = async (req, res) => {
       .json({ message: `Election with ID ${election_id} has already started` });
   }
 
+  // update the election
   await db.elections.update({
     where: {
       id: election.id,

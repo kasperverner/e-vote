@@ -10,8 +10,7 @@
       "./packages/backend/api",
       "./packages/backend/ballot-service",
       "./packages/backend/proposition-service",
-      "./packages/backend/validation-service",
-      "./packages/shared"
+      "./packages/backend/validation-service"
     ]
   },
   "scripts": {
