@@ -58,7 +58,7 @@ export const getTeam: RequestHandler = async (req, res) => {
  * @returns team: Team
  */
 export const createTeam: RequestHandler = async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = res.locals;
   const { name } = req.body;
   try {
     // Create a new team and add the authenticated user as an admin
@@ -73,6 +73,7 @@ export const createTeam: RequestHandler = async (req, res) => {
         },
       },
     });
+
     return res.status(201).json(team);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
@@ -87,8 +88,8 @@ export const createTeam: RequestHandler = async (req, res) => {
  */
 export const updateTeam: RequestHandler = async (req, res) => {
   const { team_id } = req.params;
-  const { name } req.body;
-  
+  const { name } = req.body;
+
   try {
     // Update the team with the new name
     const team = await db.teams.update({

@@ -11,7 +11,8 @@ import { generateValidationProof } from "../utilities/validationClient";
  * @returns elections: Election[]
  */
 export const getElections: RequestHandler = async (req, res) => {
-  const { team_id, user_id } = req.params;
+  const { team_id } = req.params;
+  const { user_id } = res.locals;
 
   const elections = await db.elections.findMany({
     where: {
@@ -59,11 +60,12 @@ export const getElection: RequestHandler = async (req, res) => {
  * @returns ballot: Ballot
  */
 export const voteInElection: RequestHandler = async (req, res) => {
-  const { election_id, team_id, user_id } = req.params;
+  const { election_id, team_id } = req.params;
   const { proposition_id } = req.body;
+  const { user_id } = res.locals;
 
   try {
-    // check if the election is open
+    // check if the election exists and is open
     const election = await db.elections.findUnique({
       where: {
         id: election_id,
@@ -195,6 +197,7 @@ export const editElection: RequestHandler = async (req, res) => {
   const { election_id, team_id } = req.params;
   const { name, description, start_at, end_at, propositions } = req.body;
 
+  // check if the election exists and has not started
   const election = await db.elections.findUnique({
     where: {
       id: election_id,
@@ -214,6 +217,7 @@ export const editElection: RequestHandler = async (req, res) => {
       .json({ message: `Election with ID ${election_id} has already started` });
   }
 
+  // update the election
   await db.elections.update({
     where: {
       id: election.id,

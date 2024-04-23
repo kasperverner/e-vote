@@ -15,7 +15,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/users", usersRoutes);
+/**
+ * Removed the /users route as the functionality is implicit in the authentication middleware
+ * app.use("/users", usersRoutes);
+ */
 app.use("/teams", teamsRoutes);
 app.use("/teams/:team_id/members", membersRoutes);
 app.use("/teams/:team_id/elections", electionsRoutes);
