@@ -20,7 +20,7 @@ const Navbar = () => {
           <div className="flex gap-4">
             {/* Example Links, to show how they are implemented */}
             <Link to="/organizations" className="hover:underline">
-              Organizations
+              Teams
             </Link>
             <Link
               to="/organizations/$organization_slug"
@@ -29,7 +29,7 @@ const Navbar = () => {
               }}
               className="hover:underline"
             >
-              Organization
+              Team
             </Link>
             <Link to="/not-found-page" className="hover:underline">
               404 Page
