@@ -112,6 +112,7 @@ export const isMemberOfTeam: RequestHandler = async (req, res, next) => {
     // Continue to the next RequestHandler
     return next();
   } catch (error) {
+    console.error("error", error);
     return res.status(403).json({ message: "Forbidden" });
   }
 };
@@ -140,6 +141,7 @@ export const isAdminOfTeam: RequestHandler = async (req, res, next) => {
     // Continue to the next RequestHandler
     return next();
   } catch (error) {
+    console.error("error", error);
     return res.status(403).json({ message: "Forbidden" });
   }
 };
@@ -168,6 +170,7 @@ export const isEligibleToVote: RequestHandler = async (req, res, next) => {
     // Continue to the next RequestHandler
     return next();
   } catch (error) {
+    console.error("error", error);
     return res.status(403).json({ message: "Forbidden" });
   }
 };
@@ -206,6 +209,7 @@ export const isEligibleToEditElection: RequestHandler = async (
     // Continue to the next RequestHandler
     return next();
   } catch (error) {
+    console.error("error", error);
     return res.status(403).json({ message: "Forbidden" });
   }
 };

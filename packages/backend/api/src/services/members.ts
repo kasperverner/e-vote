@@ -58,6 +58,7 @@ export const editMemberRole: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -79,6 +80,7 @@ export const removeMember: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -117,6 +119,7 @@ export const getInvitations: RequestHandler = async (req, res) => {
 
     return res.status(200).json({ invitations });
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -135,11 +138,22 @@ export const inviteMembers: RequestHandler = async (req, res) => {
     const { email, isAdmin } = req.body;
     const { user_id } = res.locals;
 
+    const member = await db.teamMembers.findFirst({
+      where: {
+        team_id,
+        user_id,
+      },
+    });
+
+    if (!member) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
     // Create a new invitation
     const invitation = await db.invitations.create({
       data: {
         team_id: team_id,
-        invited_by_member_id: user_id,
+        invited_by_member_id: member.id,
         email,
         is_admin: isAdmin,
       },
@@ -149,6 +163,7 @@ export const inviteMembers: RequestHandler = async (req, res) => {
 
     return res.status(201).json({ invitation });
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -177,6 +192,7 @@ export const editInvitation: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -203,6 +219,7 @@ export const deleteInvitation: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -215,6 +232,7 @@ export const deleteInvitation: RequestHandler = async (req, res) => {
 export const acceptInvitation: RequestHandler = async (req, res) => {
   try {
     const { invitation_id } = req.params;
+    const { user_id } = res.locals;
 
     // Find the invitation
     const invitation = await db.invitations.findUnique({
@@ -232,7 +250,7 @@ export const acceptInvitation: RequestHandler = async (req, res) => {
     const teamMember = await db.teamMembers.create({
       data: {
         team_id: invitation.team_id,
-        user_id: invitation.invited_by_member_id,
+        user_id: user_id,
         is_admin: invitation.is_admin,
       },
     });
@@ -249,6 +267,7 @@ export const acceptInvitation: RequestHandler = async (req, res) => {
 
     return res.status(201).json({ teamMember });
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -286,6 +305,7 @@ export const declineInvitation: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
