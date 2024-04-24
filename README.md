@@ -179,3 +179,15 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 - [ ] Add a CI/CD pipeline using Github Actions
 - [ ] Make proper layout for the UI
 - [ ] Add a proper error logging system (Application Insights) ((Maybe?))
+
+## Missing route contents
+
+- [ ] team details page with members, invites and elections
+  - [ ] admins should be able to manage members
+  - [ ] admins should be able to manage invites
+  - [ ] admins should be able to manage elections
+- [ ] team invites page where admins can invite new users to the team
+- [ ] team elections page where admins can create new elections
+- [ ] modify elections page where admins can modify existing elections
+- [ ] election details page where members can see the election details, vote and see results
+- [ ] accept/decline invite page where users can accept or decline an invite to a team

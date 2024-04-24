@@ -51,13 +51,13 @@ router.delete("/:team_id/members/invitations/:invitation_id", isAdminOfTeam, del
  * PUT /teams/:team_id/members/invitations/:invitation_id/accept
  * accept pending invitation if the user is an admin of the team
  */
-router.put("/:team_id/members/invitations/:invitation_id/accept", isAdminOfTeam, acceptInvitation);
+router.put("/:team_id/members/invitations/:invitation_id/accept", acceptInvitation);
 
 /**
  * PUT /teams/:team_id/members/invitations/:invitation_id/decline
  * decline pending invitation if the user is an admin of the team
  */
-router.put("/:team_id/members/invitations/:invitation_id/decline", isAdminOfTeam, declineInvitation);
+router.put("/:team_id/members/invitations/:invitation_id/decline", declineInvitation);
 
 export default router;
 
