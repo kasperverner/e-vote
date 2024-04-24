@@ -20,6 +20,15 @@ function TeamListPage() {
     return <Container>Loading...</Container>;
   }
 
+  if (data.length === 0) {
+    return (
+      <Container>
+        <h1 className="text-3xl font-bold mb-4">Teams</h1>
+        <p>You are not a member of any teams.</p>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <h1 className="text-3xl font-bold mb-4">Teams</h1>
