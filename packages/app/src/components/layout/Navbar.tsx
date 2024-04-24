@@ -19,17 +19,17 @@ const Navbar = () => {
           </div>
           <div className="flex gap-4">
             {/* Example Links, to show how they are implemented */}
-            <Link to="/organizations" className="hover:underline">
-              Organizations
+            <Link to="/teams" className="hover:underline">
+              Teams
             </Link>
             <Link
-              to="/organizations/$organization_slug"
+              to="/teams/$team_slug"
               params={{
-                organization_slug: "87654321",
+                team_slug: "87654321",
               }}
               className="hover:underline"
             >
-              Organization
+              Team
             </Link>
             <Link to="/not-found-page" className="hover:underline">
               404 Page

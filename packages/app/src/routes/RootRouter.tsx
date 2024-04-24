@@ -1,7 +1,7 @@
 import { createRootRoute, createRouter } from "@tanstack/react-router";
 import Shell from "../components/layout/Shell";
 import IndexRoute from "./HomeRoute";
-import OrganizationIndexRoute from "./Organizations/OrganizationIndexRoute";
+import TeamIndexRoute from "./Teams/TeamIndexRoute";
 import NotFoundRoute from "./NotFoundRoute";
 
 // Create the root route and provide the app shell for layout
@@ -10,7 +10,7 @@ export const rootRoute = createRootRoute({
 });
 
 // Add sub-routes to the root route
-rootRoute.addChildren([IndexRoute, OrganizationIndexRoute, NotFoundRoute]);
+rootRoute.addChildren([IndexRoute, TeamIndexRoute, NotFoundRoute]);
 
 // Create the router
 const router = createRouter({
