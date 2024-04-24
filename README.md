@@ -169,39 +169,3 @@ git push origin feature/<feature-name>
 Open a pull request on GitHub and describe the changes made in the pull request.
 
 Assign a reviewer to the pull request for approval to have your changes merged into the main branch.
-
-## Features
-
-### teams
-
-- [x] create team
-- [x] update team if team admin
-- [x] invite users
-- [x] modify users roles
-- [x] get list of team user is part of
-
-### users
-
-- [x] create new user account
-- [x] accept/decline invitation
-
-### elections
-
-- [x] create election if team admin
-- [x] update election if not started and team admin
-- [x] see elections for team user is part of
-- [x] vote if elegible
-- [x] get results
-
-## Pages
-
-- [x] /
-- [x] /team                                <-- list of team user is member of
-- [x] /team/:slug                          <-- team details and management
-- [x] /team/:slug/elections                <-- list of elections for team
-- [x] /team/:slug/elections/:slug          <-- election details and management
-- [x] /team/:slug/elections/new            <-- create election
-- [x] /team/:slug/elections/:slug/vote     <-- vote in election
-- [x] /team/:slug/elections/:slug/results  <-- election results
-- [x] /team/:slug/members                  <-- list of members for team
-- [x] /team/:slug/members/invite           <-- invite members to team
