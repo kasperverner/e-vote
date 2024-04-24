@@ -43,6 +43,7 @@ function TeamListPage() {
           </li>
         ))}
       </ul>
+      <Link to="/teams/create" className="mt-4 text-blue-500 hover:underline">Create a new team</Link>
     </Container>
   );
 }
