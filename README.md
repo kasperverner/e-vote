@@ -182,6 +182,8 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 ## Missing route contents
 
+- [ ] main page
+- [ ] create team page
 - [ ] team details page with members, invites and elections
   - [ ] admins should be able to manage members
   - [ ] admins should be able to manage invites
