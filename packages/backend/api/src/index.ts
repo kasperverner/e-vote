@@ -6,7 +6,7 @@ import usersRoutes from "./routes/users";
 import membersRoutes from "./routes/members";
 import electionsRoutes from "./routes/elections";
 
-dotenv.config();
+dotenv.config({override: true});
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,6 +21,7 @@ app.use(express.json());
  */
 app.use("/teams", teamsRoutes);
 app.use("/teams/:team_id/members", membersRoutes);
+app.use("/teams/:team_id/members/count", membersRoutes);
 app.use("/teams/:team_id/elections", electionsRoutes);
 
 app.listen(PORT, async () => {
