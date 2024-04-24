@@ -1,0 +1,29 @@
+name: Auto Merge Main to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  merge-to-production:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Action"
+        git config user.email "action@github.com"
+
+    - name: Merge main to production
+      run: |
+        git fetch origin production
+        git checkout production
+        git merge --no-ff main --no-edit
+        git push origin production
