@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="flex items-center space-x-6">
             <p>© eDemokrati ApS</p>
             <p>All rights reserved</p>
-            <p>CVR 61287513</p>
+            <p>CVR 61287516</p>
           </div>
           <div className="flex items-center">
             <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="font-extrabold hover:underline mr-1">
