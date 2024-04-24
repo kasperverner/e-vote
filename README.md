@@ -169,3 +169,13 @@ git push origin feature/<feature-name>
 Open a pull request on GitHub and describe the changes made in the pull request.
 
 Assign a reviewer to the pull request for approval to have your changes merged into the main branch.
+
+## Assignments
+
+- [ ] Add auth filter for the protected routes
+- [ ] Add data preloading to the router
+- [ ] Dockerrize the app and apis for debug
+- [ ] Dockerrize the app and apis for deployment
+- [ ] Add a CI/CD pipeline using Github Actions
+- [ ] Make proper layout for the UI
+- [ ] Add a proper error logging system (Application Insights) ((Maybe?))
