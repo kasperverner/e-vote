@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import proofRoutes from "./routes/proofs";
 
-dotenv.config();
+dotenv.config({override: true});
 
 const PORT = process.env.PORT || 3000;
 
