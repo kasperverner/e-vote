@@ -22,6 +22,7 @@ export const getTeams: RequestHandler = async (req, res) => {
       select: {
         id: true,
         name: true,
+        created_at: true,
         _count: {
           select: {
             members: true,
@@ -54,6 +55,7 @@ export const getTeam: RequestHandler = async (req, res) => {
       select: {
         id: true,
         name: true,
+        created_at: true,
         _count: {
           select: {
             members: true,
