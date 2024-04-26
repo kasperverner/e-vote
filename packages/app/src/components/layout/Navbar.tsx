@@ -9,42 +9,36 @@ import Container from "./Container";
 
 const Navbar = () => {
   return (
-    <nav className="bg-slate-300 py-4">
+    <nav className="py-4 md:py-6 bg-slate-300">
       <Container>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <Link to="/" className="font-extrabold hover:underline">
-              e-vote
+            <Link
+              to="/"
+              className="font-extrabold text-2xl md:text-3xl hover:underline"
+            >
+              eDemokrati
             </Link>
           </div>
-          <div className="flex gap-4">
-            {/* Example Links, to show how they are implemented */}
-            <Link to="/teams" className="hover:underline">
-              Teams
-            </Link>
-            <Link
-              to="/teams/$team_slug"
-              params={{
-                team_slug: "87654321",
-              }}
-              className="hover:underline"
-            >
-              Team
-            </Link>
-            <Link to="/not-found-page" className="hover:underline">
-              404 Page
-            </Link>
+          <div className="flex gap-6 align-middle">
             <SignedOut>
-              <SignInButton />
+              <SignInButton afterSignInUrl="/">
+                <button className="font-bold text-lg hover:underline">
+                  Sign in
+                </button>
+              </SignInButton>
             </SignedOut>
             <SignedIn>
-              <UserButton />
+              <Link to="/teams" className="font-bold text-lg hover:underline">
+                Teams
+              </Link>
+              <UserButton afterSignOutUrl="/" />
             </SignedIn>
           </div>
         </div>
       </Container>
     </nav>
   );
-}
+};
 
-export default Navbar
+export default Navbar;

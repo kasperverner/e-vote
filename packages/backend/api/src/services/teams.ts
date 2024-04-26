@@ -7,7 +7,7 @@ import db from "../utilities/db.server";
  * @returns teams: Team[]
  */
 export const getTeams: RequestHandler = async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = res.locals;
 
   try {
     // Find all teams that the authenticated user is a member of

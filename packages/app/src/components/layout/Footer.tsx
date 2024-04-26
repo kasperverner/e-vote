@@ -6,13 +6,13 @@ import { faFacebookSquare } from "@fortawesome/free-brands-svg-icons/faFacebookS
 
 const Footer = () => {
   return (
-    <div className="bg-slate-300 py-4">
+    <div className="bg-slate-700 text-white py-4">
       <Container>
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-6">
             <p>© eDemokrati ApS</p>
             <p>All rights reserved</p>
-            <p>CVR 61287513</p>
+            <p>CVR 61287516</p>
           </div>
           <div className="flex items-center">
             <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="font-extrabold hover:underline mr-1">
