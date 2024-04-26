@@ -30,7 +30,7 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
     // Get the user ID from the memory cache or the database
     const user_id = await getUserId(
       payload.sub as string,
-      payload.name as string,
+      (payload.name ?? payload.email.split("@")[0]) as string,
       payload.email as string
     );
 
