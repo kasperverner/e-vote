@@ -4,6 +4,9 @@
   "author": "Kasper Verner",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "workspaces": {
     "packages": [
       "./packages/app",
