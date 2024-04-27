@@ -12,48 +12,34 @@ This is the monorepository for the E-Vote project. It contains the following pac
 
 - [ ] Node.js v18.19.0 or later (LTS) [Download](https://nodejs.org/en/download/)
 - [ ] Yarn [yarn installation guide](https://classic.yarnpkg.com/en/docs/install)
+- [ ] Docker [Download](https://www.docker.com/products/docker-desktop)
+
+## Setting up the environment
+
+Add the API secrets in `/packages/backend/api/.env` as described in the `/packages/backend/api/.env.example` file.
 
 ## Getting started
 
-Install the dependencies with the following command:
+Start the application with the following command:
 
 ```bash
-yarn
+docker-compose up
 ```
 
-Update the `.env` file in the `/packages/backend/api` package with the following content:
+The UI will be available at at [localhost:3000](http://localhost:3000).
+The API will be available at [localhost:4000](http://localhost:4000).
 
-```dotenv
-DATABASE_URL=<CONNECTION_STRING>
-JWT_ISSUER=<ISSUER_URL>
-JWT_PUBLIC_KEY=<PUBLIC_KEY>
-```
-
-Then open a console in the `/packages/backend/api` package and run the following command:
+Stop the application with the following command:
 
 ```bash
-npx prisma generate
+ctrl + c
 ```
 
-Then, you can start the project with the following command:
+Remove the containers with the following command:
 
 ```bash
-yarn app
-yarn api
-yarn api:ballot
-yarn api:proposition
-yarn api:validation
+docker-compose down
 ```
-
-Each command must be run in a separate terminal. It will start the development server for the corresponding package.
-
-Or start all the services in the same terminal with the following command:
-
-```bash
-yarn dev
-```
-
-To stop the services press `ctrl + c` in the terminal.
 
 ## Frontend
 
@@ -174,7 +160,7 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 - [ ] Add auth filter for the protected routes
 - [ ] Add data preloading to the router
-- [ ] Dockerrize the app and apis for debug
+- [x] Dockerrize the app and apis for debug
 - [ ] Dockerrize the app and apis for deployment
 - [ ] Add a CI/CD pipeline using Github Actions
 - [ ] Make proper layout for the UI
