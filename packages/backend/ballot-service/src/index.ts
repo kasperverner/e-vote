@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import proofRoutes from "./routes/proofs";
 
-dotenv.config({override: true});
+dotenv.config({ override: true });
 
 const PORT = process.env.PORT || 3000;
 
@@ -11,6 +11,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Healthcheck
+app.get("/", (req, res) => res.status(200).send({ message: "Ballot service is running" }));
 
 app.use("/proofs", proofRoutes);
 

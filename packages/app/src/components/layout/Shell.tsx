@@ -6,23 +6,22 @@ import Navbar from "./Navbar";
 // import Footer from "./Footer";
 
 const Shell = () => (
-  <div className="bg-slate-100 min-h-screen flex flex-col justify-between">
+  <div className="bg-neutral-50 min-h-screen flex flex-col justify-between">
     <div>
-    <Navbar />
-    <Container>
-      {/* Note sure if Sidebar and Footer is needed, but I've added them just in case */}
-      {/* <Sidebar /> */}
+      <Navbar />
+      <Container>
+        {/* Note sure if Sidebar and Footer is needed, but I've added them just in case */}
+        {/* <Sidebar /> */}
 
-      <section className="py-4">
-        {/* The Outlet is where the router will place the page content */}
-        <Outlet />
-      </section>
-      
+        <section className="py-4">
+          {/* The Outlet is where the router will place the page content */}
+          <Outlet />
+        </section>
 
-      {/* <Footer /> */}
-    </Container>
+        {/* <Footer /> */}
+      </Container>
     </div>
-    <Footer/>
+    <Footer />
   </div>
 );
 

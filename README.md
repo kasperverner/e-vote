@@ -12,48 +12,34 @@ This is the monorepository for the E-Vote project. It contains the following pac
 
 - [ ] Node.js v18.19.0 or later (LTS) [Download](https://nodejs.org/en/download/)
 - [ ] Yarn [yarn installation guide](https://classic.yarnpkg.com/en/docs/install)
+- [ ] Docker [Download](https://www.docker.com/products/docker-desktop)
+
+## Setting up the environment
+
+Add the API secrets in `/packages/backend/api/.env` as described in the `/packages/backend/api/.env.example` file.
 
 ## Getting started
 
-Install the dependencies with the following command:
+Start the application with the following command:
 
 ```bash
-yarn
+docker-compose up
 ```
 
-Update the `.env` file in the `/packages/backend/api` package with the following content:
+The UI will be available at at [localhost:3000](http://localhost:3000).
+The API will be available at [localhost:4000](http://localhost:4000).
 
-```dotenv
-DATABASE_URL=<CONNECTION_STRING>
-JWT_ISSUER=<ISSUER_URL>
-JWT_PUBLIC_KEY=<PUBLIC_KEY>
-```
-
-Then open a console in the `/packages/backend/api` package and run the following command:
+Stop the application with the following command:
 
 ```bash
-npx prisma generate
+ctrl + c
 ```
 
-Then, you can start the project with the following command:
+Remove the containers with the following command:
 
 ```bash
-yarn app
-yarn api
-yarn api:ballot
-yarn api:proposition
-yarn api:validation
+docker-compose down
 ```
-
-Each command must be run in a separate terminal. It will start the development server for the corresponding package.
-
-Or start all the services in the same terminal with the following command:
-
-```bash
-yarn dev
-```
-
-To stop the services press `ctrl + c` in the terminal.
 
 ## Frontend
 
@@ -170,38 +156,26 @@ Open a pull request on GitHub and describe the changes made in the pull request.
 
 Assign a reviewer to the pull request for approval to have your changes merged into the main branch.
 
-## Features
+## Assignments
 
-### teams
+- [ ] Add auth filter for the protected routes
+- [ ] Add data preloading to the router
+- [x] Dockerrize the app and apis for debug
+- [ ] Dockerrize the app and apis for deployment
+- [ ] Add a CI/CD pipeline using Github Actions
+- [ ] Make proper layout for the UI
+- [ ] Add a proper error logging system (Application Insights) ((Maybe?))
 
-- [x] create team
-- [x] update team if team admin
-- [x] invite users
-- [x] modify users roles
-- [x] get list of team user is part of
+## Missing route contents
 
-### users
-
-- [x] create new user account
-- [x] accept/decline invitation
-
-### elections
-
-- [x] create election if team admin
-- [x] update election if not started and team admin
-- [x] see elections for team user is part of
-- [x] vote if elegible
-- [x] get results
-
-## Pages
-
-- [x] /
-- [x] /team                                <-- list of team user is member of
-- [x] /team/:slug                          <-- team details and management
-- [x] /team/:slug/elections                <-- list of elections for team
-- [x] /team/:slug/elections/:slug          <-- election details and management
-- [x] /team/:slug/elections/new            <-- create election
-- [x] /team/:slug/elections/:slug/vote     <-- vote in election
-- [x] /team/:slug/elections/:slug/results  <-- election results
-- [x] /team/:slug/members                  <-- list of members for team
-- [x] /team/:slug/members/invite           <-- invite members to team
+- [ ] main page
+- [ ] create team page
+- [ ] team details page with members, invites and elections
+  - [ ] admins should be able to manage members
+  - [ ] admins should be able to manage invites
+  - [ ] admins should be able to manage elections
+- [ ] team invites page where admins can invite new users to the team
+- [ ] team elections page where admins can create new elections
+- [ ] modify elections page where admins can modify existing elections
+- [ ] election details page where members can see the election details, vote and see results
+- [ ] accept/decline invite page where users can accept or decline an invite to a team

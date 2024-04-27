@@ -7,7 +7,7 @@ import db from "../utilities/db.server";
  * @returns teams: Team[]
  */
 export const getTeams: RequestHandler = async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = res.locals;
 
   try {
     // Find all teams that the authenticated user is a member of
@@ -19,10 +19,21 @@ export const getTeams: RequestHandler = async (req, res) => {
           },
         },
       },
+      select: {
+        id: true,
+        name: true,
+        created_at: true,
+        _count: {
+          select: {
+            members: true,
+          },
+        },
+      },
     });
 
     return res.status(200).json(teams);
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -41,12 +52,23 @@ export const getTeam: RequestHandler = async (req, res) => {
       where: {
         id: team_id,
       },
+      select: {
+        id: true,
+        name: true,
+        created_at: true,
+        _count: {
+          select: {
+            members: true,
+          },
+        },
+      },
     });
 
     if (!team) return res.status(404).send(`Team with ID ${team_id} not found`);
 
     return res.status(200).json(team);
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -76,6 +98,7 @@ export const createTeam: RequestHandler = async (req, res) => {
 
     return res.status(201).json(team);
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -103,6 +126,7 @@ export const updateTeam: RequestHandler = async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
+    console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
