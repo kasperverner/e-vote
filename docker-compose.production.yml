@@ -44,7 +44,7 @@ services:
     image: node:lts-alpine
     environment:
       NODE_ENV: development
-      PORT: 4000
+      PORT: 80
       BALLOT_SERVICE_URL: http://ballot-service:4000
       PROPOSITION_SERVICE_URL: http://proposition-service:4000
       VALIDATION_SERVICE_URL: http://validation-service:4000
@@ -53,5 +53,5 @@ services:
       - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
     ports:
-      - 80:4000
+      - 80:80
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
