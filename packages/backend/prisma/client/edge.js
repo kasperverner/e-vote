@@ -197,7 +197,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/prisma/client",
+      "value": "/Users/kv/aau/aau-software-02/P2/e-vote/packages/backend/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -206,7 +206,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "linux-musl-arm64-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -228,7 +228,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
