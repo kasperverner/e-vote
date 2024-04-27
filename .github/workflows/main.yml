@@ -17,11 +17,11 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
           submodules: true
           lfs: false
-          
+
       - name: Configure Git
         run: |
           git config user.name "github-actions"
