@@ -22,7 +22,14 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-action"
+          git config user.email "github-action@github.com"
+
       - name: Merge main to production
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git fetch origin production
           git checkout production
