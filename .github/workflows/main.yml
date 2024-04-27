@@ -26,5 +26,5 @@ jobs:
         run: |
           git fetch origin production
           git checkout production
-          git merge --no-ff main --no-edit
+          git merge --no-ff main --no-edit --allow-unrelated-histories
           git push origin production
