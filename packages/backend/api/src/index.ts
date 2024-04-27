@@ -2,7 +2,6 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import teamsRoutes from "./routes/teams";
-import usersRoutes from "./routes/users";
 import membersRoutes from "./routes/members";
 import electionsRoutes from "./routes/elections";
 
@@ -14,6 +13,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Healthcheck
+app.get("/", async (req, res) => res.status(200).send({ message: "Gateway API is running" }));
 
 app.use("/teams", teamsRoutes);
 app.use("/teams", membersRoutes);

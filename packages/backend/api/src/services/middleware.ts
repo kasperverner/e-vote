@@ -17,8 +17,11 @@ const cache = new NodeCache({
  */
 export const isAuthorized: RequestHandler = async (req, res, next) => {
   try {
-    // Extract the token from the Authorization header
-    const token = req.headers.authorization?.split(" ")[1] as string;
+    const token = getBearerToken(req.headers.authorization);
+    if (!token)
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: missing authorization header" });
 
     // Verify the authentication token using jsonwebtoken
     const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY as string, {
@@ -45,6 +48,10 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
   }
 };
 
+const getBearerToken = (header: string | undefined): string | undefined => {
+  return header?.split(" ")[1];
+};
+
 /**
  * Function to get the user ID from memory cache or the database
  * If the user ID is not found in the memory cache or the database,
@@ -53,7 +60,11 @@ export const isAuthorized: RequestHandler = async (req, res, next) => {
  * @param name: The name of the user
  * @param email: The email of the user
  */
-const getUserId = async (principal_id: string, name: string, email: string) : Promise<string> => {
+const getUserId = async (
+  principal_id: string,
+  name: string,
+  email: string
+): Promise<string> => {
   // Check if the user ID is stored in the memory cache
   const user_id = cache.get(principal_id) as string;
 
