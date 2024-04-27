@@ -13,6 +13,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Healthcheck
+app.get("/", (req, res) => res.status(200).send({ message: "Proposition service is running" }));
+
 app.use("/proofs", proofRoutes);
 app.use("/results", resultRoutes);
 
