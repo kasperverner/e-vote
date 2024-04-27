@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  ballot-service:
+    image: node:lts-alpine
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      PROOF_SECRET: YWE8LV72PXJUHDACF5MZGK
+    volumes:
+      - ./packages/backend/ballot-service:/api
+      - ./packages/backend/prisma:/prisma
+    working_dir: /api
+    command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
+
+  proposition-service:
+    image: node:lts-alpine
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      PROOF_SECRET: RHDZAP9WNFU8427EMSXJQL
+    volumes:
+      - ./packages/backend/proposition-service:/api
+      - ./packages/backend/prisma:/prisma
+    working_dir: /api
+    command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
+
+  validation-service:
+    image: node:lts-alpine
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      PROOF_SECRET: LPWBZH8XMTVDYEG2RASNK3
+    volumes:
+      - ./packages/backend/validation-service:/api
+      - ./packages/backend/prisma:/prisma
+    working_dir: /api
+    command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
+
+  api:
+    depends_on:
+      - ballot-service
+      - proposition-service
+      - validation-service
+    image: node:lts-alpine
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      BALLOT_SERVICE_URL: http://ballot-service:4000
+      PROPOSITION_SERVICE_URL: http://proposition-service:4000
+      VALIDATION_SERVICE_URL: http://validation-service:4000
+    volumes:
+      - ./packages/backend/api:/api
+      - ./packages/backend/prisma:/prisma
+    working_dir: /api
+    ports:
+      - 80:4000
+    command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
