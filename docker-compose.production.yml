@@ -10,6 +10,7 @@ services:
       - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/ballot-service:/api
       - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
+    restart: always
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
 
   proposition-service:
@@ -22,6 +23,7 @@ services:
       - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/proposition-service:/api
       - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
+    restart: always
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
 
   validation-service:
@@ -34,6 +36,7 @@ services:
       - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/validation-service:/api
       - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
+    restart: always
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
 
   api:
@@ -54,4 +57,5 @@ services:
     working_dir: /api
     ports:
       - 80:80
+    restart: always
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
