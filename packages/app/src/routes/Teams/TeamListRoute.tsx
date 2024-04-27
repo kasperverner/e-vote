@@ -29,7 +29,7 @@ function TeamListPage() {
     <>
       <h1 className="text-3xl font-bold my-6">Teams</h1>
       <ul>
-        {data?.map((team) => (
+        {data?.map((team: any) => (
           <li
             key={team.id}
             className="bg-white p-4 rounded-lg shadow mb-4 hover:bg-slate-200 flex items-center justify-between"

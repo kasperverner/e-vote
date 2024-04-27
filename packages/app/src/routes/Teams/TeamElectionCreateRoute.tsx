@@ -8,7 +8,7 @@ const TeamElectionCreateRoute = createRoute({
 });
 
 function TeamElectionCreatePage() {
-  const { team_slug } = TeamElectionCreateRoute.useParams();
+  // const { team_slug } = TeamElectionCreateRoute.useParams();
 
   return (
     <div className="">
