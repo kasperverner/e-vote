@@ -7,8 +7,8 @@ services:
       PORT: 4000
       PROOF_SECRET: YWE8LV72PXJUHDACF5MZGK
     volumes:
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/ballot-service:/api
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/prisma:/prisma
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/ballot-service:/api
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
 
@@ -19,8 +19,8 @@ services:
       PORT: 4000
       PROOF_SECRET: RHDZAP9WNFU8427EMSXJQL
     volumes:
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/proposition-service:/api
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/prisma:/prisma
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/proposition-service:/api
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
 
@@ -31,8 +31,8 @@ services:
       PORT: 4000
       PROOF_SECRET: LPWBZH8XMTVDYEG2RASNK3
     volumes:
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/validation-service:/api
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/prisma:/prisma
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/validation-service:/api
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
     command: /bin/sh -c "yarn install && yarn ts-node src/index.ts"
 
@@ -49,8 +49,8 @@ services:
       PROPOSITION_SERVICE_URL: http://proposition-service:4000
       VALIDATION_SERVICE_URL: http://validation-service:4000
     volumes:
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/api:/api
-      - ${WEBAPP_STORAGE_HOME}/packages/backend/prisma:/prisma
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/api:/api
+      - ${WEBAPP_STORAGE_HOME}/clouddrive/e-vote/packages/backend/prisma:/prisma
     working_dir: /api
     ports:
       - 80:4000
