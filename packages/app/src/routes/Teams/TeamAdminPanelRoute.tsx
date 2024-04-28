@@ -95,7 +95,7 @@ function TeamAdminPanel() {
                 </div>
             </div>
             <div className="flex flex-col w-1/2">
-                <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4">
+                <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4 overflow-y-auto">
                     <h2 className="text-xl font-bold mb-4">Elections</h2>
                     <div className="flex flex-col space-y-4">
                         {elections.map((election) => (
