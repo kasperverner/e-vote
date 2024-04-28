@@ -2,6 +2,8 @@ import { createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import { useAuth } from "@clerk/clerk-react";
 import useElections from "../../hooks/useElections";
+import useTeamMembers from "../../hooks/useTeamMembers";
+import useCurrentUser from "../../hooks/useCurrentUser";
 
 import Button from "../../components/form/button";
 import { Link } from "@tanstack/react-router";
@@ -17,9 +19,13 @@ function TeamAdminPanel() {
     console.log(team_slug);
     const { getToken } = useAuth();
     const { data: elections } = useElections(team_slug);
+    const { data: members } = useTeamMembers(team_slug);
+    const { data: currentUser } = useCurrentUser();
+
+    console.log(currentUser);
 
     // if something is loading, return a loading state
-    if (!elections) {
+    if (!elections || !members) {
         return <div>Loading...</div>;
     }
 
@@ -54,8 +60,9 @@ function TeamAdminPanel() {
             },
             body: JSON.stringify({
                 name: newName,
-            })})
-            .then ((data) => {
+            })
+        })
+            .then((data) => {
                 if (data.status === 500) {
                     alert("Error renaming team, try another name");
                 }
@@ -72,13 +79,78 @@ function TeamAdminPanel() {
             });
     }
 
+    async function handleChangeUser(user_id: string, isAdmin: boolean) {
+        console.log("Promote user with id: ", user_id);
+        // fetch put on /teams/:teamId/members/:memberId, add isAdmin: true
+        const token = await getToken();
+        fetch(`http://localhost:4000/teams/${team_slug}/members/${user_id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token as string}`,
+            },
+            body: JSON.stringify({
+                isAdmin: isAdmin,
+            }),
+        })
+            .then((data) => {
+                console.log(data);
+                // reload page
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Error promoting user to admin");
+            });
+    }
+
+    async function handleRemoveUser(user_id: string) {
+        // fetch delete request to remove user from team (DELETE on /teams/:teamId/members/:memberId)
+        const token = await getToken();
+        fetch(`http://localhost:4000/teams/${team_slug}/members/${user_id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token as string}`,
+            },
+        })
+            .then((data) => {
+                console.log(data);
+                // reload page
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Error removing user from team");
+            });
+    }
+
     return (
         <div className="flex flex-row" style={{ height: "80vh" }}>
             <div className="flex flex-col w-1/2">
-                <div className="bg-white p-4 rounded-lg shadow-md mb-4 h-2/5">
+                <div className="bg-white p-4 rounded-lg shadow-md mb-4 h-2/5 overflow-y-auto">
                     <h2 className="text-xl font-bold mb-4">Members</h2>
-                    {/* Members section content */}
+                    <ul className="flex flex-col space-y-4">
+                        {members.map((member) => (
+                            <li key={member.email} className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-lg font-bold">{member.name}</h3>
+                                    <p>{member.email}</p>
+                                </div>
+                                {currentUser.user.email !== member.email && (
+                                    <div className="flex space-x-2">
+                                        {!member.isAdmin ? (
+                                            <Button className="bg-green-500 text-white px-4 py-2 rounded-md" onClick={() => handlePromoteUser(member.id)}>Promote</Button>
+                                        ) : (
+                                            <Button className="bg-yellow-500 text-white px-4 py-2 rounded-md" onClick={() => handleDemoteUser(member.id)}>Demote</Button>
+                                        )}
+                                        <Button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => handleRemoveUser(member.id)}>Kick</Button>
+                                    </div>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
+
                 <div className="bg-white p-4 rounded-lg shadow-md mb-4 h-2/5">
                     <h2 className="text-xl font-bold mb-4">Invites</h2>
                     {/* Invites section content */}
@@ -97,15 +169,15 @@ function TeamAdminPanel() {
             <div className="flex flex-col w-1/2">
                 <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4 overflow-y-auto">
                     <h2 className="text-xl font-bold mb-4">Elections</h2>
-                    <div className="flex flex-col space-y-4">
+                    <ul className="flex flex-col space-y-4">
                         {elections.map((election) => (
-                            <div key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md">
+                            <li key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md">
                                 <h3 className="text-lg font-bold">{election.name}</h3>
                                 <p>{election.description}</p>
                                 <Link to={`/teams/${team_slug}/elections/${election.id}`} className="text-blue-500">View election</Link>
-                            </div>
+                            </li>
                         ))}
-                    </div>
+                    </ul>
                 </div>
             </div>
         </div>
