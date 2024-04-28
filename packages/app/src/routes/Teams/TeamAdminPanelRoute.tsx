@@ -1,6 +1,7 @@
 import { createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import { useAuth } from "@clerk/clerk-react";
+import useElections from "../../hooks/useElections";
 
 import Button from "../../components/form/button";
 import { Link } from "@tanstack/react-router";
@@ -15,6 +16,12 @@ function TeamAdminPanel() {
     const team_slug = TeamAdminPanelRoute.useParams().team_slug;
     console.log(team_slug);
     const { getToken } = useAuth();
+    const { data: elections } = useElections(team_slug);
+
+    // if something is loading, return a loading state
+    if (!elections) {
+        return <div>Loading...</div>;
+    }
 
     async function handleDeleteTeam() {
         const token = await getToken();
@@ -48,6 +55,12 @@ function TeamAdminPanel() {
             body: JSON.stringify({
                 name: newName,
             })})
+            .then ((data) => {
+                if (data.status === 500) {
+                    alert("Error renaming team, try another name");
+                }
+                return data;
+            })
             .then((data) => {
                 console.log(data);
                 // reload page
@@ -84,7 +97,15 @@ function TeamAdminPanel() {
             <div className="flex flex-col w-1/2">
                 <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4">
                     <h2 className="text-xl font-bold mb-4">Elections</h2>
-                    {/* Elections section content */}
+                    <div className="flex flex-col space-y-4">
+                        {elections.map((election) => (
+                            <div key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md">
+                                <h3 className="text-lg font-bold">{election.name}</h3>
+                                <p>{election.description}</p>
+                                <Link to={`/teams/${team_slug}/elections/${election.id}`} className="text-blue-500">View election</Link>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
