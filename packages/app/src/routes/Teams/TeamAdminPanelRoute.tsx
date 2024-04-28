@@ -13,15 +13,31 @@ const TeamAdminPanelRoute = createRoute({
 
 function TeamAdminPanel() {
     const team_slug = TeamAdminPanelRoute.useParams().team_slug;
+    console.log(team_slug);
     const { getToken } = useAuth();
 
-    function handleDeleteTeam() {
-        console.log("Team deleted");
+    async function handleDeleteTeam() {
+        const token = await getToken();
+        // fetch delete request to delete team (DELETE on /teams/:teamId)
+        fetch(`http://localhost:4000/teams/${team_slug}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token as string}`,
+            },
+        })
+            .then((data) => {
+                console.log(data);
+                // redirect to team index
+                window.location.href = "/teams";
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Error deleting team");
+            });
     }
 
     async function handleRenameTeam(newName: string, team_slug: string) {
         const token = await getToken();
-        console.log(token);
         // fetch request to rename team (PUT on /teams/:teamId)
         fetch(`http://localhost:4000/teams/${team_slug}`, {
             method: "PUT",

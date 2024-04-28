@@ -3,6 +3,7 @@ import TeamIndexRoute from "./TeamIndexRoute";
 import useTeam from "../../hooks/useTeam";
 import useTeamMembers from "../../hooks/useTeamMembers";
 import useCurrentUser from "../../hooks/useCurrentUser";
+import { useAuth } from "@clerk/clerk-react";
 
 import Button from "../../components/form/button";
 import Info from "../../components/team-details-page/Info";
@@ -27,6 +28,26 @@ function TeamDetailsPage() {
     return <div>Loading...</div>;
   }
 
+  function handleLeaveTeam(user_id, members) {
+    const isAdmin = members.some((member) => member.user_id === user_id && member.isAdmin);
+    const adminCount = members.filter((member) => member.isAdmin).length;
+    console.log(isAdmin, adminCount);
+  
+    if (isAdmin && adminCount === 1) {
+      console.log("You are the only admin");
+      // Delete the team
+      // TODO: Implement team deletion logic
+    } else if (isAdmin) {
+      console.log("You are an admin but not the only one");
+      // Demote itself and leave
+      // TODO: Implement demotion and leave logic
+    } else {
+      console.log("You are not an admin");
+      // Just leave the team
+      // TODO: Implement leave logic
+    }
+  }
+
   return (
     <div className="flex flex-col space-y-6">
       <div className="bg-gray-100 p-6 rounded-lg shadow-md flex justify-between">
@@ -42,26 +63,6 @@ function TeamDetailsPage() {
       </div>
     </div>
   );
-}
-
-function handleLeaveTeam(user_id, members) {
-  const isAdmin = members.some((member) => member.user_id === user_id && member.isAdmin);
-  const adminCount = members.filter((member) => member.isAdmin).length;
-  console.log(isAdmin, adminCount);
-
-  if (isAdmin && adminCount === 1) {
-    console.log("You are the only admin");
-    // Delete the team
-    // TODO: Implement team deletion logic
-  } else if (isAdmin) {
-    console.log("You are an admin but not the only one");
-    // Demote itself and leave
-    // TODO: Implement demotion and leave logic
-  } else {
-    console.log("You are not an admin");
-    // Just leave the team
-    // TODO: Implement leave logic
-  }
 }
 
 export default TeamDetailsRoute;
