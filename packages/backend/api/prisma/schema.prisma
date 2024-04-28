@@ -26,7 +26,7 @@ model Elections {
 
 model Teams {
   id          String        @id @default(uuid())
-  name        String        @unique
+  name        String
   elections   Elections[]
   members     TeamMembers[]
   invitations Invitations[]
