@@ -18,6 +18,9 @@ export const getTeams: RequestHandler = async (req, res) => {
             user_id,
           },
         },
+        is_deleted: {
+          not: true,
+        }
       },
       select: {
         id: true,
@@ -52,6 +55,9 @@ export const getTeam: RequestHandler = async (req, res) => {
     const team = await db.teams.findUnique({
       where: {
         id: team_id,
+        is_deleted: {
+          not: true,
+        },
       },
       select: {
         id: true,
@@ -127,6 +133,9 @@ export const updateTeam: RequestHandler = async (req, res) => {
     const team = await db.teams.update({
       where: {
         id: team_id,
+        is_deleted: {
+          not: true,
+        },
       },
       data: {
         name,
@@ -149,10 +158,16 @@ export const deleteTeam: RequestHandler = async (req, res) => {
 
   try {
     // Delete the team
-    await db.teams.delete({
+    await db.teams.update({
       where: {
         id: team_id,
+        is_deleted: {
+          not: true,
+        },
       },
+      data: {
+        is_deleted: true,
+      }
     });
 
     return res.status(204).send();

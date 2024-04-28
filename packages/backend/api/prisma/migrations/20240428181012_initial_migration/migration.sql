@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "InviteStates" AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED', 'DELETED');
+CREATE TYPE "InviteStates" AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED');
 
 -- CreateTable
 CREATE TABLE "Elections" (
@@ -7,6 +7,7 @@ CREATE TABLE "Elections" (
     "team_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
+    "is_deleted" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "start_at" TIMESTAMP(3) NOT NULL,
     "end_at" TIMESTAMP(3),
@@ -18,6 +19,7 @@ CREATE TABLE "Elections" (
 CREATE TABLE "Teams" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
 
@@ -30,6 +32,7 @@ CREATE TABLE "TeamMembers" (
     "team_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "is_admin" BOOLEAN NOT NULL DEFAULT false,
+    "is_deleted" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
 
@@ -44,6 +47,7 @@ CREATE TABLE "Invitations" (
     "invited_by_member_id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "is_admin" BOOLEAN NOT NULL DEFAULT false,
+    "is_deleted" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
 

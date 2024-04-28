@@ -61,8 +61,7 @@ export namespace $Enums {
   export const InviteStates: {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
-  DECLINED: 'DECLINED',
-  DELETED: 'DELETED'
+  DECLINED: 'DECLINED'
 };
 
 export type InviteStates = (typeof InviteStates)[keyof typeof InviteStates]
@@ -1649,6 +1648,7 @@ export namespace Prisma {
     team_id: string | null
     name: string | null
     description: string | null
+    is_deleted: boolean | null
     created_at: Date | null
     start_at: Date | null
     end_at: Date | null
@@ -1659,6 +1659,7 @@ export namespace Prisma {
     team_id: string | null
     name: string | null
     description: string | null
+    is_deleted: boolean | null
     created_at: Date | null
     start_at: Date | null
     end_at: Date | null
@@ -1669,6 +1670,7 @@ export namespace Prisma {
     team_id: number
     name: number
     description: number
+    is_deleted: number
     created_at: number
     start_at: number
     end_at: number
@@ -1681,6 +1683,7 @@ export namespace Prisma {
     team_id?: true
     name?: true
     description?: true
+    is_deleted?: true
     created_at?: true
     start_at?: true
     end_at?: true
@@ -1691,6 +1694,7 @@ export namespace Prisma {
     team_id?: true
     name?: true
     description?: true
+    is_deleted?: true
     created_at?: true
     start_at?: true
     end_at?: true
@@ -1701,6 +1705,7 @@ export namespace Prisma {
     team_id?: true
     name?: true
     description?: true
+    is_deleted?: true
     created_at?: true
     start_at?: true
     end_at?: true
@@ -1784,6 +1789,7 @@ export namespace Prisma {
     team_id: string
     name: string
     description: string | null
+    is_deleted: boolean
     created_at: Date
     start_at: Date
     end_at: Date | null
@@ -1811,6 +1817,7 @@ export namespace Prisma {
     team_id?: boolean
     name?: boolean
     description?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     start_at?: boolean
     end_at?: boolean
@@ -1826,6 +1833,7 @@ export namespace Prisma {
     team_id?: boolean
     name?: boolean
     description?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     start_at?: boolean
     end_at?: boolean
@@ -1854,6 +1862,7 @@ export namespace Prisma {
       team_id: string
       name: string
       description: string | null
+      is_deleted: boolean
       created_at: Date
       start_at: Date
       end_at: Date | null
@@ -2262,6 +2271,7 @@ export namespace Prisma {
     readonly team_id: FieldRef<"Elections", 'String'>
     readonly name: FieldRef<"Elections", 'String'>
     readonly description: FieldRef<"Elections", 'String'>
+    readonly is_deleted: FieldRef<"Elections", 'Boolean'>
     readonly created_at: FieldRef<"Elections", 'DateTime'>
     readonly start_at: FieldRef<"Elections", 'DateTime'>
     readonly end_at: FieldRef<"Elections", 'DateTime'>
@@ -2651,6 +2661,7 @@ export namespace Prisma {
   export type TeamsMinAggregateOutputType = {
     id: string | null
     name: string | null
+    is_deleted: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -2658,6 +2669,7 @@ export namespace Prisma {
   export type TeamsMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    is_deleted: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -2665,6 +2677,7 @@ export namespace Prisma {
   export type TeamsCountAggregateOutputType = {
     id: number
     name: number
+    is_deleted: number
     created_at: number
     updated_at: number
     _all: number
@@ -2674,6 +2687,7 @@ export namespace Prisma {
   export type TeamsMinAggregateInputType = {
     id?: true
     name?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
   }
@@ -2681,6 +2695,7 @@ export namespace Prisma {
   export type TeamsMaxAggregateInputType = {
     id?: true
     name?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
   }
@@ -2688,6 +2703,7 @@ export namespace Prisma {
   export type TeamsCountAggregateInputType = {
     id?: true
     name?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -2768,6 +2784,7 @@ export namespace Prisma {
   export type TeamsGroupByOutputType = {
     id: string
     name: string
+    is_deleted: boolean
     created_at: Date
     updated_at: Date | null
     _count: TeamsCountAggregateOutputType | null
@@ -2792,6 +2809,7 @@ export namespace Prisma {
   export type TeamsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     updated_at?: boolean
     elections?: boolean | Teams$electionsArgs<ExtArgs>
@@ -2803,6 +2821,7 @@ export namespace Prisma {
   export type TeamsSelectScalar = {
     id?: boolean
     name?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -2826,6 +2845,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      is_deleted: boolean
       created_at: Date
       updated_at: Date | null
     }, ExtArgs["result"]["teams"]>
@@ -3229,6 +3249,7 @@ export namespace Prisma {
   interface TeamsFieldRefs {
     readonly id: FieldRef<"Teams", 'String'>
     readonly name: FieldRef<"Teams", 'String'>
+    readonly is_deleted: FieldRef<"Teams", 'Boolean'>
     readonly created_at: FieldRef<"Teams", 'DateTime'>
     readonly updated_at: FieldRef<"Teams", 'DateTime'>
   }
@@ -3619,6 +3640,7 @@ export namespace Prisma {
     team_id: string | null
     user_id: string | null
     is_admin: boolean | null
+    is_deleted: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -3628,6 +3650,7 @@ export namespace Prisma {
     team_id: string | null
     user_id: string | null
     is_admin: boolean | null
+    is_deleted: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -3637,6 +3660,7 @@ export namespace Prisma {
     team_id: number
     user_id: number
     is_admin: number
+    is_deleted: number
     created_at: number
     updated_at: number
     _all: number
@@ -3648,6 +3672,7 @@ export namespace Prisma {
     team_id?: true
     user_id?: true
     is_admin?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
   }
@@ -3657,6 +3682,7 @@ export namespace Prisma {
     team_id?: true
     user_id?: true
     is_admin?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
   }
@@ -3666,6 +3692,7 @@ export namespace Prisma {
     team_id?: true
     user_id?: true
     is_admin?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -3748,6 +3775,7 @@ export namespace Prisma {
     team_id: string
     user_id: string
     is_admin: boolean
+    is_deleted: boolean
     created_at: Date
     updated_at: Date | null
     _count: TeamMembersCountAggregateOutputType | null
@@ -3774,6 +3802,7 @@ export namespace Prisma {
     team_id?: boolean
     user_id?: boolean
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     updated_at?: boolean
     team?: boolean | TeamsDefaultArgs<ExtArgs>
@@ -3787,6 +3816,7 @@ export namespace Prisma {
     team_id?: boolean
     user_id?: boolean
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -3812,6 +3842,7 @@ export namespace Prisma {
       team_id: string
       user_id: string
       is_admin: boolean
+      is_deleted: boolean
       created_at: Date
       updated_at: Date | null
     }, ExtArgs["result"]["teamMembers"]>
@@ -4217,6 +4248,7 @@ export namespace Prisma {
     readonly team_id: FieldRef<"TeamMembers", 'String'>
     readonly user_id: FieldRef<"TeamMembers", 'String'>
     readonly is_admin: FieldRef<"TeamMembers", 'Boolean'>
+    readonly is_deleted: FieldRef<"TeamMembers", 'Boolean'>
     readonly created_at: FieldRef<"TeamMembers", 'DateTime'>
     readonly updated_at: FieldRef<"TeamMembers", 'DateTime'>
   }
@@ -4569,6 +4601,7 @@ export namespace Prisma {
     invited_by_member_id: string | null
     email: string | null
     is_admin: boolean | null
+    is_deleted: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -4580,6 +4613,7 @@ export namespace Prisma {
     invited_by_member_id: string | null
     email: string | null
     is_admin: boolean | null
+    is_deleted: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -4591,6 +4625,7 @@ export namespace Prisma {
     invited_by_member_id: number
     email: number
     is_admin: number
+    is_deleted: number
     created_at: number
     updated_at: number
     _all: number
@@ -4604,6 +4639,7 @@ export namespace Prisma {
     invited_by_member_id?: true
     email?: true
     is_admin?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
   }
@@ -4615,6 +4651,7 @@ export namespace Prisma {
     invited_by_member_id?: true
     email?: true
     is_admin?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
   }
@@ -4626,6 +4663,7 @@ export namespace Prisma {
     invited_by_member_id?: true
     email?: true
     is_admin?: true
+    is_deleted?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -4710,6 +4748,7 @@ export namespace Prisma {
     invited_by_member_id: string
     email: string
     is_admin: boolean
+    is_deleted: boolean
     created_at: Date
     updated_at: Date | null
     _count: InvitationsCountAggregateOutputType | null
@@ -4738,6 +4777,7 @@ export namespace Prisma {
     invited_by_member_id?: boolean
     email?: boolean
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     updated_at?: boolean
     team?: boolean | TeamsDefaultArgs<ExtArgs>
@@ -4751,6 +4791,7 @@ export namespace Prisma {
     invited_by_member_id?: boolean
     email?: boolean
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -4775,6 +4816,7 @@ export namespace Prisma {
       invited_by_member_id: string
       email: string
       is_admin: boolean
+      is_deleted: boolean
       created_at: Date
       updated_at: Date | null
     }, ExtArgs["result"]["invitations"]>
@@ -5180,6 +5222,7 @@ export namespace Prisma {
     readonly invited_by_member_id: FieldRef<"Invitations", 'String'>
     readonly email: FieldRef<"Invitations", 'String'>
     readonly is_admin: FieldRef<"Invitations", 'Boolean'>
+    readonly is_deleted: FieldRef<"Invitations", 'Boolean'>
     readonly created_at: FieldRef<"Invitations", 'DateTime'>
     readonly updated_at: FieldRef<"Invitations", 'DateTime'>
   }
@@ -9175,6 +9218,7 @@ export namespace Prisma {
     team_id: 'team_id',
     name: 'name',
     description: 'description',
+    is_deleted: 'is_deleted',
     created_at: 'created_at',
     start_at: 'start_at',
     end_at: 'end_at'
@@ -9186,6 +9230,7 @@ export namespace Prisma {
   export const TeamsScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    is_deleted: 'is_deleted',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -9198,6 +9243,7 @@ export namespace Prisma {
     team_id: 'team_id',
     user_id: 'user_id',
     is_admin: 'is_admin',
+    is_deleted: 'is_deleted',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -9212,6 +9258,7 @@ export namespace Prisma {
     invited_by_member_id: 'invited_by_member_id',
     email: 'email',
     is_admin: 'is_admin',
+    is_deleted: 'is_deleted',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -9306,6 +9353,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -9316,13 +9370,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -9365,6 +9412,7 @@ export namespace Prisma {
     team_id?: StringFilter<"Elections"> | string
     name?: StringFilter<"Elections"> | string
     description?: StringNullableFilter<"Elections"> | string | null
+    is_deleted?: BoolFilter<"Elections"> | boolean
     created_at?: DateTimeFilter<"Elections"> | Date | string
     start_at?: DateTimeFilter<"Elections"> | Date | string
     end_at?: DateTimeNullableFilter<"Elections"> | Date | string | null
@@ -9379,6 +9427,7 @@ export namespace Prisma {
     team_id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     start_at?: SortOrder
     end_at?: SortOrderInput | SortOrder
@@ -9396,6 +9445,7 @@ export namespace Prisma {
     team_id?: StringFilter<"Elections"> | string
     name?: StringFilter<"Elections"> | string
     description?: StringNullableFilter<"Elections"> | string | null
+    is_deleted?: BoolFilter<"Elections"> | boolean
     created_at?: DateTimeFilter<"Elections"> | Date | string
     start_at?: DateTimeFilter<"Elections"> | Date | string
     end_at?: DateTimeNullableFilter<"Elections"> | Date | string | null
@@ -9410,6 +9460,7 @@ export namespace Prisma {
     team_id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     start_at?: SortOrder
     end_at?: SortOrderInput | SortOrder
@@ -9426,6 +9477,7 @@ export namespace Prisma {
     team_id?: StringWithAggregatesFilter<"Elections"> | string
     name?: StringWithAggregatesFilter<"Elections"> | string
     description?: StringNullableWithAggregatesFilter<"Elections"> | string | null
+    is_deleted?: BoolWithAggregatesFilter<"Elections"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"Elections"> | Date | string
     start_at?: DateTimeWithAggregatesFilter<"Elections"> | Date | string
     end_at?: DateTimeNullableWithAggregatesFilter<"Elections"> | Date | string | null
@@ -9437,6 +9489,7 @@ export namespace Prisma {
     NOT?: TeamsWhereInput | TeamsWhereInput[]
     id?: StringFilter<"Teams"> | string
     name?: StringFilter<"Teams"> | string
+    is_deleted?: BoolFilter<"Teams"> | boolean
     created_at?: DateTimeFilter<"Teams"> | Date | string
     updated_at?: DateTimeNullableFilter<"Teams"> | Date | string | null
     elections?: ElectionsListRelationFilter
@@ -9447,6 +9500,7 @@ export namespace Prisma {
   export type TeamsOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     elections?: ElectionsOrderByRelationAggregateInput
@@ -9460,6 +9514,7 @@ export namespace Prisma {
     AND?: TeamsWhereInput | TeamsWhereInput[]
     OR?: TeamsWhereInput[]
     NOT?: TeamsWhereInput | TeamsWhereInput[]
+    is_deleted?: BoolFilter<"Teams"> | boolean
     created_at?: DateTimeFilter<"Teams"> | Date | string
     updated_at?: DateTimeNullableFilter<"Teams"> | Date | string | null
     elections?: ElectionsListRelationFilter
@@ -9470,6 +9525,7 @@ export namespace Prisma {
   export type TeamsOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: TeamsCountOrderByAggregateInput
@@ -9483,6 +9539,7 @@ export namespace Prisma {
     NOT?: TeamsScalarWhereWithAggregatesInput | TeamsScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Teams"> | string
     name?: StringWithAggregatesFilter<"Teams"> | string
+    is_deleted?: BoolWithAggregatesFilter<"Teams"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"Teams"> | Date | string
     updated_at?: DateTimeNullableWithAggregatesFilter<"Teams"> | Date | string | null
   }
@@ -9495,6 +9552,7 @@ export namespace Prisma {
     team_id?: StringFilter<"TeamMembers"> | string
     user_id?: StringFilter<"TeamMembers"> | string
     is_admin?: BoolFilter<"TeamMembers"> | boolean
+    is_deleted?: BoolFilter<"TeamMembers"> | boolean
     created_at?: DateTimeFilter<"TeamMembers"> | Date | string
     updated_at?: DateTimeNullableFilter<"TeamMembers"> | Date | string | null
     team?: XOR<TeamsRelationFilter, TeamsWhereInput>
@@ -9507,6 +9565,7 @@ export namespace Prisma {
     team_id?: SortOrder
     user_id?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     team?: TeamsOrderByWithRelationInput
@@ -9522,6 +9581,7 @@ export namespace Prisma {
     team_id?: StringFilter<"TeamMembers"> | string
     user_id?: StringFilter<"TeamMembers"> | string
     is_admin?: BoolFilter<"TeamMembers"> | boolean
+    is_deleted?: BoolFilter<"TeamMembers"> | boolean
     created_at?: DateTimeFilter<"TeamMembers"> | Date | string
     updated_at?: DateTimeNullableFilter<"TeamMembers"> | Date | string | null
     team?: XOR<TeamsRelationFilter, TeamsWhereInput>
@@ -9534,6 +9594,7 @@ export namespace Prisma {
     team_id?: SortOrder
     user_id?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: TeamMembersCountOrderByAggregateInput
@@ -9549,6 +9610,7 @@ export namespace Prisma {
     team_id?: StringWithAggregatesFilter<"TeamMembers"> | string
     user_id?: StringWithAggregatesFilter<"TeamMembers"> | string
     is_admin?: BoolWithAggregatesFilter<"TeamMembers"> | boolean
+    is_deleted?: BoolWithAggregatesFilter<"TeamMembers"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"TeamMembers"> | Date | string
     updated_at?: DateTimeNullableWithAggregatesFilter<"TeamMembers"> | Date | string | null
   }
@@ -9563,6 +9625,7 @@ export namespace Prisma {
     invited_by_member_id?: StringFilter<"Invitations"> | string
     email?: StringFilter<"Invitations"> | string
     is_admin?: BoolFilter<"Invitations"> | boolean
+    is_deleted?: BoolFilter<"Invitations"> | boolean
     created_at?: DateTimeFilter<"Invitations"> | Date | string
     updated_at?: DateTimeNullableFilter<"Invitations"> | Date | string | null
     team?: XOR<TeamsRelationFilter, TeamsWhereInput>
@@ -9576,6 +9639,7 @@ export namespace Prisma {
     invited_by_member_id?: SortOrder
     email?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     team?: TeamsOrderByWithRelationInput
@@ -9592,6 +9656,7 @@ export namespace Prisma {
     invited_by_member_id?: StringFilter<"Invitations"> | string
     email?: StringFilter<"Invitations"> | string
     is_admin?: BoolFilter<"Invitations"> | boolean
+    is_deleted?: BoolFilter<"Invitations"> | boolean
     created_at?: DateTimeFilter<"Invitations"> | Date | string
     updated_at?: DateTimeNullableFilter<"Invitations"> | Date | string | null
     team?: XOR<TeamsRelationFilter, TeamsWhereInput>
@@ -9605,6 +9670,7 @@ export namespace Prisma {
     invited_by_member_id?: SortOrder
     email?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: InvitationsCountOrderByAggregateInput
@@ -9622,6 +9688,7 @@ export namespace Prisma {
     invited_by_member_id?: StringWithAggregatesFilter<"Invitations"> | string
     email?: StringWithAggregatesFilter<"Invitations"> | string
     is_admin?: BoolWithAggregatesFilter<"Invitations"> | boolean
+    is_deleted?: BoolWithAggregatesFilter<"Invitations"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"Invitations"> | Date | string
     updated_at?: DateTimeNullableWithAggregatesFilter<"Invitations"> | Date | string | null
   }
@@ -9851,6 +9918,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -9865,6 +9933,7 @@ export namespace Prisma {
     team_id: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -9877,6 +9946,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9891,6 +9961,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9904,6 +9975,7 @@ export namespace Prisma {
     team_id: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -9913,6 +9985,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9923,6 +9996,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9931,6 +10005,7 @@ export namespace Prisma {
   export type TeamsCreateInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     elections?: ElectionsCreateNestedManyWithoutTeamInput
@@ -9941,6 +10016,7 @@ export namespace Prisma {
   export type TeamsUncheckedCreateInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     elections?: ElectionsUncheckedCreateNestedManyWithoutTeamInput
@@ -9951,6 +10027,7 @@ export namespace Prisma {
   export type TeamsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     elections?: ElectionsUpdateManyWithoutTeamNestedInput
@@ -9961,6 +10038,7 @@ export namespace Prisma {
   export type TeamsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     elections?: ElectionsUncheckedUpdateManyWithoutTeamNestedInput
@@ -9971,6 +10049,7 @@ export namespace Prisma {
   export type TeamsCreateManyInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -9978,6 +10057,7 @@ export namespace Prisma {
   export type TeamsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -9985,6 +10065,7 @@ export namespace Prisma {
   export type TeamsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -9992,6 +10073,7 @@ export namespace Prisma {
   export type TeamMembersCreateInput = {
     id?: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     team: TeamsCreateNestedOneWithoutMembersInput
@@ -10004,6 +10086,7 @@ export namespace Prisma {
     team_id: string
     user_id: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     Invitation?: InvitationsUncheckedCreateNestedManyWithoutInvited_by_memberInput
@@ -10012,6 +10095,7 @@ export namespace Prisma {
   export type TeamMembersUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     team?: TeamsUpdateOneRequiredWithoutMembersNestedInput
@@ -10024,6 +10108,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Invitation?: InvitationsUncheckedUpdateManyWithoutInvited_by_memberNestedInput
@@ -10034,6 +10119,7 @@ export namespace Prisma {
     team_id: string
     user_id: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -10041,6 +10127,7 @@ export namespace Prisma {
   export type TeamMembersUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -10050,6 +10137,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -10059,6 +10147,7 @@ export namespace Prisma {
     state?: $Enums.InviteStates
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     team: TeamsCreateNestedOneWithoutInvitationsInput
@@ -10072,6 +10161,7 @@ export namespace Prisma {
     invited_by_member_id: string
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -10081,6 +10171,7 @@ export namespace Prisma {
     state?: EnumInviteStatesFieldUpdateOperationsInput | $Enums.InviteStates
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     team?: TeamsUpdateOneRequiredWithoutInvitationsNestedInput
@@ -10094,6 +10185,7 @@ export namespace Prisma {
     invited_by_member_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -10105,6 +10197,7 @@ export namespace Prisma {
     invited_by_member_id: string
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -10114,6 +10207,7 @@ export namespace Prisma {
     state?: EnumInviteStatesFieldUpdateOperationsInput | $Enums.InviteStates
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -10125,6 +10219,7 @@ export namespace Prisma {
     invited_by_member_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -10380,6 +10475,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -10447,6 +10547,7 @@ export namespace Prisma {
     team_id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     start_at?: SortOrder
     end_at?: SortOrder
@@ -10457,6 +10558,7 @@ export namespace Prisma {
     team_id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     start_at?: SortOrder
     end_at?: SortOrder
@@ -10467,6 +10569,7 @@ export namespace Prisma {
     team_id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     start_at?: SortOrder
     end_at?: SortOrder
@@ -10506,6 +10609,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -10569,6 +10680,7 @@ export namespace Prisma {
   export type TeamsCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10576,6 +10688,7 @@ export namespace Prisma {
   export type TeamsMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10583,13 +10696,9 @@ export namespace Prisma {
   export type TeamsMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type UsersRelationFilter = {
@@ -10602,6 +10711,7 @@ export namespace Prisma {
     team_id?: SortOrder
     user_id?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10611,6 +10721,7 @@ export namespace Prisma {
     team_id?: SortOrder
     user_id?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10620,16 +10731,9 @@ export namespace Prisma {
     team_id?: SortOrder
     user_id?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumInviteStatesFilter<$PrismaModel = never> = {
@@ -10651,6 +10755,7 @@ export namespace Prisma {
     invited_by_member_id?: SortOrder
     email?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10662,6 +10767,7 @@ export namespace Prisma {
     invited_by_member_id?: SortOrder
     email?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10673,6 +10779,7 @@ export namespace Prisma {
     invited_by_member_id?: SortOrder
     email?: SortOrder
     is_admin?: SortOrder
+    is_deleted?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10839,6 +10946,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -11093,10 +11204,6 @@ export namespace Prisma {
     connect?: InvitationsWhereUniqueInput | InvitationsWhereUniqueInput[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type TeamsUpdateOneRequiredWithoutMembersNestedInput = {
     create?: XOR<TeamsCreateWithoutMembersInput, TeamsUncheckedCreateWithoutMembersInput>
     connectOrCreate?: TeamsCreateOrConnectWithoutMembersInput
@@ -11341,6 +11448,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -11419,6 +11531,14 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -11447,19 +11567,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedEnumInviteStatesFilter<$PrismaModel = never> = {
     equals?: $Enums.InviteStates | EnumInviteStatesFieldRefInput<$PrismaModel>
     in?: $Enums.InviteStates[] | ListEnumInviteStatesFieldRefInput<$PrismaModel>
@@ -11480,6 +11587,7 @@ export namespace Prisma {
   export type TeamsCreateWithoutElectionsInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     members?: TeamMembersCreateNestedManyWithoutTeamInput
@@ -11489,6 +11597,7 @@ export namespace Prisma {
   export type TeamsUncheckedCreateWithoutElectionsInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     members?: TeamMembersUncheckedCreateNestedManyWithoutTeamInput
@@ -11586,6 +11695,7 @@ export namespace Prisma {
   export type TeamsUpdateWithoutElectionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     members?: TeamMembersUpdateManyWithoutTeamNestedInput
@@ -11595,6 +11705,7 @@ export namespace Prisma {
   export type TeamsUncheckedUpdateWithoutElectionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     members?: TeamMembersUncheckedUpdateManyWithoutTeamNestedInput
@@ -11686,6 +11797,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -11698,6 +11810,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -11719,6 +11832,7 @@ export namespace Prisma {
   export type TeamMembersCreateWithoutTeamInput = {
     id?: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     user: UsersCreateNestedOneWithoutMember_ofInput
@@ -11729,6 +11843,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     Invitation?: InvitationsUncheckedCreateNestedManyWithoutInvited_by_memberInput
@@ -11749,6 +11864,7 @@ export namespace Prisma {
     state?: $Enums.InviteStates
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     invited_by_member: TeamMembersCreateNestedOneWithoutInvitationInput
@@ -11760,6 +11876,7 @@ export namespace Prisma {
     invited_by_member_id: string
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -11798,6 +11915,7 @@ export namespace Prisma {
     team_id?: StringFilter<"Elections"> | string
     name?: StringFilter<"Elections"> | string
     description?: StringNullableFilter<"Elections"> | string | null
+    is_deleted?: BoolFilter<"Elections"> | boolean
     created_at?: DateTimeFilter<"Elections"> | Date | string
     start_at?: DateTimeFilter<"Elections"> | Date | string
     end_at?: DateTimeNullableFilter<"Elections"> | Date | string | null
@@ -11827,6 +11945,7 @@ export namespace Prisma {
     team_id?: StringFilter<"TeamMembers"> | string
     user_id?: StringFilter<"TeamMembers"> | string
     is_admin?: BoolFilter<"TeamMembers"> | boolean
+    is_deleted?: BoolFilter<"TeamMembers"> | boolean
     created_at?: DateTimeFilter<"TeamMembers"> | Date | string
     updated_at?: DateTimeNullableFilter<"TeamMembers"> | Date | string | null
   }
@@ -11857,6 +11976,7 @@ export namespace Prisma {
     invited_by_member_id?: StringFilter<"Invitations"> | string
     email?: StringFilter<"Invitations"> | string
     is_admin?: BoolFilter<"Invitations"> | boolean
+    is_deleted?: BoolFilter<"Invitations"> | boolean
     created_at?: DateTimeFilter<"Invitations"> | Date | string
     updated_at?: DateTimeNullableFilter<"Invitations"> | Date | string | null
   }
@@ -11864,6 +11984,7 @@ export namespace Prisma {
   export type TeamsCreateWithoutMembersInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     elections?: ElectionsCreateNestedManyWithoutTeamInput
@@ -11873,6 +11994,7 @@ export namespace Prisma {
   export type TeamsUncheckedCreateWithoutMembersInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     elections?: ElectionsUncheckedCreateNestedManyWithoutTeamInput
@@ -11910,6 +12032,7 @@ export namespace Prisma {
     state?: $Enums.InviteStates
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     team: TeamsCreateNestedOneWithoutInvitationsInput
@@ -11921,6 +12044,7 @@ export namespace Prisma {
     state?: $Enums.InviteStates
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -11949,6 +12073,7 @@ export namespace Prisma {
   export type TeamsUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     elections?: ElectionsUpdateManyWithoutTeamNestedInput
@@ -11958,6 +12083,7 @@ export namespace Prisma {
   export type TeamsUncheckedUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     elections?: ElectionsUncheckedUpdateManyWithoutTeamNestedInput
@@ -12010,6 +12136,7 @@ export namespace Prisma {
   export type TeamsCreateWithoutInvitationsInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     elections?: ElectionsCreateNestedManyWithoutTeamInput
@@ -12019,6 +12146,7 @@ export namespace Prisma {
   export type TeamsUncheckedCreateWithoutInvitationsInput = {
     id?: string
     name: string
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     elections?: ElectionsUncheckedCreateNestedManyWithoutTeamInput
@@ -12033,6 +12161,7 @@ export namespace Prisma {
   export type TeamMembersCreateWithoutInvitationInput = {
     id?: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     team: TeamsCreateNestedOneWithoutMembersInput
@@ -12044,6 +12173,7 @@ export namespace Prisma {
     team_id: string
     user_id: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -12067,6 +12197,7 @@ export namespace Prisma {
   export type TeamsUpdateWithoutInvitationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     elections?: ElectionsUpdateManyWithoutTeamNestedInput
@@ -12076,6 +12207,7 @@ export namespace Prisma {
   export type TeamsUncheckedUpdateWithoutInvitationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     elections?: ElectionsUncheckedUpdateManyWithoutTeamNestedInput
@@ -12096,6 +12228,7 @@ export namespace Prisma {
   export type TeamMembersUpdateWithoutInvitationInput = {
     id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     team?: TeamsUpdateOneRequiredWithoutMembersNestedInput
@@ -12107,6 +12240,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12114,6 +12248,7 @@ export namespace Prisma {
   export type TeamMembersCreateWithoutUserInput = {
     id?: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     team: TeamsCreateNestedOneWithoutMembersInput
@@ -12124,6 +12259,7 @@ export namespace Prisma {
     id?: string
     team_id: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
     Invitation?: InvitationsUncheckedCreateNestedManyWithoutInvited_by_memberInput
@@ -12199,6 +12335,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -12212,6 +12349,7 @@ export namespace Prisma {
     team_id: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -12239,6 +12377,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12252,6 +12391,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12263,6 +12403,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -12276,6 +12417,7 @@ export namespace Prisma {
     team_id: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -12324,6 +12466,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12337,6 +12480,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12375,6 +12519,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -12388,6 +12533,7 @@ export namespace Prisma {
     team_id: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -12415,6 +12561,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12428,6 +12575,7 @@ export namespace Prisma {
     team_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12523,6 +12671,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    is_deleted?: boolean
     created_at?: Date | string
     start_at: Date | string
     end_at?: Date | string | null
@@ -12532,6 +12681,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -12542,6 +12692,7 @@ export namespace Prisma {
     invited_by_member_id: string
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -12550,6 +12701,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12562,6 +12714,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12574,6 +12727,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12582,6 +12736,7 @@ export namespace Prisma {
   export type TeamMembersUpdateWithoutTeamInput = {
     id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UsersUpdateOneRequiredWithoutMember_ofNestedInput
@@ -12592,6 +12747,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Invitation?: InvitationsUncheckedUpdateManyWithoutInvited_by_memberNestedInput
@@ -12601,6 +12757,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12610,6 +12767,7 @@ export namespace Prisma {
     state?: EnumInviteStatesFieldUpdateOperationsInput | $Enums.InviteStates
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invited_by_member?: TeamMembersUpdateOneRequiredWithoutInvitationNestedInput
@@ -12621,6 +12779,7 @@ export namespace Prisma {
     invited_by_member_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12631,6 +12790,7 @@ export namespace Prisma {
     invited_by_member_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12641,6 +12801,7 @@ export namespace Prisma {
     state?: $Enums.InviteStates
     email: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -12650,6 +12811,7 @@ export namespace Prisma {
     state?: EnumInviteStatesFieldUpdateOperationsInput | $Enums.InviteStates
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     team?: TeamsUpdateOneRequiredWithoutInvitationsNestedInput
@@ -12661,6 +12823,7 @@ export namespace Prisma {
     state?: EnumInviteStatesFieldUpdateOperationsInput | $Enums.InviteStates
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12671,6 +12834,7 @@ export namespace Prisma {
     state?: EnumInviteStatesFieldUpdateOperationsInput | $Enums.InviteStates
     email?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12679,6 +12843,7 @@ export namespace Prisma {
     id?: string
     team_id: string
     is_admin?: boolean
+    is_deleted?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
   }
@@ -12693,6 +12858,7 @@ export namespace Prisma {
   export type TeamMembersUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     team?: TeamsUpdateOneRequiredWithoutMembersNestedInput
@@ -12703,6 +12869,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     team_id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Invitation?: InvitationsUncheckedUpdateManyWithoutInvited_by_memberNestedInput
@@ -12712,6 +12879,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     team_id?: StringFieldUpdateOperationsInput | string
     is_admin?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
