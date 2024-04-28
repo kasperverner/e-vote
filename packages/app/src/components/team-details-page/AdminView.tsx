@@ -2,6 +2,9 @@ const Members = ({memberInfo}) => {
     return (
         <div id="target" className="flex flex-col space-y-4 w-2/3">
             <div>
+                <h2 className="text-xl font-bold text-gray-800">Admins</h2>
+            </div>
+            <div>
                 <ul>
                     {memberInfo?.filter(member => member.isAdmin).map((member) => (
                         <li key={member.email} className="flex items-center space-x-4 py-2">
