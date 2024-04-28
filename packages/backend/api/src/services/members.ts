@@ -103,7 +103,7 @@ export const leaveTeam: RequestHandler = async (req, res) => {
     console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
-
+};
 
 /**
  * Remove a team member
