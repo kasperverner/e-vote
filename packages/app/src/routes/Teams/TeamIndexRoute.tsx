@@ -10,6 +10,7 @@ import TeamElectionVoteRoute from "./TeamElectionVoteRoute";
 import TeamListRoute from "./TeamListRoute";
 import TeamMemberInviteRoute from "./TeamMemberInviteRoute";
 import TeamMemberListRoute from "./TeamMemberListRoute";
+import TeamAdminPanelRoute from "./TeamAdminPanelRoute";
 
 const TeamIndexRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -35,6 +36,7 @@ TeamIndexRoute.addChildren([
   TeamListRoute,
   TeamMemberInviteRoute,
   TeamMemberListRoute,
+  TeamAdminPanelRoute,
 ]);
 
 export default TeamIndexRoute;
