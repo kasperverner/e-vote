@@ -20,31 +20,55 @@ function TeamDetailsPage() {
   const { data: team } = useTeam(team_slug);
   const { data: memberInfo } = useTeamMembers(team_slug);
   const { data: currentUser } = useCurrentUser();
-  console.log(currentUser);
+  const { getToken } = useAuth();
   const userIsAdmin = memberInfo?.find((member) => member.user_id === currentUser?.id)?.isAdmin;
+
 
   // if anything is loading, return a loading state
   if (!team || !memberInfo || !currentUser) {
     return <div>Loading...</div>;
   }
 
-  function handleLeaveTeam(user_id, members) {
+  async function handleLeaveTeam(user_id, members) {
     const isAdmin = members.some((member) => member.user_id === user_id && member.isAdmin);
     const adminCount = members.filter((member) => member.isAdmin).length;
-    console.log(isAdmin, adminCount);
+    const token = await getToken();
   
     if (isAdmin && adminCount === 1) {
       console.log("You are the only admin");
       // Delete the team
-      // TODO: Implement team deletion logic
-    } else if (isAdmin) {
-      console.log("You are an admin but not the only one");
-      // Demote itself and leave
-      // TODO: Implement demotion and leave logic
+      fetch(`http://localhost:4000/teams/${team_slug}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token as string}`,
+        },
+      })
+        .then((data) => {
+          console.log(data);
+          // redirect to team index
+          window.location.href = "/teams";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Error deleting team");
+        }
+      )
     } else {
-      console.log("You are not an admin");
-      // Just leave the team
-      // TODO: Implement leave logic
+      fetch(`http://localhost:4000/teams/${team_slug}/members/leave`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token as string}`,
+        },
+      })
+        .then((data) => {
+          console.log(data);
+          // redirect to team index
+          window.location.href = "/teams";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Error leaving team");
+        });
     }
   }
 
