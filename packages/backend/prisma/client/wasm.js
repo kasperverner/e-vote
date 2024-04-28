@@ -124,6 +124,7 @@ exports.Prisma.ElectionsScalarFieldEnum = {
   team_id: 'team_id',
   name: 'name',
   description: 'description',
+  is_deleted: 'is_deleted',
   created_at: 'created_at',
   start_at: 'start_at',
   end_at: 'end_at'
@@ -132,6 +133,7 @@ exports.Prisma.ElectionsScalarFieldEnum = {
 exports.Prisma.TeamsScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  is_deleted: 'is_deleted',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -141,6 +143,7 @@ exports.Prisma.TeamMembersScalarFieldEnum = {
   team_id: 'team_id',
   user_id: 'user_id',
   is_admin: 'is_admin',
+  is_deleted: 'is_deleted',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -152,6 +155,7 @@ exports.Prisma.InvitationsScalarFieldEnum = {
   invited_by_member_id: 'invited_by_member_id',
   email: 'email',
   is_admin: 'is_admin',
+  is_deleted: 'is_deleted',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -204,8 +208,7 @@ exports.Prisma.NullsOrder = {
 exports.InviteStates = exports.$Enums.InviteStates = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
-  DECLINED: 'DECLINED',
-  DELETED: 'DELETED'
+  DECLINED: 'DECLINED'
 };
 
 exports.Prisma.ModelName = {

@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../../prisma/client"
+  provider      = "prisma-client-js"
+  output        = "../../prisma/client"
   binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
@@ -15,6 +15,7 @@ model Elections {
   team_id      String
   name         String
   description  String?
+  is_deleted   Boolean        @default(false)
   created_at   DateTime       @default(now())
   start_at     DateTime
   end_at       DateTime?
@@ -29,6 +30,7 @@ model Teams {
   elections   Elections[]
   members     TeamMembers[]
   invitations Invitations[]
+  is_deleted  Boolean       @default(false)
   created_at  DateTime      @default(now())
   updated_at  DateTime?     @updatedAt
 }
@@ -40,6 +42,7 @@ model TeamMembers {
   user       Users         @relation(fields: [user_id], references: [id])
   user_id    String
   is_admin   Boolean       @default(false)
+  is_deleted Boolean       @default(false)
   created_at DateTime      @default(now())
   updated_at DateTime?     @updatedAt
   Invitation Invitations[]
@@ -54,6 +57,7 @@ model Invitations {
   invited_by_member_id String
   email                String
   is_admin             Boolean      @default(false)
+  is_deleted           Boolean      @default(false)
   created_at           DateTime     @default(now())
   updated_at           DateTime?    @updatedAt
 }
@@ -62,7 +66,6 @@ enum InviteStates {
   PENDING
   ACCEPTED
   DECLINED
-  DELETED
 }
 
 model Users {

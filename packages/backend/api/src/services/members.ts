@@ -13,6 +13,9 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
   const members = await db.teamMembers.findMany({
     where: {
       team_id,
+      is_deleted: {
+        not: true,
+      },
     },
     select: {
       user: {
@@ -24,7 +27,7 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
       },
       is_admin: true,
       created_at: true,
-    }
+    },
   });
 
   return res.status(200).json({ members });
@@ -50,6 +53,9 @@ export const editMemberRole: RequestHandler = async (req, res) => {
         user_id: {
           not: user_id,
         },
+        is_deleted: {
+          not: true,
+        },
       },
       data: {
         is_admin: isAdmin,
@@ -72,9 +78,15 @@ export const removeMember: RequestHandler = async (req, res) => {
     const { member_id } = req.params;
 
     // Delete the team member
-    await db.teamMembers.delete({
+    await db.teamMembers.update({
       where: {
         id: member_id,
+        is_deleted: {
+          not: true,
+        },
+      },
+      data: {
+        is_deleted: true,
       },
     });
 
@@ -98,6 +110,9 @@ export const getInvitations: RequestHandler = async (req, res) => {
     const invitations = await db.invitations.findMany({
       where: {
         team_id,
+        is_deleted: {
+          not: true,
+        },
       },
       select: {
         email: true,
@@ -142,6 +157,9 @@ export const inviteMembers: RequestHandler = async (req, res) => {
       where: {
         team_id,
         user_id,
+        is_deleted: {
+          not: true,
+        },
       },
     });
 
@@ -184,6 +202,9 @@ export const editInvitation: RequestHandler = async (req, res) => {
       where: {
         id: invitation_id,
         state: "PENDING",
+        is_deleted: {
+          not: true,
+        },
       },
       data: {
         is_admin: isAdmin,
@@ -211,9 +232,12 @@ export const deleteInvitation: RequestHandler = async (req, res) => {
       where: {
         id: invitation_id,
         state: "PENDING",
+        is_deleted: {
+          not: true,
+        },
       },
       data: {
-        state: "DELETED",
+        is_deleted: true,
       },
     });
 
@@ -239,6 +263,9 @@ export const acceptInvitation: RequestHandler = async (req, res) => {
       where: {
         id: invitation_id,
         state: "PENDING",
+        is_deleted: {
+          not: true,
+        },
       },
     });
 
@@ -286,6 +313,9 @@ export const declineInvitation: RequestHandler = async (req, res) => {
       where: {
         id: invitation_id,
         state: "PENDING",
+        is_deleted: {
+          not: true,
+        },
       },
     });
 
