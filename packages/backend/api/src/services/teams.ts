@@ -139,3 +139,25 @@ export const updateTeam: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+/**
+ * Delete team by id
+ * @param team_id: string
+ */
+export const deleteTeam: RequestHandler = async (req, res) => {
+  const { team_id } = req.params;
+
+  try {
+    // Delete the team
+    await db.teams.delete({
+      where: {
+        id: team_id,
+      },
+    });
+
+    return res.status(204).send();
+  } catch (error) {
+    console.error("error", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

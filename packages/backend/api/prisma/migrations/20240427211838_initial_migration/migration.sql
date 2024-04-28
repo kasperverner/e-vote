@@ -1,80 +1,13 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Ballot` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Election` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Invitation` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Proposition` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Team` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `TeamMember` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Vote` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- CreateEnum
-CREATE TYPE "InviteStates" AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED');
-
--- DropForeignKey
-ALTER TABLE "Ballot" DROP CONSTRAINT "Ballot_election_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "Ballot" DROP CONSTRAINT "Ballot_user_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "Election" DROP CONSTRAINT "Election_team_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "Invitation" DROP CONSTRAINT "Invitation_invited_by_member_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "Invitation" DROP CONSTRAINT "Invitation_team_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "Proposition" DROP CONSTRAINT "Proposition_election_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "TeamMember" DROP CONSTRAINT "TeamMember_team_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "TeamMember" DROP CONSTRAINT "TeamMember_user_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "Vote" DROP CONSTRAINT "Vote_election_id_fkey";
-
--- DropTable
-DROP TABLE "Ballot";
-
--- DropTable
-DROP TABLE "Election";
-
--- DropTable
-DROP TABLE "Invitation";
-
--- DropTable
-DROP TABLE "Proposition";
-
--- DropTable
-DROP TABLE "Team";
-
--- DropTable
-DROP TABLE "TeamMember";
-
--- DropTable
-DROP TABLE "User";
-
--- DropTable
-DROP TABLE "Vote";
-
--- DropEnum
-DROP TYPE "InviteState";
+CREATE TYPE "InviteStates" AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED', 'DELETED');
 
 -- CreateTable
 CREATE TABLE "Elections" (
     "id" TEXT NOT NULL,
     "team_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "slug" TEXT NOT NULL,
     "description" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "start_at" TIMESTAMP(3) NOT NULL,
     "end_at" TIMESTAMP(3),
 
@@ -85,7 +18,6 @@ CREATE TABLE "Elections" (
 CREATE TABLE "Teams" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "slug" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
 
@@ -97,6 +29,7 @@ CREATE TABLE "TeamMembers" (
     "id" TEXT NOT NULL,
     "team_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
+    "is_admin" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
 
@@ -107,9 +40,9 @@ CREATE TABLE "TeamMembers" (
 CREATE TABLE "Invitations" (
     "id" TEXT NOT NULL,
     "team_id" TEXT NOT NULL,
+    "state" "InviteStates" NOT NULL DEFAULT 'PENDING',
     "invited_by_member_id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
     "is_admin" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
@@ -161,7 +94,7 @@ CREATE TABLE "Votes" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Invitations_token_key" ON "Invitations"("token");
+CREATE UNIQUE INDEX "Teams_name_key" ON "Teams"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Users_principal_id_key" ON "Users"("principal_id");
