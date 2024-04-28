@@ -9,6 +9,7 @@ import {
   getTeam,
   createTeam,
   updateTeam,
+  deleteTeam,
 } from "../services/teams";
 
 const router = express.Router();
@@ -37,5 +38,12 @@ router.post("/", createTeam);
  * update team if the user is an admin of the team
  */
 router.put("/:team_id", isAdminOfTeam, updateTeam);
+
+/**
+ * DELETE /teams/:team_id
+ * delete team if the user is an admin of the team
+ */
+
+router.delete("/:team_id", isAdminOfTeam, deleteTeam);
 
 export default router;
