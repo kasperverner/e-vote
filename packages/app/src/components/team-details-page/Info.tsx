@@ -1,6 +1,6 @@
 const Info = ({team}) => {
     return (
-        <div className="flex flex-col space-y-4 w-1/3">
+        <div className="flex flex-col space-y-4">
             {team ? (
                 <div>
                     <h1 className="text-3xl font-bold text-gray-800">{team.name}</h1>
