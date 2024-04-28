@@ -70,6 +70,42 @@ export const editMemberRole: RequestHandler = async (req, res) => {
 };
 
 /**
+ * Leave the team
+ * @param team_id: string
+ * @param user_id: string
+ */
+export const leaveTeam: RequestHandler = async (req, res) => {
+  try {
+    const { team_id } = req.params;
+    const { user_id } = res.locals;
+
+    // Find the team member
+    const teamMember = await db.teamMembers.findFirst({
+      where: {
+        team_id,
+        user_id,
+      },
+    });
+
+    if (!teamMember) {
+      return res.status(404).json({ message: "Team member not found" });
+    }
+
+    // Delete the team member
+    await db.teamMembers.delete({
+      where: {
+        id: teamMember.id,
+      },
+    });
+
+    return res.status(204).send();
+  } catch (error) {
+    console.error("error", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+
+
+/**
  * Remove a team member
  * @param member_id: string
  */
