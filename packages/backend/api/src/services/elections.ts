@@ -17,6 +17,9 @@ export const getElections: RequestHandler = async (req, res) => {
   const elections = await db.elections.findMany({
     where: {
       team_id,
+      is_deleted: {
+        not: true,
+      },
     },
     orderBy: {
       created_at: "desc",
@@ -46,6 +49,9 @@ export const getElection: RequestHandler = async (req, res) => {
     where: {
       id: election_id,
       team_id,
+      is_deleted: {
+        not: true,
+      },
     },
   });
 
@@ -70,6 +76,9 @@ export const voteInElection: RequestHandler = async (req, res) => {
       where: {
         id: election_id,
         team_id,
+        is_deleted: {
+          not: true,
+        },
       },
     });
 
@@ -138,6 +147,9 @@ export const getElectionResults: RequestHandler = async (req, res) => {
     where: {
       id: election_id,
       team_id,
+      is_deleted: {
+        not: true,
+      },
     },
   });
 
@@ -223,6 +235,9 @@ export const editElection: RequestHandler = async (req, res) => {
     where: {
       id: election_id,
       team_id,
+      is_deleted: {
+        not: true,
+      },
     },
   });
 
