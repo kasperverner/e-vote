@@ -9510,17 +9510,17 @@ export namespace Prisma {
 
   export type TeamsWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    name?: string
     AND?: TeamsWhereInput | TeamsWhereInput[]
     OR?: TeamsWhereInput[]
     NOT?: TeamsWhereInput | TeamsWhereInput[]
+    name?: StringFilter<"Teams"> | string
     is_deleted?: BoolFilter<"Teams"> | boolean
     created_at?: DateTimeFilter<"Teams"> | Date | string
     updated_at?: DateTimeNullableFilter<"Teams"> | Date | string | null
     elections?: ElectionsListRelationFilter
     members?: TeamMembersListRelationFilter
     invitations?: InvitationsListRelationFilter
-  }, "id" | "name">
+  }, "id">
 
   export type TeamsOrderByWithAggregationInput = {
     id?: SortOrder
