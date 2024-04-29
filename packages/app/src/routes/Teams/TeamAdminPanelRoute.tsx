@@ -1,4 +1,4 @@
-import { Navigate, createRoute } from "@tanstack/react-router";
+import { useNavigate, createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import { useAuth } from "@clerk/clerk-react";
 import useElections from "../../hooks/useElections";
@@ -22,6 +22,7 @@ function TeamAdminPanel() {
     const { data: members } = useTeamMembers(team_slug);
     const { data: currentUser } = useCurrentUser();
     const { data: invitations } = useInvitations(team_slug);
+    const navigate = useNavigate();
 
     // if something is loading, return a loading state
     if (!elections || !members || !currentUser || !invitations) {
@@ -40,7 +41,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // redirect to team index
-                <Navigate to="/teams" />;
+                navigate({ to: "/teams" });
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -167,6 +168,18 @@ function TeamAdminPanel() {
             });
     }
 
+    const copyLink = (path: string) => {
+        const fullPath = document.location.origin + path;
+
+        navigator.clipboard.writeText(fullPath)
+            .then(() => {
+                alert('Link copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy link: ', err);
+            });
+    };
+
     return (
         <div className="flex flex-row" style={{ height: "80vh" }}>
             <div className="flex flex-col w-1/2">
@@ -208,12 +221,26 @@ function TeamAdminPanel() {
                         </div>
                     </div>
                     <ul className="flex flex-col space-y-4 h-full ml-4">
-                        {invitations.map((invitation, index) => (
+                        {[...invitations.filter(inv => inv.state === 'PENDING'),
+                        ...invitations.filter(inv => inv.state === 'ACCEPTED'),
+                        ...invitations.filter(inv => inv.state === 'DECLINED')].map((invitation, index) => (
                             <li key={invitation.email + index} className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center">
                                 <div>
                                     <h3 className="text-lg">{invitation.email}</h3>
+                                    <p>Invited by: {invitation.invited_by_member.user.name}</p> {/* Added line */}
                                 </div>
-                                <Button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => handleRevokeInvitation(invitation.id)}>Revoke</Button>
+                                {invitation.state === 'PENDING' && (
+                                    <div>
+                                        <Button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2" onClick={() => copyLink(`/teams/${team_slug}/members/invite/${invitation.id}`)}>Copy link</Button>
+                                        <Button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => handleRevokeInvitation(invitation.id)}>Revoke</Button>
+                                    </div>
+                                )}
+                                {invitation.state === 'DECLINED' && (
+                                    <span className="text-red-500">Declined</span>
+                                )}
+                                {invitation.state === 'ACCEPTED' && (
+                                    <span className="text-green-500">Accepted</span>
+                                )}
                             </li>
                         ))}
                     </ul>
