@@ -30,7 +30,7 @@ const Navbar = () => {
             </SignedOut>
             <SignedIn>
               <Link to="/teams" className="font-bold text-lg hover:underline">
-                Teams
+                My Teams
               </Link>
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
