@@ -59,6 +59,30 @@ export const getElection: RequestHandler = async (req, res) => {
 };
 
 /**
+ * @param election_id: string
+ * @param team_id: string
+ * @param user_id: string
+ * @returns ballot: Ballot
+ */
+export const getBallot: RequestHandler = async (req, res) => {
+  const { election_id } = req.params;
+  const { user_id } = res.locals;
+
+  const ballot = await db.ballots.findFirst({
+    where: {
+      election_id,
+      user_id,
+    },
+  });
+
+  if (!ballot) {
+    return res.status(404).json({ message: "Ballot not found" });
+  }
+
+  return res.status(200).json(ballot);
+};
+
+/**
  * Vote in an election
  * @param election_id: string
  * @param team_id: string

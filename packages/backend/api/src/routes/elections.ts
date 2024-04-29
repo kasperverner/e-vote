@@ -1,6 +1,14 @@
 import express from "express";
 import { isAdminOfTeam, isAuthorized, isEligibleToEditElection, isEligibleToVote, isMemberOfTeam } from "../services/middleware";
-import { createElection, editElection, getElection, getElectionResults, getElections, voteInElection } from "../services/elections";
+import {
+  createElection,
+  editElection,
+  getElection,
+  getBallot,
+  getElectionResults,
+  getElections,
+  voteInElection,
+} from "../services/elections";
 
 
 const router = express.Router();
@@ -17,6 +25,12 @@ router.get("/:team_id/elections/", isMemberOfTeam, getElections);
  * get election by id if the user is a member of the team
  */
 router.get("/:team_id/elections/:election_id", isMemberOfTeam, getElection);
+
+/**
+ * get /teams/:team_id/elections/:election_id/vote
+ * returns the ballot for the election if the user has voted in the election
+ */
+router.get("/:team_id/elections/:election_id/vote", isMemberOfTeam, getBallot);
 
 /**
  * POST /teams/:team_id/elections/:election_id/vote
