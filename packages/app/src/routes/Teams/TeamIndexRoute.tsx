@@ -1,4 +1,4 @@
-import { Outlet, createRoute } from "@tanstack/react-router";
+import { Navigate, Outlet, createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../RootRouter";
 import TeamCreateRoute from "./TeamCreateRoute";
 import TeamDetailsRoute from "./TeamDetailsRoute";
@@ -11,6 +11,7 @@ import TeamListRoute from "./TeamListRoute";
 import TeamMemberInviteRoute from "./TeamMemberInviteRoute";
 import TeamMemberListRoute from "./TeamMemberListRoute";
 import TeamAdminPanelRoute from "./TeamAdminPanelRoute";
+import { useSession } from "@clerk/clerk-react";
 
 const TeamIndexRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -19,8 +20,17 @@ const TeamIndexRoute = createRoute({
 });
 
 function TeamIndexPage() {
-  // Since all routes under this route are protected, we can make a protected route here,
-  // where we will add an auth check and redirect to / if user is not authenticated
+  const { isLoaded, isSignedIn} = useSession();
+
+  if (!isLoaded) {
+    return "Loading session...";
+  }
+
+  if (!isSignedIn) {
+    return <Navigate to="/sign-in" search={{
+      redirectTo: document.location.pathname,
+    }} />;
+  }
 
   return <Outlet />;
 }
