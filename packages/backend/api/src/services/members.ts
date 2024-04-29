@@ -20,17 +20,25 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
     select: {
       user: {
         select: {
-          id: true,
+          //id: true,
           name: true,
           email: true,
         },
       },
+      id: true,
       is_admin: true,
       created_at: true,
     },
   });
 
-  return res.status(200).json({ members });
+  return res.status(200).json(members?.map((member) => ({
+    name: member.user.name,
+    email: member.user.email,
+    isAdmin: member.is_admin,
+    createdAt: member.created_at,
+    id: member.id,
+  }))
+  );
 };
 
 /**
@@ -151,6 +159,7 @@ export const getInvitations: RequestHandler = async (req, res) => {
         },
       },
       select: {
+        id: true,
         email: true,
         is_admin: true,
         created_at: true,
@@ -168,7 +177,7 @@ export const getInvitations: RequestHandler = async (req, res) => {
       },
     });
 
-    return res.status(200).json({ invitations });
+    return res.status(200).json(invitations);
   } catch (error) {
     console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -215,7 +224,7 @@ export const inviteMembers: RequestHandler = async (req, res) => {
 
     // TODO: Send an email to the invited user
 
-    return res.status(201).json({ invitation });
+    return res.status(201).json(invitation);
   } catch (error) {
     console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });

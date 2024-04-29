@@ -66,4 +66,3 @@ router.put("/:team_id/members/invitations/:invitation_id/accept", acceptInvitati
 router.put("/:team_id/members/invitations/:invitation_id/decline", declineInvitation);
 
 export default router;
-

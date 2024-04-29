@@ -48,6 +48,7 @@ export const getTeams: RequestHandler = async (req, res) => {
  */
 export const getTeam: RequestHandler = async (req, res) => {
   const { team_id } = req.params;
+  const { user_id } = res.locals;
 
   try {
     // Find the team by the slug
@@ -72,7 +73,15 @@ export const getTeam: RequestHandler = async (req, res) => {
 
     if (!team) return res.status(404).send(`Team with ID ${team_id} not found`);
 
-    return res.status(200).json(team);
+    const isAdmin = await db.teamMembers.findFirst({
+      where: {
+        team_id,
+        user_id,
+        is_admin: true,
+      },
+    });
+
+    return res.status(200).json({ ...team, isAdmin: !!isAdmin });
   } catch (error) {
     console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
