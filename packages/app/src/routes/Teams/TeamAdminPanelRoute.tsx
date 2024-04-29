@@ -1,4 +1,4 @@
-import { Navigate, createRoute } from "@tanstack/react-router";
+import { Navigate, createRoute, useNavigate } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import { useAuth } from "@clerk/clerk-react";
 import useElections from "../../hooks/useElections";
@@ -18,6 +18,7 @@ const TeamAdminPanelRoute = createRoute({
 function TeamAdminPanel() {
     const team_slug = TeamAdminPanelRoute.useParams().team_slug;
     const { getToken } = useAuth();
+    const navigate = useNavigate();
     const { data: elections } = useElections(team_slug);
     const { data: members } = useTeamMembers(team_slug);
     const { data: currentUser } = useCurrentUser();
@@ -40,7 +41,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // redirect to team index
-                <Navigate to="/teams" />;
+                navigate({ to: "/teams" });
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -70,7 +71,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // reload page
-                window.location.reload();
+                navigate({to: "/teams/$team_slug}", params: { team_slug }});
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -94,7 +95,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // reload page
-                window.location.reload();
+                navigate({to: "/teams/$team_slug}", params: { team_slug }});
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -114,7 +115,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // reload page
-                window.location.reload();
+                navigate({to: "/teams/$team_slug}", params: { team_slug }});
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -139,7 +140,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // reload page
-                window.location.reload();
+                navigate({to: "/teams/$team_slug}", params: { team_slug }});
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -159,7 +160,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // reload page
-                window.location.reload();
+                navigate({to: "/teams/$team_slug}", params: { team_slug }});
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -208,12 +209,22 @@ function TeamAdminPanel() {
                         </div>
                     </div>
                     <ul className="flex flex-col space-y-4 h-full ml-4">
-                        {invitations.map((invitation, index) => (
+                        {[...invitations.filter(inv => inv.state === 'PENDING'),
+                        ...invitations.filter(inv => inv.state === 'ACCEPTED'),
+                        ...invitations.filter(inv => inv.state === 'DECLINED')].map((invitation, index) => (
                             <li key={invitation.email + index} className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center">
                                 <div>
                                     <h3 className="text-lg">{invitation.email}</h3>
                                 </div>
-                                <Button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => handleRevokeInvitation(invitation.id)}>Revoke</Button>
+                                {invitation.state === 'PENDING' && (
+                                    <Button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => handleRevokeInvitation(invitation.id)}>Revoke</Button>
+                                )}
+                                {invitation.state === 'DECLINED' && (
+                                    <span className="text-red-500">Declined</span>
+                                )}
+                                {invitation.state === 'ACCEPTED' && (
+                                    <span className="text-green-500">Accepted</span>
+                                )}
                             </li>
                         ))}
                     </ul>
