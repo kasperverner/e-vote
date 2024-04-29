@@ -81,6 +81,40 @@ function TeamElectionCreatePage() {
   // same as above but using then chain
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // check if the dates are set
+    if (!formData.start_at_server || !formData.end_at_server) {
+      alert("Please set the start and end dates");
+      return;
+    }
+
+    // check if the start date is before the end date
+    if (formData.start_at_server > formData.end_at_server) {
+      alert("The start date must be before the end date");
+      return;
+    }
+
+    // check if there are is at least one proposition
+    if (formData.propositions.length < 1) {
+      alert("Please add at least one proposition");
+      return;
+    }
+
+    // check if all names and descriptions are set (both for election and propositions)
+    if (
+      !formData.name ||
+      !formData.description ||
+      formData.propositions.some(
+        (proposition) => !proposition.name || !proposition.description
+      )
+    ) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    // disable the button to prevent double submission
+    document.getElementById("create-election-button").disabled = true;
+
     const token = await getToken();
     const requestOptions = {
       method: "POST",
@@ -103,6 +137,7 @@ function TeamElectionCreatePage() {
       .catch((error) => {
         console.error("Error:", error);
       });
+    document.getElementById("create-election-button").disabled = false;
   };
 
   return (
@@ -177,6 +212,7 @@ function TeamElectionCreatePage() {
         <button
           type="submit"
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          id="create-election-button"
         >
           Create Election
         </button>
