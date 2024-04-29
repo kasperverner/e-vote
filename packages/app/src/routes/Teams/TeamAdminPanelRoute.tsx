@@ -246,7 +246,7 @@ function TeamAdminPanel() {
                     </ul>
                 </div>
 
-                <div className="bg-white p-4 rounded-lg shadow-md h-1/5">
+                <div className="bg-white p-4 rounded-lg shadow-md h-1/5 overflow-y-auto">
                     <h2 className="text-xl font-bold mb-4">Actions</h2>
                     <div>
                         <div className="flex">
