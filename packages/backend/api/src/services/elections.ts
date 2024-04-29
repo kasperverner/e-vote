@@ -306,7 +306,7 @@ export const createElection: RequestHandler = async (req, res) => {
     },
   });
 
-  return res.json(election);
+  return res.status(201).json(election).end();
 };
 
 /**
