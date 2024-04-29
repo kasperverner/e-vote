@@ -8,6 +8,7 @@ import {
   getElectionResults,
   getElections,
   voteInElection,
+  deleteElection,
 } from "../services/elections";
 
 
@@ -56,5 +57,11 @@ router.post("/:team_id/elections/", isAdminOfTeam, createElection);
  * edit an election if the user is an admin of the team
  */
 router.put("/:team_id/elections/:election_id", isAdminOfTeam, isEligibleToEditElection, editElection);
+
+/**
+ * DELETE /teams/:team_id/elections/:election_id
+ * delete an election if the user is an admin of the team
+ */
+router.delete("/:team_id/elections/:election_id", isAdminOfTeam, deleteElection);
 
 export default router;

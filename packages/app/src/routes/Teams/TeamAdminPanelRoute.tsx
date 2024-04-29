@@ -168,6 +168,26 @@ function TeamAdminPanel() {
             });
     }
 
+    async function deleteElection(election_id: string) {
+        // fetch delete request to delete election (DELETE on /teams/:teamId/elections/:electionId)
+        const token = await getToken();
+        fetch(`http://localhost:4000/teams/${team_slug}/elections/${election_id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token as string}`,
+            },
+        })
+            .then((data) => {
+                console.log(data);
+                // reload page
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Error deleting election");
+            });
+    }
+
     const copyLink = (path: string) => {
         const fullPath = document.location.origin + path;
 
@@ -262,10 +282,12 @@ function TeamAdminPanel() {
                     <h2 className="text-xl font-bold mb-4">Elections</h2>
                     <ul className="flex flex-col space-y-4">
                         {elections.map((election) => (
-                            <li key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md">
-                                <h3 className="text-lg font-bold">{election.name}</h3>
-                                <p>{election.description}</p>
-                                <Link to={`/teams/${team_slug}/elections/${election.id}`} className="text-blue-500">View election</Link>
+                            <li key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md relative flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-lg font-bold">{election.name}</h3>
+                                    <p>{election.description}</p>
+                                </div>
+                                <Button onClick={() => deleteElection(election.id)} className="bg-red-500">Delete</Button>
                             </li>
                         ))}
                     </ul>
