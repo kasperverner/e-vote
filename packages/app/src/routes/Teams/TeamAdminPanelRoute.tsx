@@ -7,7 +7,6 @@ import useCurrentUser from "../../hooks/useCurrentUser";
 import useInvitations from "../../hooks/useInvitations";
 
 import Button from "../../components/form/button";
-import { Link } from "@tanstack/react-router";
 
 const TeamAdminPanelRoute = createRoute({
     getParentRoute: () => TeamIndexRoute,
@@ -278,21 +277,25 @@ function TeamAdminPanel() {
                 </div>
             </div>
             <div className="flex flex-col w-1/2">
-                <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4 overflow-y-auto">
-                    <h2 className="text-xl font-bold mb-4">Elections</h2>
-                    <ul className="flex flex-col space-y-4">
-                        {elections.map((election) => (
-                            <li key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md relative flex justify-between items-center">
-                                <div>
-                                    <h3 className="text-lg font-bold">{election.name}</h3>
-                                    <p>{election.description}</p>
-                                </div>
-                                <Button onClick={() => deleteElection(election.id)} className="bg-red-500">Delete</Button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
+    <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4 overflow-y-auto">
+        <h2 className="text-xl font-bold mb-4">Elections</h2>
+        <div className="flex justify-between items-center mb-4">
+            <Button to={`/teams/${team_slug}/elections/new`} className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md">Add Election</Button>
+        </div>
+        <ul className="flex flex-col space-y-4">
+            {elections.map((election) => (
+                <li key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md relative flex justify-between items-center">
+                    <div>
+                        <h3 className="text-lg font-bold">{election.name}</h3>
+                        <p>{election.description}</p>
+                    </div>
+                    <Button onClick={() => deleteElection(election.id)} className="bg-red-500">Delete</Button>
+                </li>
+            ))}
+        </ul>
+    </div>
+</div>
+
         </div>
     );
 }
