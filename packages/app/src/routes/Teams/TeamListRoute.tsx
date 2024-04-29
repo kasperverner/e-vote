@@ -19,15 +19,17 @@ function TeamListPage() {
   if (data.length === 0) {
     return (
       <>
-        <h1 className="text-3xl font-bold mb-4">Teams</h1>
-        <p>You are not a member of any teams.</p>
+        <h1 className="text-3xl font-bold mb-4">My Teams</h1>
+        <p>You are not a member of any teams. 
+          <Link to="/teams/create" className="mt-4 text-blue-500 hover:underline"> Create one here.</Link>
+        </p>
       </>
     );
   }
 
   return (
     <>
-      <h1 className="text-3xl font-bold my-6">Teams</h1>
+      <h1 className="text-3xl font-bold my-6">My Teams</h1>
       <ul>
         {data?.map((team: any) => (
           <li
