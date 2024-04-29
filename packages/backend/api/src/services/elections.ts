@@ -1,8 +1,18 @@
 import { RequestHandler } from "express";
 import db from "../utilities/db.server";
-import { generateBallotProof, validateBallotProofsForElection } from "../utilities/ballotClient";
-import { generatePropositionProof, validatePropositionProofsForElection, getResultForElection } from "../utilities/propositionClient";
-import { generateValidationProof, validateValidationProofsForElection } from "../utilities/validationClient";
+import {
+  generateBallotProof,
+  validateBallotProofsForElection,
+} from "../utilities/ballotClient";
+import {
+  generatePropositionProof,
+  validatePropositionProofsForElection,
+  getResultForElection,
+} from "../utilities/propositionClient";
+import {
+  generateValidationProof,
+  validateValidationProofsForElection,
+} from "../utilities/validationClient";
 
 /**
  * Get all elections of the team
@@ -33,7 +43,12 @@ export const getElections: RequestHandler = async (req, res) => {
     },
   });
 
-  return res.json(elections);
+  return res.json(
+    elections.map(({ ballots, ...rest }) => ({
+      ...rest,
+      has_voted: ballots.length > 0,
+    }))
+  );
 };
 
 /**
@@ -44,6 +59,7 @@ export const getElections: RequestHandler = async (req, res) => {
  */
 export const getElection: RequestHandler = async (req, res) => {
   const { election_id, team_id } = req.params;
+  const { user_id } = res.locals;
 
   const election = await db.elections.findUnique({
     where: {
@@ -53,9 +69,27 @@ export const getElection: RequestHandler = async (req, res) => {
         not: true,
       },
     },
+    include: {
+      ballots: {
+        where: {
+          user_id,
+        },
+      },
+    },
   });
 
-  return res.json(election);
+  if (!election) {
+    return res
+      .status(404)
+      .json({ message: `Election with ID ${election_id} not found` });
+  }
+
+  const { ballots, ...rest } = election;
+
+  return res.status(200).json({
+    ...rest,
+    has_voted: ballots.length > 0,
+  });
 };
 
 /**
@@ -113,19 +147,15 @@ export const voteInElection: RequestHandler = async (req, res) => {
     }
 
     if (election.start_at > new Date()) {
-      return res
-        .status(400)
-        .json({
-          message: `Election with ID ${election_id} has not started yet`,
-        });
+      return res.status(400).json({
+        message: `Election with ID ${election_id} has not started yet`,
+      });
     }
 
     if (election.end_at && election.end_at < new Date()) {
-      return res
-        .status(400)
-        .json({
-          message: `Election with ID ${election_id} has already ended`,
-        });
+      return res.status(400).json({
+        message: `Election with ID ${election_id} has already ended`,
+      });
     }
 
     // Add the ballot
@@ -140,7 +170,10 @@ export const voteInElection: RequestHandler = async (req, res) => {
 
     const ballotProof = await generateBallotProof(ballot.id);
     const propositionProof = await generatePropositionProof(proposition_id);
-    const validationProof = await generateValidationProof(ballotProof, propositionProof);
+    const validationProof = await generateValidationProof(
+      ballotProof,
+      propositionProof
+    );
 
     const vote = await db.votes.create({
       data: {
@@ -189,7 +222,9 @@ export const getElectionResults: RequestHandler = async (req, res) => {
     return res.status(400).json(validationResult.message);
   }
 
-  var propositionResult = await validatePropositionProofsForElection(election_id);
+  var propositionResult = await validatePropositionProofsForElection(
+    election_id
+  );
 
   if (!propositionResult.success) {
     return res.status(400).json(propositionResult.message);
@@ -203,8 +238,7 @@ export const getElectionResults: RequestHandler = async (req, res) => {
 
   var result = await getResultForElection(election_id);
 
-  if (!result.results)
-    return res.status(400).json(result.message);
+  if (!result.results) return res.status(400).json(result.message);
 
   return res.status(200).json(result.results);
 };
