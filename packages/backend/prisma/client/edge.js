@@ -200,7 +200,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/kv/aau/aau-software-02/P2/e-vote/packages/backend/prisma/client",
+      "value": "C:\\Users\\caspe\\OneDrive\\Desktop\\e-vote\\e-vote\\packages\\backend\\prisma\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -209,12 +209,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "windows",
         "native": true
       },
       {
         "fromEnvVar": null,
         "value": "linux-musl-arm64-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-musl-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -231,6 +235,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -239,8 +244,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../../prisma/client\"\n  binaryTargets = [\"native\", \"linux-musl-arm64-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Elections {\n  id           String         @id @default(uuid())\n  team         Teams          @relation(fields: [team_id], references: [id])\n  team_id      String\n  name         String\n  description  String?\n  is_deleted   Boolean        @default(false)\n  created_at   DateTime       @default(now())\n  start_at     DateTime\n  end_at       DateTime?\n  propositions Propositions[]\n  ballots      Ballots[]\n  votes        Votes[]\n}\n\nmodel Teams {\n  id          String        @id @default(uuid())\n  name        String\n  elections   Elections[]\n  members     TeamMembers[]\n  invitations Invitations[]\n  is_deleted  Boolean       @default(false)\n  created_at  DateTime      @default(now())\n  updated_at  DateTime?     @updatedAt\n}\n\nmodel TeamMembers {\n  id         String        @id @default(uuid())\n  team       Teams         @relation(fields: [team_id], references: [id])\n  team_id    String\n  user       Users         @relation(fields: [user_id], references: [id])\n  user_id    String\n  is_admin   Boolean       @default(false)\n  is_deleted Boolean       @default(false)\n  created_at DateTime      @default(now())\n  updated_at DateTime?     @updatedAt\n  Invitation Invitations[]\n}\n\nmodel Invitations {\n  id                   String       @id @default(uuid())\n  team                 Teams        @relation(fields: [team_id], references: [id])\n  team_id              String\n  state                InviteStates @default(PENDING)\n  invited_by_member    TeamMembers  @relation(fields: [invited_by_member_id], references: [id])\n  invited_by_member_id String\n  email                String\n  is_admin             Boolean      @default(false)\n  is_deleted           Boolean      @default(false)\n  created_at           DateTime     @default(now())\n  updated_at           DateTime?    @updatedAt\n}\n\nenum InviteStates {\n  PENDING\n  ACCEPTED\n  DECLINED\n}\n\nmodel Users {\n  id           String        @id @default(uuid())\n  principal_id String        @unique\n  name         String\n  email        String        @unique\n  member_of    TeamMembers[]\n  ballots      Ballots[]\n}\n\nmodel Propositions {\n  id          String    @id @default(uuid())\n  election    Elections @relation(fields: [election_id], references: [id])\n  election_id String\n  name        String\n  description String?\n}\n\nmodel Ballots {\n  id          String    @id @default(uuid())\n  election    Elections @relation(fields: [election_id], references: [id])\n  election_id String\n  user        Users     @relation(fields: [user_id], references: [id])\n  user_id     String\n  is_used     Boolean   @default(false)\n  used_at     DateTime?\n}\n\nmodel Votes {\n  id                String    @id @default(uuid())\n  election          Elections @relation(fields: [election_id], references: [id])\n  election_id       String\n  created_at        DateTime  @default(now())\n  ballot_proof      String    @unique\n  proposition_proof String    @unique\n  validation_proof  String    @unique\n}\n",
-  "inlineSchemaHash": "183b21184941a1482c54ce563c0a44cae0b1a9b5d0f1c341c8c2e356e4493c96",
+  "inlineSchema": "generator client {\r\n  provider      = \"prisma-client-js\"\r\n  output        = \"../../prisma/client\"\r\n  binaryTargets = [\"native\", \"linux-musl-arm64-openssl-3.0.x\", \"linux-musl-openssl-3.0.x\"]\r\n}\r\n\r\ndatasource db {\r\n  provider = \"postgresql\"\r\n  url      = env(\"DATABASE_URL\")\r\n}\r\n\r\nmodel Elections {\r\n  id           String         @id @default(uuid())\r\n  team         Teams          @relation(fields: [team_id], references: [id])\r\n  team_id      String\r\n  name         String\r\n  description  String?\r\n  is_deleted   Boolean        @default(false)\r\n  created_at   DateTime       @default(now())\r\n  start_at     DateTime\r\n  end_at       DateTime?\r\n  propositions Propositions[]\r\n  ballots      Ballots[]\r\n  votes        Votes[]\r\n}\r\n\r\nmodel Teams {\r\n  id          String        @id @default(uuid())\r\n  name        String\r\n  elections   Elections[]\r\n  members     TeamMembers[]\r\n  invitations Invitations[]\r\n  is_deleted  Boolean       @default(false)\r\n  created_at  DateTime      @default(now())\r\n  updated_at  DateTime?     @updatedAt\r\n}\r\n\r\nmodel TeamMembers {\r\n  id         String        @id @default(uuid())\r\n  team       Teams         @relation(fields: [team_id], references: [id])\r\n  team_id    String\r\n  user       Users         @relation(fields: [user_id], references: [id])\r\n  user_id    String\r\n  is_admin   Boolean       @default(false)\r\n  is_deleted Boolean       @default(false)\r\n  created_at DateTime      @default(now())\r\n  updated_at DateTime?     @updatedAt\r\n  Invitation Invitations[]\r\n}\r\n\r\nmodel Invitations {\r\n  id                   String       @id @default(uuid())\r\n  team                 Teams        @relation(fields: [team_id], references: [id])\r\n  team_id              String\r\n  state                InviteStates @default(PENDING)\r\n  invited_by_member    TeamMembers  @relation(fields: [invited_by_member_id], references: [id])\r\n  invited_by_member_id String\r\n  email                String\r\n  is_admin             Boolean      @default(false)\r\n  is_deleted           Boolean      @default(false)\r\n  created_at           DateTime     @default(now())\r\n  updated_at           DateTime?    @updatedAt\r\n}\r\n\r\nenum InviteStates {\r\n  PENDING\r\n  ACCEPTED\r\n  DECLINED\r\n}\r\n\r\nmodel Users {\r\n  id           String        @id @default(uuid())\r\n  principal_id String        @unique\r\n  name         String\r\n  email        String        @unique\r\n  member_of    TeamMembers[]\r\n  ballots      Ballots[]\r\n}\r\n\r\nmodel Propositions {\r\n  id          String    @id @default(uuid())\r\n  election    Elections @relation(fields: [election_id], references: [id])\r\n  election_id String\r\n  name        String\r\n  description String?\r\n}\r\n\r\nmodel Ballots {\r\n  id          String    @id @default(uuid())\r\n  election    Elections @relation(fields: [election_id], references: [id])\r\n  election_id String\r\n  user        Users     @relation(fields: [user_id], references: [id])\r\n  user_id     String\r\n  is_used     Boolean   @default(false)\r\n  used_at     DateTime?\r\n}\r\n\r\nmodel Votes {\r\n  id                String    @id @default(uuid())\r\n  election          Elections @relation(fields: [election_id], references: [id])\r\n  election_id       String\r\n  created_at        DateTime  @default(now())\r\n  ballot_proof      String    @unique\r\n  proposition_proof String    @unique\r\n  validation_proof  String    @unique\r\n}\r\n",
+  "inlineSchemaHash": "ae7ea477324d924227820fe59f20cc17a7d4248c149696ce91b6720f43b51fad",
   "copyEngine": true
 }
 config.dirname = '/'

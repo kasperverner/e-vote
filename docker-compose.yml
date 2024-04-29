@@ -69,4 +69,5 @@ services:
     working_dir: /app
     ports:
       - 3000:3000
+      - 3010:3010
     command: /bin/sh -c "yarn install && yarn dev --host"
