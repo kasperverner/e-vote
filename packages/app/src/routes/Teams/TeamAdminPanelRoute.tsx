@@ -1,4 +1,4 @@
-import { Navigate, createRoute } from "@tanstack/react-router";
+import { useNavigate, createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import { useAuth } from "@clerk/clerk-react";
 import useElections from "../../hooks/useElections";
@@ -22,6 +22,7 @@ function TeamAdminPanel() {
     const { data: members } = useTeamMembers(team_slug);
     const { data: currentUser } = useCurrentUser();
     const { data: invitations } = useInvitations(team_slug);
+    const navigate = useNavigate();
 
     // if something is loading, return a loading state
     if (!elections || !members || !currentUser || !invitations) {
@@ -40,7 +41,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // redirect to team index
-                <Navigate to="/teams" />;
+                navigate({ to: "/teams" });
             })
             .catch((error) => {
                 console.error("Error:", error);
