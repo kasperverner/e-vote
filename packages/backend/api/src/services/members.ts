@@ -20,11 +20,12 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
     select: {
       user: {
         select: {
-          id: true,
+          //id: true,
           name: true,
           email: true,
         },
       },
+      id: true,
       is_admin: true,
       created_at: true,
     },
@@ -34,6 +35,8 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
     name: member.user.name,
     email: member.user.email,
     isAdmin: member.is_admin,
+    createdAt: member.created_at,
+    id: member.id,
   }))
   );
 };
@@ -156,6 +159,7 @@ export const getInvitations: RequestHandler = async (req, res) => {
         },
       },
       select: {
+        id: true,
         email: true,
         is_admin: true,
         created_at: true,
