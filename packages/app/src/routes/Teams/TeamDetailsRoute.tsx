@@ -33,7 +33,7 @@ function TeamDetailsPage() {
     const isAdmin = members.some((member) => member.user_id === user_id && member.isAdmin);
     const adminCount = members.filter((member) => member.isAdmin).length;
     const token = await getToken();
-  
+
     if (isAdmin && adminCount === 1) {
       console.log("You are the only admin");
       // Delete the team

@@ -31,13 +31,14 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
     },
   });
 
-  return res.status(200).json(members?.map((member) => ({
-    name: member.user.name,
-    email: member.user.email,
-    isAdmin: member.is_admin,
-    createdAt: member.created_at,
-    id: member.id,
-  }))
+  return res.status(200).json(
+    members?.map((member) => ({
+      name: member.user.name,
+      email: member.user.email,
+      isAdmin: member.is_admin,
+      createdAt: member.created_at,
+      id: member.id,
+    }))
   );
 };
 
@@ -165,6 +166,11 @@ export const getInvitations: RequestHandler = async (req, res) => {
         created_at: true,
         updated_at: true,
         state: true,
+        team: {
+          select: {
+            name: true,
+          },
+        },
         invited_by_member: {
           select: {
             user: {
@@ -178,6 +184,64 @@ export const getInvitations: RequestHandler = async (req, res) => {
     });
 
     return res.status(200).json(invitations);
+  } catch (error) {
+    console.error("error", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+/**
+ * Get pending invitation from id unless the user is already member of the team
+ * @param team_id: string
+ * @returns invitations: Invitation[]
+ */
+export const getInvitation: RequestHandler = async (req, res) => {
+  try {
+    const { team_id, invitation_id } = req.params;
+    const { user_id } = res.locals;
+
+    // Find all invitations of the team
+    const invitation = await db.invitations.findFirstOrThrow({
+      where: {
+        team_id,
+        team: {
+          id: team_id,
+          members: {
+            none: {
+              user_id
+            }
+          }
+        },
+        id: invitation_id,
+        is_deleted: {
+          not: true,
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+        is_admin: true,
+        created_at: true,
+        updated_at: true,
+        state: true,
+        team: {
+          select: {
+            name: true,
+          },
+        },
+        invited_by_member: {
+          select: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return res.status(200).json(invitation);
   } catch (error) {
     console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -316,6 +380,23 @@ export const acceptInvitation: RequestHandler = async (req, res) => {
 
     if (!invitation) {
       return res.status(404).json({ message: "Invitation not found" });
+    }
+
+    // check if the user is already a member of the team
+    const existingMember = await db.teamMembers.findFirst({
+      where: {
+        team_id: invitation.team_id,
+        user_id,
+        is_deleted: {
+          not: true,
+        },
+      },
+    });
+
+    if (existingMember) {
+      return res
+        .status(409)
+        .json({ message: "User is already a member of the team" });
     }
 
     // Create a new team member

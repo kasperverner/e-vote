@@ -1,6 +1,6 @@
 import express from "express";
 import { isAdminOfTeam, isAuthorized, isMemberOfTeam } from "../services/middleware";
-import { acceptInvitation, declineInvitation, deleteInvitation, editInvitation, editMemberRole, getInvitations, getTeamMembers, inviteMembers, leaveTeam, removeMember } from "../services/members";
+import { acceptInvitation, declineInvitation, deleteInvitation, editInvitation, editMemberRole, getInvitation, getInvitations, getTeamMembers, inviteMembers, leaveTeam, removeMember } from "../services/members";
 
 const router = express.Router();
 router.use(isAuthorized);
@@ -34,6 +34,12 @@ router.delete("/:team_id/members/:member_id", isAdminOfTeam, removeMember);
  * list invitations of the team if the user is an admin of the team
  */
 router.get("/:team_id/members/invitations", isAdminOfTeam, getInvitations);
+
+/**
+ * POST /teams/:team_id/members/invitations/:invitation_id
+ * get invitation details
+ */
+router.get("/:team_id/members/invitations/:invitation_id", getInvitation);
 
 /**
  * POST /teams/:team_id/members/invitations
