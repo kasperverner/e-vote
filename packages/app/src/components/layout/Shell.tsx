@@ -2,6 +2,7 @@ import Container from "./Container";
 import Footer from "./Footer";
 import { Outlet } from "@tanstack/react-router";
 import Navbar from "./Navbar";
+import BreadCrumbs from "./BreadCrumbs";
 // import Sidebar from "./Sidebar";
 // import Footer from "./Footer";
 
@@ -14,6 +15,7 @@ const Shell = () => (
         {/* <Sidebar /> */}
 
         <section className="py-4">
+          <BreadCrumbs />
           {/* The Outlet is where the router will place the page content */}
           <Outlet />
         </section>
