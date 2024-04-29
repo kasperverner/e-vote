@@ -3,6 +3,7 @@ import Shell from "../components/layout/Shell";
 import IndexRoute from "./HomeRoute";
 import TeamIndexRoute from "./Teams/TeamIndexRoute";
 import NotFoundRoute from "./NotFoundRoute";
+import SigninRoute from "./SigninRoute";
 
 // Create the root route and provide the app shell for layout
 export const rootRoute = createRootRoute({
@@ -10,7 +11,7 @@ export const rootRoute = createRootRoute({
 });
 
 // Add sub-routes to the root route
-rootRoute.addChildren([IndexRoute, TeamIndexRoute, NotFoundRoute]);
+rootRoute.addChildren([IndexRoute, TeamIndexRoute, SigninRoute, NotFoundRoute]);
 
 // Create the router
 const router = createRouter({
