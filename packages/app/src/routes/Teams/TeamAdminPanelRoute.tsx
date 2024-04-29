@@ -1,4 +1,4 @@
-import { createRoute } from "@tanstack/react-router";
+import { Navigate, createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import { useAuth } from "@clerk/clerk-react";
 import useElections from "../../hooks/useElections";
@@ -40,7 +40,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // redirect to team index
-                window.location.href = "/teams";
+                <Navigate to="/teams" />;
             })
             .catch((error) => {
                 console.error("Error:", error);
