@@ -52,6 +52,42 @@ export const getElections: RequestHandler = async (req, res) => {
 };
 
 /**
+ * Delete an election by setting is_deleted to true
+ */
+export const deleteElection: RequestHandler = async (req, res) => {
+  const { election_id, team_id } = req.params;
+
+  // check if the election exists
+  const election = await db.elections.findUnique({
+    where: {
+      id: election_id,
+      team_id,
+      is_deleted: {
+        not: true,
+      },
+    },
+  });
+
+  if (!election) {
+    return res
+      .status(404)
+      .json({ message: `Election with ID ${election_id} not found` });
+  }
+
+  // delete the election
+  await db.elections.update({
+    where: {
+      id: election.id,
+    },
+    data: {
+      is_deleted: true,
+    },
+  });
+
+  return res.status(204).send();
+}
+
+/**
  * Get election by id
  * @param election_id: string
  * @param team_id: string
