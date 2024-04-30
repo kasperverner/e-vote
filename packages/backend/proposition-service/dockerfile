@@ -4,4 +4,4 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 COPY ../prisma /usr/srv/prisma
-CMD [ "ts-node", "src/index.ts" ]
+CMD [ "npm", "start" ]
