@@ -1,10 +1,11 @@
 # Stage 1: Build the React application
-FROM node:20-bullseye AS builder
+FROM node:20 AS builder
+ENV NODE_ENV=production
 WORKDIR /usr/srv/app
 COPY package*.json ./
-RUN npm install
+RUN yarn install --verbose
 COPY . .
-RUN npm run build
+RUN yarn build --verbose
 
 # Stage 2: Serve the app on Nginx
 FROM nginx:stable-alpine

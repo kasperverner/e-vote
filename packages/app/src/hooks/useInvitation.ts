@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
-import { Invitation } from "../types/invitation";
+import { Invitation } from "../types/Invitation";
 
-async function fetchInvitation(authToken: string, team_id: string, invitation_id: string): Promise<Invitation> {
-  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/teams/${team_id}/members/invitations/${invitation_id}`,
+async function fetchInvitation(
+  authToken: string,
+  team_id: string,
+  invitation_id: string
+): Promise<Invitation> {
+  const res = await fetch(
+    `${
+      import.meta.env.VITE_API_BASE_URL
+    }/teams/${team_id}/members/invitations/${invitation_id}`,
     {
       headers: { Authorization: `Bearer ${authToken}` },
     }
