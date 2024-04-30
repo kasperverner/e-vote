@@ -35,7 +35,7 @@ function TeamElectionCreatePage() {
     end_at_client: "",
     start_at_server: "",
     end_at_server: "",
-    propositions: [{ name: "", description: "" }],
+    propositions: [{ name: "", description: "" }, { name: "", description: "" }],
   });
 
   const handleChange = (e) => {
@@ -94,9 +94,9 @@ function TeamElectionCreatePage() {
       return;
     }
 
-    // check if there are is at least one proposition
-    if (formData.propositions.length < 1) {
-      alert("Please add at least one proposition");
+    // check if there are is at least two propositions
+    if (formData.propositions.length < 2) {
+      alert("Please add at least two proposition");
       return;
     }
 
@@ -193,13 +193,23 @@ function TeamElectionCreatePage() {
               placeholder="Proposition Description"
               className="block w-full border rounded py-2 px-3 focus:outline-none focus:border-blue-500"
             />
-            <button
+{/*             <button
               type="button"
               onClick={() => handleRemoveProposition(index)}
               className="text-red-500 hover:text-red-700"
             >
               Remove
-            </button>
+            </button> */}
+            {/* only include button if the propisition is beyond 2 */}
+            {index > 1 && (
+              <button
+                type="button"
+                onClick={() => handleRemoveProposition(index)}
+                className="text-red-500 hover:text-red-700"
+              >
+                Remove
+              </button>
+            )}
           </div>
         ))}
         <button
