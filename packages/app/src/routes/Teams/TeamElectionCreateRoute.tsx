@@ -137,7 +137,8 @@ function TeamElectionCreatePage() {
       .catch((error) => {
         console.error("Error:", error);
       });
-    document.getElementById("create-election-button").disabled = false;
+    // This is not the way to do it. Make a mutation and use the useMutation isLoading state to disable the button
+    // document.getElementById("create-election-button").disabled = false;
   };
 
   return (

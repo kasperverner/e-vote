@@ -1,7 +1,6 @@
 import { createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import useElection from "../../hooks/useElection";
-import { useAuth } from "@clerk/clerk-react";
 
 const TeamElectionDetailsRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
