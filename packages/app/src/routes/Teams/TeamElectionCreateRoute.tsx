@@ -24,9 +24,16 @@ function TeamElectionCreatePage() {
   };
 
   const serverFormat = (datetime) => {
-    // Ensure datetime is in the format expected by the server
-    return datetime + ":00.000Z"; // Adding seconds and milliseconds for server format
+    // Parse input time as local time
+    const date = new Date(datetime);
+    console.log("date", date);  // This will be the local time
+
+    // Convert to UTC without altering the time value
+    const utcDateString = date.toISOString();
+    console.log("utcDate in iso", utcDateString); // This will be in UTC, maintaining the time value
+    return utcDateString;
   };
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -130,7 +137,7 @@ function TeamElectionCreatePage() {
         end_at: formData.end_at_server,
       }),
     };
-    fetch(import.meta.env.VITE_API_BASE_URL+`/teams/${team_slug}/elections`, requestOptions)
+    fetch(import.meta.env.VITE_API_BASE_URL + `/teams/${team_slug}/elections`, requestOptions)
       .then((response) => {
         navigate({ to: `/teams/$team_slug/admin`, params: { team_slug } });
       })
