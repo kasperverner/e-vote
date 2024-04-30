@@ -111,6 +111,7 @@ export const getElection: RequestHandler = async (req, res) => {
           user_id,
         },
       },
+      propositions: true,
     },
   });
 
