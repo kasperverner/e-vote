@@ -1,0 +1,12 @@
+# Stage 1: Build the React application
+FROM node:20-bullseye AS builder
+WORKDIR /usr/srv/app
+COPY package*.json ./
+RUN yarn install
+COPY . .
+RUN yarn build
+
+# Stage 2: Serve the app on Nginx
+FROM nginx:stable-alpine
+COPY --from=builder /usr/srv/app/dist /usr/share/nginx/html
+CMD ["nginx", "-g", "daemon off;"]
