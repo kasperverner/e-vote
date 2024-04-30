@@ -193,14 +193,6 @@ function TeamElectionCreatePage() {
               placeholder="Proposition Description"
               className="block w-full border rounded py-2 px-3 focus:outline-none focus:border-blue-500"
             />
-{/*             <button
-              type="button"
-              onClick={() => handleRemoveProposition(index)}
-              className="text-red-500 hover:text-red-700"
-            >
-              Remove
-            </button> */}
-            {/* only include button if the propisition is beyond 2 */}
             {index > 1 && (
               <button
                 type="button"
