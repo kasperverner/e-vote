@@ -1,4 +1,4 @@
-import { Navigate, createRoute } from "@tanstack/react-router";
+import { useNavigate, createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import { useAuth } from "@clerk/clerk-react";
 import useElections from "../../hooks/useElections";
@@ -7,7 +7,6 @@ import useCurrentUser from "../../hooks/useCurrentUser";
 import useInvitations from "../../hooks/useInvitations";
 
 import Button from "../../components/form/button";
-import { Link } from "@tanstack/react-router";
 
 const TeamAdminPanelRoute = createRoute({
     getParentRoute: () => TeamIndexRoute,
@@ -22,6 +21,7 @@ function TeamAdminPanel() {
     const { data: members } = useTeamMembers(team_slug);
     const { data: currentUser } = useCurrentUser();
     const { data: invitations } = useInvitations(team_slug);
+    const navigate = useNavigate();
 
     // if something is loading, return a loading state
     if (!elections || !members || !currentUser || !invitations) {
@@ -40,7 +40,7 @@ function TeamAdminPanel() {
             .then((data) => {
                 console.log(data);
                 // redirect to team index
-                <Navigate to="/teams" />;
+                navigate({ to: "/teams" });
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -167,6 +167,38 @@ function TeamAdminPanel() {
             });
     }
 
+    async function deleteElection(election_id: string) {
+        // fetch delete request to delete election (DELETE on /teams/:teamId/elections/:electionId)
+        const token = await getToken();
+        fetch(`http://localhost:4000/teams/${team_slug}/elections/${election_id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token as string}`,
+            },
+        })
+            .then((data) => {
+                console.log(data);
+                // reload page
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Error deleting election");
+            });
+    }
+
+    const copyLink = (path: string) => {
+        const fullPath = document.location.origin + path;
+
+        navigator.clipboard.writeText(fullPath)
+            .then(() => {
+                alert('Link copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy link: ', err);
+            });
+    };
+
     return (
         <div className="flex flex-row" style={{ height: "80vh" }}>
             <div className="flex flex-col w-1/2">
@@ -208,18 +240,32 @@ function TeamAdminPanel() {
                         </div>
                     </div>
                     <ul className="flex flex-col space-y-4 h-full ml-4">
-                        {invitations.map((invitation, index) => (
+                        {[...invitations.filter(inv => inv.state === 'PENDING'),
+                        ...invitations.filter(inv => inv.state === 'ACCEPTED'),
+                        ...invitations.filter(inv => inv.state === 'DECLINED')].map((invitation, index) => (
                             <li key={invitation.email + index} className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center">
                                 <div>
                                     <h3 className="text-lg">{invitation.email}</h3>
+                                    <p>Invited by: {invitation.invited_by_member.user.name}</p> {/* Added line */}
                                 </div>
-                                <Button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => handleRevokeInvitation(invitation.id)}>Revoke</Button>
+                                {invitation.state === 'PENDING' && (
+                                    <div>
+                                        <Button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2" onClick={() => copyLink(`/teams/${team_slug}/members/invite/${invitation.id}`)}>Copy link</Button>
+                                        <Button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => handleRevokeInvitation(invitation.id)}>Revoke</Button>
+                                    </div>
+                                )}
+                                {invitation.state === 'DECLINED' && (
+                                    <span className="text-red-500">Declined</span>
+                                )}
+                                {invitation.state === 'ACCEPTED' && (
+                                    <span className="text-green-500">Accepted</span>
+                                )}
                             </li>
                         ))}
                     </ul>
                 </div>
 
-                <div className="bg-white p-4 rounded-lg shadow-md h-1/5">
+                <div className="bg-white p-4 rounded-lg shadow-md h-1/5 overflow-y-auto">
                     <h2 className="text-xl font-bold mb-4">Actions</h2>
                     <div>
                         <div className="flex">
@@ -231,19 +277,25 @@ function TeamAdminPanel() {
                 </div>
             </div>
             <div className="flex flex-col w-1/2">
-                <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4 overflow-y-auto">
-                    <h2 className="text-xl font-bold mb-4">Elections</h2>
-                    <ul className="flex flex-col space-y-4">
-                        {elections.map((election) => (
-                            <li key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md">
-                                <h3 className="text-lg font-bold">{election.name}</h3>
-                                <p>{election.description}</p>
-                                <Link to={`/teams/${team_slug}/elections/${election.id}`} className="text-blue-500">View election</Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
+    <div className="bg-white p-4 rounded-lg shadow-md h-full ml-4 overflow-y-auto">
+        <h2 className="text-xl font-bold mb-4">Elections</h2>
+        <div className="flex justify-between items-center mb-4">
+            <Button to={`/teams/${team_slug}/elections/new`} className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md">Add Election</Button>
+        </div>
+        <ul className="flex flex-col space-y-4">
+            {elections.map((election) => (
+                <li key={election.id} className="bg-gray-100 p-4 rounded-lg shadow-md relative flex justify-between items-center">
+                    <div>
+                        <h3 className="text-lg font-bold">{election.name}</h3>
+                        <p>{election.description}</p>
+                    </div>
+                    <Button onClick={() => deleteElection(election.id)} className="bg-red-500">Delete</Button>
+                </li>
+            ))}
+        </ul>
+    </div>
+</div>
+
         </div>
     );
 }

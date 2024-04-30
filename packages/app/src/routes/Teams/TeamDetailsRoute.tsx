@@ -21,8 +21,7 @@ function TeamDetailsPage() {
   const { data: memberInfo } = useTeamMembers(team_slug);
   const { data: currentUser } = useCurrentUser();
   const { getToken } = useAuth();
-  const userIsAdmin = memberInfo?.find((member) => member.user_id === currentUser?.id)?.isAdmin;
-
+  const userIsAdmin = currentUser?.user.id;
 
   // if anything is loading, return a loading state
   if (!team || !memberInfo || !currentUser) {
