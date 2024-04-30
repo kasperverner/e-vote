@@ -36,30 +36,30 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./packages/backend
-          file: api.dockerfile
+          file: ./packages/backend/api.dockerfile
           push: true
           tags: kasperverner/e-vote-api:latest
 
-      - name: Build and push Ballot Service
-        uses: docker/build-push-action@v5
-        with:
-          context: ./packages/backend
-          file: ballot-service.dockerfile
-          push: true
-          tags: kasperverner/e-vote-ballot-service:latest
+      # - name: Build and push Ballot Service
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./packages/backend
+      #     file: ballot-service.dockerfile
+      #     push: true
+      #     tags: kasperverner/e-vote-ballot-service:latest
 
-      - name: Build and push Propositotion Service
-        uses: docker/build-push-action@v5
-        with:
-          context: ./packages/backend
-          file: proposition-service.dockerfile
-          push: true
-          tags: kasperverner/e-vote-proposition-service:latest
+      # - name: Build and push Propositotion Service
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./packages/backend
+      #     file: proposition-service.dockerfile
+      #     push: true
+      #     tags: kasperverner/e-vote-proposition-service:latest
 
-      - name: Build and push Validation Service
-        uses: docker/build-push-action@v5
-        with:
-          context: ./packages/backend
-          file: validation-service.dockerfile
-          push: true
-          tags: kasperverner/e-vote-validation-service:latest
+      # - name: Build and push Validation Service
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: /packages/backend/validation-service.dockerfile
+      #     push: true
+      #     tags: kasperverner/e-vote-validation-service:latest
