@@ -1,7 +1,7 @@
 FROM node:20-bullseye
 WORKDIR /usr/srv/app
-COPY package*.json ./
+COPY api/package*.json ./
 RUN npm install
-COPY . .
-COPY ../prisma /usr/srv/prisma
+COPY api .
+COPY prisma /usr/srv/prisma
 CMD [ "npm", "start" ]

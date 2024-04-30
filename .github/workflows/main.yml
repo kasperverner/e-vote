@@ -35,27 +35,27 @@ jobs:
       - name: Build and push API
         uses: docker/build-push-action@v5
         with:
-          context: ./packages/backend/api
+          context: ./packages/backend/api.dockerfile
           push: true
           tags: kasperverner/e-vote-api:latest
 
       - name: Build and push Ballot Service
         uses: docker/build-push-action@v5
         with:
-          context: ./packages/backend/ballot-service
+          context: ./packages/backend/ballot-service.dockerfile
           push: true
           tags: kasperverner/e-vote-ballot-service:latest
 
       - name: Build and push Propositotion Service
         uses: docker/build-push-action@v5
         with:
-          context: ./packages/backend/ballot-service
+          context: ./packages/backend/ballot-service.dockerfile
           push: true
           tags: kasperverner/e-vote-ballot-service:latest
 
       - name: Build and push Validation Service
         uses: docker/build-push-action@v5
         with:
-          context: ./packages/backend/ballot-service
+          context: ./packages/backend/ballot-service.dockerfile
           push: true
           tags: kasperverner/e-vote-ballot-service:latest
