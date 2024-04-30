@@ -158,10 +158,10 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 ## Assignments
 
-- [ ] Add auth filter for the protected routes
+- [x] Add auth filter for the protected routes
 - [ ] Add data preloading to the router
 - [x] Dockerrize the app and apis for debug
-- [ ] Dockerrize the app and apis for deployment
+- [x] Dockerrize the app and apis for deployment
 - [ ] Add a CI/CD pipeline using Github Actions
 - [ ] Make proper layout for the UI
 - [ ] Add a proper error logging system (Application Insights) ((Maybe?))
