@@ -8,6 +8,7 @@ import db from "../utilities/db.server";
  */
 export const getTeamMembers: RequestHandler = async (req, res) => {
   const { team_id } = req.params;
+  const { user_id } = res.locals;
 
   // Find all members of the team
   const members = await db.teamMembers.findMany({
@@ -20,7 +21,7 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
     select: {
       user: {
         select: {
-          //id: true,
+          id: true,
           name: true,
           email: true,
         },
@@ -36,6 +37,7 @@ export const getTeamMembers: RequestHandler = async (req, res) => {
       name: member.user.name,
       email: member.user.email,
       isAdmin: member.is_admin,
+      isUser: member.user.id === user_id,
       createdAt: member.created_at,
       id: member.id,
     }))
@@ -288,7 +290,7 @@ export const inviteMembers: RequestHandler = async (req, res) => {
         is_admin: isAdmin,
       },
     });
-    
+
     // TODO: Send an email to the invited user
 
     return res.status(201).json(invitation);
