@@ -3,6 +3,11 @@ import { ValidationResponse } from "../types/ValidationResponse";
 export const generateValidationProof = async (ballotProof: string, propositionProof: string) => {
   const url = `${process.env.VALIDATION_SERVICE_URL}/proofs/${ballotProof}/${propositionProof}`;
   const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Failed to generate proof");
+  }
+  
   const proof = await response.json();
 
   return proof;

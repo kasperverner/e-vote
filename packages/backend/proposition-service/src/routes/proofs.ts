@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/:proposition_id", async (req, res) => {
   try {
     const { proposition_id } = req.params;
-    const proof = hasher(proposition_id, process.env.SECRET as string);
+    const proof = hasher(proposition_id, process.env.PROOF_SECRET as string);
 
     return res.status(200).json(proof);
   } catch (error) {
@@ -55,7 +55,9 @@ router.get("/:election_id", async (req, res) => {
       return res.status(200).json({ message: `No votes found for election with ID ${election_id}`, success: false });
 
     // Generate a list of valid proposition proofs
-    const propositionProofs = propositions.map(({ id }) => hasher(id, process.env.SECRET as string));
+    const propositionProofs = propositions.map(({ id }) =>
+      hasher(id, process.env.PROOF_SECRET as string)
+    );
 
     // Validate each vote
     for (let i = 0; i < votes.length; i++) {

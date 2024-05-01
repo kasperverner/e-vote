@@ -1,3 +1,5 @@
+import { Proposition } from "./Proposition";
+
 export type Election = {
   id: string;
   team_id: string;
@@ -8,6 +10,6 @@ export type Election = {
   end_at: string;
   has_voted?: boolean;
   is_deleted: boolean;
-  // propositions: Proposition[];
+  propositions?: Proposition[];
   // ballots: Ballot[];
 };
