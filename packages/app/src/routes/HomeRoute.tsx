@@ -1,5 +1,6 @@
-import { Link, createRoute } from "@tanstack/react-router";
+import { Link, Navigate, createRoute } from "@tanstack/react-router";
 import { rootRoute } from "./RootRouter";
+import { useSession } from "@clerk/clerk-react";
 
 const HomeRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -8,23 +9,24 @@ const HomeRoute = createRoute({
 });
 
 function HomePage() {
-  return (
-    <div className="flex flex-col gap-4  mt-8">
-      <h3 className="font-bold">Example links:</h3>
-      <Link
-        to="/teams/$team_id"
-        params={{
-          team_id: "87654321",
+  const { isLoaded, isSignedIn } = useSession();
+
+  if (!isLoaded) {
+    return "Loading session...";
+  }
+
+  if (!isSignedIn) {
+    return (
+      <Navigate
+        to="/sign-in"
+        search={{
+          redirectTo: document.location.pathname,
         }}
-        className="hover:underline"
-      >
-        Team
-      </Link>
-      <Link to="/not-found-page" className="hover:underline">
-        404 Page
-      </Link>
-    </div>
-  );
+      />
+    );
+  }
+
+  return <Navigate to="/teams" />;
 }
 
 export default HomeRoute;
