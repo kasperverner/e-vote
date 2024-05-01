@@ -24,7 +24,7 @@ const CreateInvitationForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     reset,
   } = useForm<FormValues>({
     resolver: zodResolver(FormSchema), // Apply the zodResolver
