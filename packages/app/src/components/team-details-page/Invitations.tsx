@@ -1,6 +1,8 @@
+import { Invitation } from "../../types/Invitation";
 import Button from "../form/button";
 
-const Invitations = ({ invitations }) => {
+
+const Invitations = ({ invitations }: { invitations: Invitation[] }) => {
   return (
     <div>
       <h2 className="text-2xl font-semibold text-gray-700 mb-2">Invitations</h2>
@@ -11,7 +13,7 @@ const Invitations = ({ invitations }) => {
             <td><Button className="bg-blue-500 mb-4 w-4/5">Invite</Button></td>
           </tr>
           {invitations
-            .filter((invitation) => invitation.state === "pending")
+            .filter((invitation) => invitation.state === "PENDING")
             .map((invitation, index) => (
               <tr key={index}>
                 <td>{invitation.email}</td>
@@ -24,4 +26,4 @@ const Invitations = ({ invitations }) => {
   );
 }
 
-export default Invitations; 
+export default Invitations;

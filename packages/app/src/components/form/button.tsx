@@ -5,16 +5,19 @@ interface ButtonProps {
   to?: string;
   onClick?: () => void;
   className?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   children: ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, onClick, to, className }) => {
+const Button: React.FC<ButtonProps> = ({ children, onClick, to, className, type = "button", disabled = false }) => {
   if (to) {
     return (
       <Link to={to}>
         <button
-          onClick={onClick}
           className={`px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none ${className}`}
+          type={type}
+          disabled={disabled}
         >
           {children}
         </button>
@@ -26,6 +29,8 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, to, className }) => 
     <button
       onClick={onClick}
       className={`px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none ${className}`}
+      type={type}
+      disabled={disabled}
     >
       {children}
     </button>
