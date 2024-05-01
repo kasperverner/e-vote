@@ -7,7 +7,9 @@ async function fetchResults(
   election_id: string
 ) {
   const res = await fetch(
-    `http://localhost:4000/teams/${team_id}/elections/${election_id}/results`,
+    `${
+      import.meta.env.VITE_API_BASE_URL
+    }/teams/${team_id}/elections/${election_id}/results`,
     {
       headers: { Authorization: `Bearer ${authToken}` },
     }

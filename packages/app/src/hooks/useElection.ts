@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
+import { Election } from "../types/Election";
 
 async function fetchElection(
   authToken: string,
@@ -7,7 +8,9 @@ async function fetchElection(
   election_id: string
 ) {
   const res = await fetch(
-    `http://localhost:4000/teams/${team_id}/elections/${election_id}`,
+    `${
+      import.meta.env.VITE_API_BASE_URL
+    }/teams/${team_id}/elections/${election_id}`,
     {
       headers: { Authorization: `Bearer ${authToken}` },
     }
@@ -18,7 +21,7 @@ async function fetchElection(
 const useElection = (team_id: string, election_id: string) => {
   const { getToken } = useAuth();
 
-  return useQuery<object>({
+  return useQuery<Election>({
     enabled: !!team_id && !!election_id,
     queryKey: ["elections", team_id],
     queryFn: async () => {
