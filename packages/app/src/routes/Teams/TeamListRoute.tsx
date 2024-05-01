@@ -36,7 +36,7 @@ function TeamListPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold my-6">My Teams</h1>
+      <h1 className="text-3xl font-bold mb-4">My Teams</h1>
       <ul>
         {data?.map((team: any) => (
           <li

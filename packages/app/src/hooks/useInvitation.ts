@@ -31,7 +31,7 @@ const useInvitation = (team_id: string, invitation_id: string) => {
     queryFn: async () => {
       const token = await getToken();
       return fetchInvitation(token as string, team_id, invitation_id);
-    },
+    }
   });
 };
 
