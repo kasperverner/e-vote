@@ -20,7 +20,7 @@ export const getTeams: RequestHandler = async (req, res) => {
         },
         is_deleted: {
           not: true,
-        }
+        },
       },
       select: {
         id: true,
@@ -167,7 +167,7 @@ export const deleteTeam: RequestHandler = async (req, res) => {
       },
       data: {
         is_deleted: true,
-      }
+      },
     });
 
     return res.status(204).send();
