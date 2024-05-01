@@ -24,9 +24,17 @@ const BuildBreadCrumsLabel = ({ label }: { label: string }) => {
   );
 };
 
+const TruncateLabel = (label: string, maxLength: number) => {
+  if (label.length > maxLength) {
+    return label.slice(0, maxLength) + "...";
+  }
+
+  return label;
+}
+
 const GenerateLabel = (part: string, teamId: string, electionId: string) => {
-  if (part === teamId) return GetTeamName(teamId);
-  if (part === electionId) return GetElectionName(teamId, electionId);
+  if (part === teamId) return TruncateLabel(GetTeamName(teamId), 16);
+  if (part === electionId) return TruncateLabel(GetElectionName(teamId, electionId), 16);
 
   return part;
 };
