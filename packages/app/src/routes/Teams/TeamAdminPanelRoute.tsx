@@ -7,6 +7,7 @@ import useCurrentUser from "../../hooks/useCurrentUser";
 import useInvitations from "../../hooks/useInvitations";
 
 import Button from "../../components/form/button";
+import CreateInvitationForm from "../../components/team-admin-page/CreateInvitationForm";
 
 const TeamAdminPanelRoute = createRoute({
     getParentRoute: () => TeamIndexRoute,
@@ -122,31 +123,6 @@ function TeamAdminPanel() {
             });
     }
 
-    async function handleInviteUser(email: string) {
-        // fetch post request to invite user to team (POST on /teams/:teamId/members/invitations)
-        const token = await getToken();
-        fetch(`http://localhost:4000/teams/${team_slug}/members/invitations`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token as string}`,
-            },
-            body: JSON.stringify({
-                email: email,
-                isAdmin: false,
-            }),
-        })
-            .then((data) => {
-                console.log(data);
-                // reload page
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("Error inviting user to team");
-            });
-    }
-
     async function handleRevokeInvitation(invitation_id: string) {
         // fetch delete request to revoke invitation (DELETE on /teams/:teamId/members/invitations/:invitationId)
         const token = await getToken();
@@ -233,12 +209,7 @@ function TeamAdminPanel() {
 
                 <div className="bg-white p-4 rounded-lg shadow-md mb-4 h-2/5 overflow-y-auto">
                     <h2 className="text-xl font-bold mb-4">Invites</h2>
-                    <div>
-                        <div className="flex mb-4">
-                            <input type="email" placeholder="Enter email" id="inviteEmail" className="border border-gray-300 rounded-md px-2 py-1" />
-                            <Button className="ml-2 bg-green-500 text-white px-4 py-2 rounded-md" onClick={() => handleInviteUser(document.getElementById('inviteEmail').value)}>Invite</Button>
-                        </div>
-                    </div>
+                    <CreateInvitationForm />
                     <ul className="flex flex-col space-y-4 h-full ml-4">
                         {[...invitations.filter(inv => inv.state === 'PENDING'),
                         ...invitations.filter(inv => inv.state === 'ACCEPTED'),

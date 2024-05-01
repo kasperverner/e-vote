@@ -208,9 +208,9 @@ export const getInvitation: RequestHandler = async (req, res) => {
           id: team_id,
           members: {
             none: {
-              user_id
-            }
-          }
+              user_id,
+            },
+          },
         },
         id: invitation_id,
         is_deleted: {
@@ -262,6 +262,9 @@ export const inviteMembers: RequestHandler = async (req, res) => {
     const { email, isAdmin } = req.body;
     const { user_id } = res.locals;
 
+    console.log("email", email);
+    console.log("isAdmin", isAdmin);
+
     const member = await db.teamMembers.findFirst({
       where: {
         team_id,
@@ -285,7 +288,7 @@ export const inviteMembers: RequestHandler = async (req, res) => {
         is_admin: isAdmin,
       },
     });
-
+    
     // TODO: Send an email to the invited user
 
     return res.status(201).json(invitation);

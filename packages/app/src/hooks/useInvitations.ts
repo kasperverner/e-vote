@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
+import { Invitation } from "../types/Invitation";
 
-async function fetchInvitations(authToken: string, team_slug: string) {
+async function fetchInvitations(authToken: string, team_slug: string) : Promise<Invitation[]> {
   const res = await fetch(`http://localhost:4000/teams/${team_slug}/members/invitations`, {
     headers: { Authorization: `Bearer ${authToken}` }
   });
@@ -11,12 +12,12 @@ async function fetchInvitations(authToken: string, team_slug: string) {
 const useInvitations = (team_slug: string) => {
   const { getToken } = useAuth();
 
-  return useQuery<object[]>({
+  return useQuery<Invitation[]>({
     queryKey: ["invitations", team_slug],
     queryFn: async () => {
       const token = await getToken();
       return fetchInvitations(token as string, team_slug);
-    }
+    },
   });
 };
 
