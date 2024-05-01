@@ -33,8 +33,8 @@ const CreateInvitationForm = () => {
     }
   )
 
-  if (errors.email || errors.isAdmin)
-    console.error(errors);
+  // if (errors.email || errors.isAdmin)
+  //   console.error(errors);
 
   return (
     <form className="flex flex-row mb-4" onSubmit={onSubmit}>
