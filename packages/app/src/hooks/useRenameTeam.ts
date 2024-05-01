@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 
 async function putRenameTeam(authToken: string, teamId: string, name: string) {
-  return await fetch(`http://localhost:4000/teams/${teamId}`, {
+  return await fetch(`${import.meta.env.VITE_API_BASE_URL}/teams/${teamId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${authToken}`
+      Authorization: `Bearer ${authToken}`,
     },
-    body: JSON.stringify({ name })
+    body: JSON.stringify({ name }),
   });
 }
 
