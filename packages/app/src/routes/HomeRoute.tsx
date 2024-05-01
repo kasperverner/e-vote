@@ -12,9 +12,9 @@ function HomePage() {
     <div className="flex flex-col gap-4  mt-8">
       <h3 className="font-bold">Example links:</h3>
       <Link
-        to="/teams/$team_slug"
+        to="/teams/$team_id"
         params={{
-          team_slug: "87654321",
+          team_id: "87654321",
         }}
         className="hover:underline"
       >

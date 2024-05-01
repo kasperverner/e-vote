@@ -5,16 +5,16 @@ import TeamIndexRoute from "./TeamIndexRoute";
 
 const TeamElectionCreateRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
-  path: "$team_slug/elections/new",
+  path: "$team_id/elections/new",
   component: TeamElectionCreatePage,
 });
 
 function TeamElectionCreatePage() {
-  const { team_slug } = TeamElectionCreateRoute.useParams();
+  const { team_id } = TeamElectionCreateRoute.useParams();
   const { getToken } = useAuth();
   const navigate = useNavigate();
 
-  if (!team_slug) {
+  if (!team_id) {
     return <div>Loading...</div>;
   }
 
@@ -26,14 +26,13 @@ function TeamElectionCreatePage() {
   const serverFormat = (datetime) => {
     // Parse input time as local time
     const date = new Date(datetime);
-    console.log("date", date);  // This will be the local time
+    console.log("date", date); // This will be the local time
 
     // Convert to UTC without altering the time value
     const utcDateString = date.toISOString();
     console.log("utcDate in iso", utcDateString); // This will be in UTC, maintaining the time value
     return utcDateString;
   };
-
 
   const [formData, setFormData] = useState({
     name: "",
@@ -42,7 +41,10 @@ function TeamElectionCreatePage() {
     end_at_client: "",
     start_at_server: "",
     end_at_server: "",
-    propositions: [{ name: "", description: "" }, { name: "", description: "" }],
+    propositions: [
+      { name: "", description: "" },
+      { name: "", description: "" },
+    ],
   });
 
   const handleChange = (e) => {
@@ -137,9 +139,12 @@ function TeamElectionCreatePage() {
         end_at: formData.end_at_server,
       }),
     };
-    fetch(import.meta.env.VITE_API_BASE_URL + `/teams/${team_slug}/elections`, requestOptions)
+    fetch(
+      import.meta.env.VITE_API_BASE_URL + `/teams/${team_id}/elections`,
+      requestOptions
+    )
       .then((response) => {
-        navigate({ to: `/teams/$team_slug/admin`, params: { team_slug } });
+        navigate({ to: `/teams/$team_id/admin`, params: { team_id } });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -189,7 +194,9 @@ function TeamElectionCreatePage() {
               type="text"
               name={`proposition_${index}_name`}
               value={proposition.name}
-              onChange={(e) => handlePropositionChange(index, "name", e.target.value)}
+              onChange={(e) =>
+                handlePropositionChange(index, "name", e.target.value)
+              }
               placeholder="Proposition Name"
               className="block w-full border rounded py-2 px-3 focus:outline-none focus:border-blue-500"
             />
@@ -197,7 +204,9 @@ function TeamElectionCreatePage() {
               type="text"
               name={`proposition_${index}_description`}
               value={proposition.description}
-              onChange={(e) => handlePropositionChange(index, "description", e.target.value)}
+              onChange={(e) =>
+                handlePropositionChange(index, "description", e.target.value)
+              }
               placeholder="Proposition Description"
               className="block w-full border rounded py-2 px-3 focus:outline-none focus:border-blue-500"
             />

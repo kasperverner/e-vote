@@ -12,6 +12,7 @@ const useTeam = (teamId: string) => {
   const { getToken } = useAuth();
 
   return useQuery<object>({
+    enabled: !!teamId,
     queryKey: ["team", teamId],
     queryFn: async () => {
       const token = await getToken();

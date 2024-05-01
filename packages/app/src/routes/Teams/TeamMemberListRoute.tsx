@@ -3,7 +3,7 @@ import TeamIndexRoute from "./TeamIndexRoute";
 
 const TeamMemberListRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
-  path: "$team_slug/members/invite",
+  path: "$team_id/members/invite",
   component: TeamMemberListPage,
 });
 

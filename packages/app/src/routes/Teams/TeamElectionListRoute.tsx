@@ -3,12 +3,12 @@ import TeamIndexRoute from "./TeamIndexRoute";
 
 const TeamElectionListRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
-  path: "$team_slug/elections",
+  path: "$team_id/elections",
   component: TeamElectionListPage,
 });
 
 function TeamElectionListPage() {
-  // const { team_slug } = TeamElectionListRoute.useParams();
+  // const { team_id } = TeamElectionListRoute.useParams();
 
   return (
     <div className="">
