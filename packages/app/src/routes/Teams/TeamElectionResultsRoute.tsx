@@ -3,19 +3,18 @@ import TeamIndexRoute from "./TeamIndexRoute";
 
 const TeamElectionResultsRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
-  path: "$team_slug/elections/$election_slug/results",
+  path: "$team_id/elections/$election_id/results",
   component: TeamElectionResultsPage,
 });
 
 function TeamElectionResultsPage() {
-  const { team_slug, election_slug } =
-    TeamElectionResultsRoute.useParams();
+  const { team_id, election_id } = TeamElectionResultsRoute.useParams();
 
   return (
     <div className="">
       <h3>Steffiboys side!</h3>
-      <p>Team: {team_slug}</p>
-      <p>Election: {election_slug}</p>
+      <p>Team: {team_id}</p>
+      <p>Election: {election_id}</p>
     </div>
   );
 }

@@ -11,14 +11,14 @@ import AdminView from "../../components/team-details-page/AdminView";
 
 const TeamDetailsRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
-  path: "$team_slug",
+  path: "$team_id",
   component: TeamDetailsPage,
 });
 
 function TeamDetailsPage() {
-  const { team_slug } = TeamDetailsRoute.useParams();
-  const { data: team } = useTeam(team_slug);
-  const { data: memberInfo } = useTeamMembers(team_slug);
+  const { team_id } = TeamDetailsRoute.useParams();
+  const { data: team } = useTeam(team_id);
+  const { data: memberInfo } = useTeamMembers(team_id);
   const { data: currentUser } = useCurrentUser();
   const { getToken } = useAuth();
   const userIsAdmin = currentUser?.user.id;
@@ -29,14 +29,16 @@ function TeamDetailsPage() {
   }
 
   async function handleLeaveTeam(user_id, members) {
-    const isAdmin = members.some((member) => member.user_id === user_id && member.isAdmin);
+    const isAdmin = members.some(
+      (member) => member.user_id === user_id && member.isAdmin
+    );
     const adminCount = members.filter((member) => member.isAdmin).length;
     const token = await getToken();
 
     if (isAdmin && adminCount === 1) {
       console.log("You are the only admin");
       // Delete the team
-      fetch(`http://localhost:4000/teams/${team_slug}`, {
+      fetch(`http://localhost:4000/teams/${team_id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token as string}`,
@@ -50,10 +52,9 @@ function TeamDetailsPage() {
         .catch((error) => {
           console.error("Error:", error);
           alert("Error deleting team");
-        }
-      )
+        });
     } else {
-      fetch(`http://localhost:4000/teams/${team_slug}/members/leave`, {
+      fetch(`http://localhost:4000/teams/${team_id}/members/leave`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token as string}`,
@@ -76,12 +77,30 @@ function TeamDetailsPage() {
       <div className="bg-gray-100 p-6 rounded-lg shadow-md flex justify-between">
         <div className="flex flex-col space-y-4 w-1/2">
           <Info team={team} />
-          {userIsAdmin && <Button to={`/Teams/${team_slug}/admin`} className="mt-1 bg-green-500 w-1/2" >Admin panel</Button>}
-          <Button className="mt-3 bg-orange-500 w-1/2" onClick={() => {handleLeaveTeam(currentUser?.id, memberInfo)}}>Leave team</Button>
+          {userIsAdmin && (
+            <Button
+              to={`/Teams/${team_id}/admin`}
+              className="mt-1 bg-green-500 w-1/2"
+            >
+              Admin panel
+            </Button>
+          )}
+          <Button
+            className="mt-3 bg-orange-500 w-1/2"
+            onClick={() => {
+              handleLeaveTeam(currentUser?.id, memberInfo);
+            }}
+          >
+            Leave team
+          </Button>
         </div>
 
         <div className="flex flex-col space-y-4 w-1/2">
-          <AdminView memberInfo={memberInfo?.filter((member) => {return member.isAdmin})} />
+          <AdminView
+            memberInfo={memberInfo?.filter((member) => {
+              return member.isAdmin;
+            })}
+          />
         </div>
       </div>
     </div>

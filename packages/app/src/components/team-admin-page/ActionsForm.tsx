@@ -16,8 +16,8 @@ const FormSchema: ZodType<FormValues> = z.object({
 
 const ActionsForm = () => {
   const team_id = useParams({
-    from: "/teams/$team_slug/admin",
-    select: ({ team_slug }) => team_slug,
+    from: "/teams/$team_id/admin",
+    select: ({ team_id }) => team_id,
   });
 
   const {

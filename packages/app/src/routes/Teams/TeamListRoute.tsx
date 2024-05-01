@@ -20,8 +20,15 @@ function TeamListPage() {
     return (
       <>
         <h1 className="text-3xl font-bold mb-4">My Teams</h1>
-        <p>You are not a member of any teams. 
-          <Link to="/teams/create" className="mt-4 text-blue-500 hover:underline"> Create one here.</Link>
+        <p>
+          You are not a member of any teams.
+          <Link
+            to="/teams/create"
+            className="mt-4 text-blue-500 hover:underline"
+          >
+            {" "}
+            Create one here.
+          </Link>
         </p>
       </>
     );
@@ -42,7 +49,7 @@ function TeamListPage() {
                 {team._count.members} members
               </p>
             </div>
-            <Button to={`/Teams/${team.id}`}>See details</Button>
+            <Button to={`/teams/${team.id}`}>See details</Button>
           </li>
         ))}
       </ul>

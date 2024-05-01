@@ -1,4 +1,4 @@
-import { useParams } from "@tanstack/react-router"
+import { useParams } from "@tanstack/react-router";
 import Button from "../form/button";
 import useCreateInvitation from "../../hooks/useCreateInvitation";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,7 @@ import { z, ZodType } from "zod";
 type FormValues = {
   email: string;
   isAdmin?: boolean;
-}
+};
 
 const FormSchema: ZodType<FormValues> = z.object({
   email: z.string().email(),
@@ -16,22 +16,24 @@ const FormSchema: ZodType<FormValues> = z.object({
 });
 
 const CreateInvitationForm = () => {
-  const team_id = useParams({ from: "/teams/$team_slug/admin", select: ({ team_slug }) => team_slug });
+  const team_id = useParams({
+    from: "/teams/$team_id/admin",
+    select: ({ team_id }) => team_id,
+  });
   const createInvitation = useCreateInvitation(team_id);
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-    reset
+    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(FormSchema), // Apply the zodResolver
   });
 
   const onSubmit = handleSubmit(async (data: FormValues) => {
-      await createInvitation.mutateAsync(data)
-      reset()
-    }
-  )
+    await createInvitation.mutateAsync(data);
+    reset();
+  });
 
   // if (errors.email || errors.isAdmin)
   //   console.error(errors);
@@ -69,8 +71,6 @@ const CreateInvitationForm = () => {
       </div>
     </form>
   );
-
-
-}
+};
 
 export default CreateInvitationForm;

@@ -12,15 +12,15 @@ import ActionsForm from "../../components/team-admin-page/ActionsForm";
 
 const TeamAdminPanelRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
-  path: "$team_slug/admin",
+  path: "$team_id/admin",
   component: TeamAdminPanel,
 });
 
 function TeamAdminPanel() {
-  const team_slug = TeamAdminPanelRoute.useParams().team_slug;
+  const team_id = TeamAdminPanelRoute.useParams().team_id;
   const { getToken } = useAuth();
-  const { data: elections } = useElections(team_slug);
-  const { data: members } = useTeamMembers(team_slug);
+  const { data: elections } = useElections(team_id);
+  const { data: members } = useTeamMembers(team_id);
   const { data: currentUser } = useCurrentUser();
 
   // if something is loading, return a loading state
@@ -31,7 +31,7 @@ function TeamAdminPanel() {
   async function handleChangeUser(user_id: string, isAdmin: boolean) {
     // fetch put on /teams/:teamId/members/:memberId, add isAdmin: true
     const token = await getToken();
-    fetch(`http://localhost:4000/teams/${team_slug}/members/${user_id}`, {
+    fetch(`http://localhost:4000/teams/${team_id}/members/${user_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ function TeamAdminPanel() {
   async function handleRemoveUser(user_id: string) {
     // fetch delete request to remove user from team (DELETE on /teams/:teamId/members/:memberId)
     const token = await getToken();
-    fetch(`http://localhost:4000/teams/${team_slug}/members/${user_id}`, {
+    fetch(`http://localhost:4000/teams/${team_id}/members/${user_id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token as string}`,
@@ -75,7 +75,7 @@ function TeamAdminPanel() {
   async function deleteElection(election_id: string) {
     // fetch delete request to delete election (DELETE on /teams/:teamId/elections/:electionId)
     const token = await getToken();
-    fetch(`http://localhost:4000/teams/${team_slug}/elections/${election_id}`, {
+    fetch(`http://localhost:4000/teams/${team_id}/elections/${election_id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token as string}`,
@@ -160,7 +160,7 @@ function TeamAdminPanel() {
           <h2 className="text-xl font-bold mb-4">Elections</h2>
           <div className="flex justify-between items-center mb-4">
             <Button
-              to={`/teams/${team_slug}/elections/new`}
+              to={`/teams/${team_id}/elections/new`}
               className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md"
             >
               Add Election

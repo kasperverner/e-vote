@@ -18,8 +18,8 @@ const copyLink = (path: string) => {
 
 const InvitationsList = () => {
   const team_id = useParams({
-    from: "/teams/$team_slug/admin",
-    select: ({ team_slug }) => team_slug,
+    from: "/teams/$team_id/admin",
+    select: ({ team_id }) => team_id,
   });
 
   const { data: invitations, isLoading } = useInvitations(team_id);
@@ -77,6 +77,6 @@ const InvitationsList = () => {
       ))}
     </ul>
   );
-}
+};
 
 export default InvitationsList;
