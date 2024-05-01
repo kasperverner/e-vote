@@ -2,6 +2,7 @@ import { Link, createRoute } from "@tanstack/react-router";
 import TeamIndexRoute from "./TeamIndexRoute";
 import useTeams from "../../hooks/useTeams";
 import Button from "../../components/form/button";
+import { Team } from "../../types/Team";
 
 const TeamListRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
@@ -10,13 +11,17 @@ const TeamListRoute = createRoute({
 });
 
 function TeamListPage() {
-  const { data } = useTeams();
+  const { data: teams, isLoading, isError } = useTeams();
 
-  if (!data) {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (data.length === 0) {
+  if (isError) {
+    return <p>Error loading teams.</p>;
+  }
+
+  if (!teams || teams.length === 0) {
     return (
       <>
         <h1 className="text-3xl font-bold mb-4">My Teams</h1>
@@ -38,7 +43,7 @@ function TeamListPage() {
     <>
       <h1 className="text-3xl font-bold mb-4">My Teams</h1>
       <ul>
-        {data?.map((team: any) => (
+        {teams?.map((team: Team) => (
           <li
             key={team.id}
             className="bg-white p-4 rounded-lg shadow mb-4 hover:bg-slate-200 flex items-center justify-between"
