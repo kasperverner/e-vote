@@ -42,7 +42,6 @@ const useCreateInvitation = (team_id: string) => {
       return postCreateInvitation(token as string, team_id, email, isAdmin);
     },
     onSuccess: () => {
-      console.log('done')
       queryClient.invalidateQueries({ queryKey: ["invitations", team_id] })
     },
     onError: (error) => {
