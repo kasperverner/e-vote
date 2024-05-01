@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
+import { TeamMember } from "../types/TeamMember";
 
 async function fetchTeamMembers(authToken: string, teamId: string) {
   const res = await fetch(
@@ -14,7 +15,7 @@ async function fetchTeamMembers(authToken: string, teamId: string) {
 const useTeamMembers = (teamId: string) => {
   const { getToken } = useAuth();
 
-  return useQuery<object[]>({
+  return useQuery<TeamMember[]>({
     queryKey: ["team-members", teamId],
     queryFn: async () => {
       const token = await getToken();
