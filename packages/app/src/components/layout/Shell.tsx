@@ -15,7 +15,7 @@ const Shell = () => (
         {/* <Sidebar /> */}
 
         <section className="py-4">
-          <BreadCrumbs />
+          {/* <BreadCrumbs /> */}
           {/* The Outlet is where the router will place the page content */}
           <Outlet />
         </section>

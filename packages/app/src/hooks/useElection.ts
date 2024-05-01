@@ -23,7 +23,7 @@ const useElection = (team_id: string, election_id: string) => {
 
   return useQuery<Election>({
     enabled: !!team_id && !!election_id,
-    queryKey: ["elections", team_id],
+    queryKey: ["elections", team_id, election_id],
     queryFn: async () => {
       const token = await getToken();
       return fetchElection(token as string, team_id, election_id);

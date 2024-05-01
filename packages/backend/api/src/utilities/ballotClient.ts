@@ -3,11 +3,7 @@ import { ValidationResponse } from "../types/ValidationResponse";
 export const generateBallotProof = async (ballotId: string) => {
   const url = `${process.env.BALLOT_SERVICE_URL}/proofs/${ballotId}`;
 
-  console.log("process.env.BALLOT_SERVICE_URL", process.env.BALLOT_SERVICE_URL);
-
   const response = await fetch(url);
-
-  console.log("response", response);
 
   if (!response.ok) {
     throw new Error("Failed to generate proof");

@@ -36,7 +36,7 @@ function TeamElectionCreatePage() {
     register,
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<ElectionRequest>({
     defaultValues: {
       name: undefined,
