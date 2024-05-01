@@ -1,4 +1,6 @@
-const Members = ({memberInfo}) => {
+import { TeamMember } from "../../types/TeamMember";
+
+const Members = ({memberInfo}: { memberInfo: TeamMember[] }) => {
     return (
         <div id="target" className="flex flex-col space-y-4 w-2/3">
             <div>

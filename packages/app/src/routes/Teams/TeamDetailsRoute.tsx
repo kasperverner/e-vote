@@ -56,7 +56,7 @@ function TeamDetailsPage() {
           <AdminView
             memberInfo={memberInfo?.filter((member) => {
               return member.isAdmin;
-            })}
+            }) ?? []}
           />
         </div>
       </div>

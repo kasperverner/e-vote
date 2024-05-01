@@ -1,4 +1,4 @@
-import { Link, Navigate, createRoute } from "@tanstack/react-router";
+import { Navigate, createRoute } from "@tanstack/react-router";
 import { rootRoute } from "./RootRouter";
 import { useSession } from "@clerk/clerk-react";
 
