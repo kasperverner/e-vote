@@ -1,4 +1,6 @@
-const Info = ({team}) => {
+import { Team } from "../../types/Team";
+
+const Info = ({ team } : { team: Team }) => {
     return (
         <div className="flex flex-col space-y-4">
             {team ? (

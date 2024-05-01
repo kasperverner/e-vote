@@ -2,14 +2,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "@tanstack/react-router";
 
-async function deleteTeam(
+async function deleteLeaveTeam(
   authToken: string,
   team_id: string
 ) {
   return await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}`,
+    `${import.meta.env.VITE_API_BASE_URL}/teams/${team_id}/members/leave`,
     {
       method: "DELETE",
       headers: { Authorization: `Bearer ${authToken}` },
@@ -17,7 +15,7 @@ async function deleteTeam(
   );
 }
 
-const useDeleteTeam = (team_id: string) => {
+const useLeaveTeam = (team_id: string) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { getToken } = useAuth();
@@ -26,7 +24,7 @@ const useDeleteTeam = (team_id: string) => {
     mutationKey: ["teams"],
     mutationFn: async () => {
       const token = await getToken();
-      return deleteTeam(token as string, team_id);
+      return deleteLeaveTeam(token as string, team_id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["teams"] });
@@ -39,4 +37,4 @@ const useDeleteTeam = (team_id: string) => {
   });
 };
 
-export default useDeleteTeam;
+export default useLeaveTeam;
