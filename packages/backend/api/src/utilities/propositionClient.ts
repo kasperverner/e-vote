@@ -4,6 +4,11 @@ import { ValidationResponse } from "../types/ValidationResponse";
 export const generatePropositionProof = async (propositionId: string) => {
   const url = `${process.env.PROPOSITION_SERVICE_URL}/proofs/${propositionId}`;
   const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Failed to generate proof");
+  }
+  
   const proof = await response.json();
 
   return proof;

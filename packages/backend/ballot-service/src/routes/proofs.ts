@@ -4,6 +4,10 @@ import db from "../utilities/db.server";
 
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+  return res.status(200).json({ message: "Proofs route" });
+});
+
 /**
  * GET /proofs/:ballot_id
  * generate a ballot proof for a vote
@@ -11,7 +15,7 @@ const router = express.Router();
 router.get("/:ballot_id", async (req, res) => {
   try {
     const { ballot_id } = req.params;
-    const proof = hasher(ballot_id, process.env.SECRET as string);
+    const proof = hasher(ballot_id, process.env.PROOF_SECRET as string);
 
     return res.status(200).json(proof);
   } catch (error) {
@@ -40,7 +44,10 @@ router.get("/validate/:election_id", async (req, res) => {
 
     // If no ballots are found, return an error
     if (!ballots.length)
-      return res.status(200).json({ message: `No ballots found for election with ID ${election_id}`, success: false });
+      return res.status(200).json({
+        message: `No ballots found for election with ID ${election_id}`,
+        success: false,
+      });
 
     // Find all votes for the election
     const votes = await db.votes.findMany({
@@ -54,15 +61,23 @@ router.get("/validate/:election_id", async (req, res) => {
 
     // If no votes are found, return an error
     if (!votes.length)
-      return res.status(200).json({ message: `No votes found for election with ID ${election_id}`, success: false });
+      return res.status(200).json({
+        message: `No votes found for election with ID ${election_id}`,
+        success: false,
+      });
 
     // To save iterations, we can check if the number of votes is equal to the number of ballots
     // If the number of votes does not match the number of ballots, return an error
     if (votes.length !== ballots.length)
-      return res.status(200).json({ message: `Not all ballots have been voted on for election with ID ${election_id}`, success: false });
+      return res.status(200).json({
+        message: `Not all ballots have been voted on for election with ID ${election_id}`,
+        success: false,
+      });
 
     // Generate a list of valid ballot proofs
-    const ballotProofs = ballots.map(({ id }) => hasher(id, process.env.SECRET as string));
+    const ballotProofs = ballots.map(({ id }) =>
+      hasher(id, process.env.PROOF_SECRET as string)
+    );
 
     // Validate each vote
     for (let i = 0; i < votes.length; i++) {
@@ -78,7 +93,10 @@ router.get("/validate/:election_id", async (req, res) => {
     }
 
     // If all votes are valid, return a success message
-    return res.status(200).json({ message: `Validation passed for election with ID ${election_id}`, success: true });
+    return res.status(200).json({
+      message: `Validation passed for election with ID ${election_id}`,
+      success: true,
+    });
   } catch (error) {
     // If an error occurs, return an error message
     return res.status(500).json({ message: "Internal Server Error" });

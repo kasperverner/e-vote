@@ -212,7 +212,7 @@ export const voteInElection: RequestHandler = async (req, res) => {
       propositionProof
     );
 
-    const vote = await db.votes.create({
+    await db.votes.create({
       data: {
         election_id: election.id,
         ballot_proof: ballotProof,
