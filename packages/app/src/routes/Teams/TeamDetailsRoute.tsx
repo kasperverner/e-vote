@@ -9,7 +9,6 @@ import AdminView from "../../components/team-details-page/AdminView";
 import Elections from "../../components/team-details-page/Elections";
 import useElections from "../../hooks/useElections";
 import useLeaveTeam from "../../hooks/useLeaveTeam";
-import { useNavigate } from "@tanstack/react-router";
 
 const TeamDetailsRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
