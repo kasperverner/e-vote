@@ -1,7 +1,15 @@
+import React from 'react';
 import useElections from "../../hooks/useElections";
 
-const Elections = ({ team_id }) => {
+const Elections = ({ team_id, navigate }) => {
   const { data: elections } = useElections(team_id);
+
+  const goToElection = (electionId) => {
+    navigate({
+      to: `/teams/${team_id}/elections/${electionId}`,
+      params: { team_id, electionId }
+    });
+  };
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md flex">
@@ -16,20 +24,26 @@ const Elections = ({ team_id }) => {
           </div>
 
           <div className="flex-col text-gray-800 space-y-4">
-            {elections.map(election => {
-              return (
-                <div key={election.id} className="bg-gray-200 hover:bg-gray-300 rounded-lg p-2">
-                  <div className="w-full flex justify-between pb-2">
-                    <h1 className="text-2xl">{election.name}</h1>
-                    <h1 className="text-1xl text-right">{
-                      new Date(election.start_at).toLocaleString("en-GB",
-                        { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })
-                    }</h1>
-                  </div>
+            {elections.map(election => (
+              <div key={election.id} className="bg-gray-200 hover:bg-gray-300 rounded-lg p-2 flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl">{election.name}</h1>
+                  <p className="text-ml text-gray-600"></p>
+                  <p className="text-ml text-gray-600">
+                    {new Date(election.start_at).toLocaleString("en-GB",
+                      { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }
+                    )}
+                  </p>
                   <p>{election.description}</p>
                 </div>
-              )
-            })}
+                <button
+                  onClick={() => goToElection(election.id)}
+                  className="bg-blue-500 hover:bg-blue-600 rounded-lg p-2"
+                >
+                  View Election
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       ) : (
