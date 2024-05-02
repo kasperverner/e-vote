@@ -6,7 +6,9 @@ import useTeamMembers from "../../hooks/useTeamMembers";
 import Button from "../../components/form/button";
 import Info from "../../components/team-details-page/Info";
 import AdminView from "../../components/team-details-page/AdminView";
+import Elections from "../../components/team-details-page/Elections";
 import useLeaveTeam from "../../hooks/useLeaveTeam";
+import useElections from "../../hooks/useElections";
 
 const TeamDetailsRoute = createRoute({
   getParentRoute: () => TeamIndexRoute,
@@ -18,6 +20,7 @@ function TeamDetailsPage() {
   const { team_id } = TeamDetailsRoute.useParams();
   const { data: team, isLoading } = useTeam(team_id);
   const { data: memberInfo } = useTeamMembers(team_id);
+  const { data: elections } = useElections(team_id);
   const leaveTeam = useLeaveTeam(team_id);
 
   if (isLoading) {
@@ -60,6 +63,7 @@ function TeamDetailsPage() {
           />
         </div>
       </div>
+      <Elections team_id={team_id} />
     </div>
   );
 }
