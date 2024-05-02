@@ -1,15 +1,8 @@
-import React from 'react';
+import { Link } from "@tanstack/react-router";
 import useElections from "../../hooks/useElections";
 
-const Elections = ({ team_id, navigate }) => {
+const Elections = ({ team_id }) => {
   const { data: elections } = useElections(team_id);
-
-  const goToElection = (electionId) => {
-    navigate({
-      to: `/teams/${team_id}/elections/${electionId}`,
-      params: { team_id, electionId }
-    });
-  };
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md flex">
@@ -36,12 +29,9 @@ const Elections = ({ team_id, navigate }) => {
                   </p>
                   <p>{election.description}</p>
                 </div>
-                <button
-                  onClick={() => goToElection(election.id)}
-                  className="bg-blue-500 hover:bg-blue-600 rounded-lg p-2"
-                >
+                <Link to={`/teams/${team_id}/elections/${election.id}`} className="bg-blue-500 hover:bg-blue-600 rounded-lg p-2">
                   View Election
-                </button>
+                </Link>
               </div>
             ))}
           </div>

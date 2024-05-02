@@ -22,7 +22,6 @@ function TeamDetailsPage() {
   const { data: team, isLoading } = useTeam(team_id);
   const { data: memberInfo } = useTeamMembers(team_id);
   const { data: elections } = useElections(team_id);
-  const navigate = useNavigate();
   const leaveTeam = useLeaveTeam(team_id);
 
   if (isLoading) {
@@ -65,7 +64,7 @@ function TeamDetailsPage() {
           />
         </div>
       </div>
-      <Elections team_id={team_id} navigate={navigate} />
+      <Elections team_id={team_id} />
     </div>
   );
 }
