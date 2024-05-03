@@ -7,6 +7,9 @@ import resultsRouter from "./routes/results";
 
 const app = new Hono<Environment>();
 app.use(logger(), injectDb, async (c, next) => {
+  if (!process.env.PROOF_SECRET)
+    throw new Error("PROOF_SECRET is required in the environment");
+  
   c.set("secret", String(process.env.PROOF_SECRET));
   await next();
 });
