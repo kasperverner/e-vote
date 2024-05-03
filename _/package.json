@@ -1,0 +1,27 @@
+{
+  "name": "e-vote",
+  "version": "1.0.0",
+  "author": "Kasper Verner",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "workspaces": {
+    "packages": [
+      "./packages/app",
+      "./packages/backend/api",
+      "./packages/backend/ballot-service",
+      "./packages/backend/proposition-service",
+      "./packages/backend/validation-service"
+    ]
+  },
+  "scripts": {
+    "app": "yarn workspace app dev",
+    "api": "yarn workspace api dev",
+    "api:ballot": "yarn workspace ballot-service dev",
+    "api:proposition": "yarn workspace proposition-service dev",
+    "api:validation": "yarn workspace validation-service dev",
+    "dev": "yarn api & yarn api:ballot & yarn api:proposition & yarn api:validation & yarn app"
+  }
+}
