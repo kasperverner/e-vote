@@ -1,10 +1,10 @@
+_
+node_modules
+
 .idea/*
 .DS_Store
 
-*.local
-.env.local
-/packages/app/.env
-/packages/backend/api/.env
-/packages/prisma
+*.lockb
 
-node_modules
+.env
+*.local

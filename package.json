@@ -1,0 +1,32 @@
+{
+  "name": "e-vote",
+  "version": "2.0.0",
+  "description": "E-vote powered by Bun, Hono and Drizzle",
+  "author": {
+    "name": "CS24SW201",
+    "email": "cs24sw201@student.aau.dk"
+  },
+  "module": "server/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev:server": "bun run --hot server/index.ts",
+    "dev:ballot": "bun run --hot services/ballot-service/index.ts",
+    "dev:proposition": "bun run --hot services/proposition-service/index.ts",
+    "dev:validation": "bun run --hot services/validation-service/index.ts",
+    "build:server": "",
+    "build:ballot": "",
+    "build:proposition": "",
+    "build:validation": ""
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prisma": "^5.13.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "hono": "^4.2.9"
+  }
+}
