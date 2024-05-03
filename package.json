@@ -8,16 +8,6 @@
   },
   "module": "server/index.ts",
   "type": "module",
-  "scripts": {
-    "dev:server": "bun run --hot server/index.ts",
-    "dev:ballot": "bun run --hot services/ballot-service/index.ts",
-    "dev:proposition": "bun run --hot services/proposition-service/index.ts",
-    "dev:validation": "bun run --hot services/validation-service/index.ts",
-    "build:server": "",
-    "build:ballot": "",
-    "build:proposition": "",
-    "build:validation": ""
-  },
   "devDependencies": {
     "@types/bun": "latest",
     "prisma": "^5.13.0"
@@ -27,6 +17,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
-    "hono": "^4.2.9"
+    "@types/jsonwebtoken": "^9.0.6",
+    "hono": "^4.2.9",
+    "jsonwebtoken": "^9.0.2"
   }
 }
