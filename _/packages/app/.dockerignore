@@ -1,9 +1,0 @@
-**/node_modules/
-**/dist
-
-.dockerignore
-.DS_Store
-.git
-.gitignore
-.env
-.env.*

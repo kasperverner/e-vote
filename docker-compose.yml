@@ -31,9 +31,6 @@ services:
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
-    environment:
-      - PORT: 3000
-      - PROOF_SECRET: YWE8LV72PXJUHDACF5MZGK
     networks:
       - services
     command: bun run --hot services/ballot-service/index.ts
@@ -46,9 +43,6 @@ services:
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
-    environment:
-      - PORT: 3000
-      - PROOF_SECRET: RHDZAP9WNFU8427EMSXJQL
     networks:
       - services
     command: bun run --hot services/proposition-service/index.ts
@@ -61,9 +55,6 @@ services:
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
-    environment:
-      - PORT: 3000
-      - PROOF_SECRET: LPWBZH8XMTVDYEG2RASNK3
     networks:
       - services
     command: bun run --hot services/validation-service/index.ts
@@ -79,8 +70,6 @@ services:
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
-    environment:
-      - PORT: 3000
     ports:
       - 3000:3000
     networks:
@@ -105,8 +94,6 @@ services:
     working_dir: /usr/src/app
     volumes:
       - ./server/frontend:/usr/src/app
-    environment:
-      - PORT:4000
     ports:
       - 4000:4000
     networks:
