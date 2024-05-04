@@ -8,9 +8,7 @@ async function fetchInvitation(
   invitation_id: string
 ): Promise<Invitation> {
   const res = await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}/members/invitations/${invitation_id}`,
+    `/api/teams/${team_id}/members/invitations/${invitation_id}`,
     {
       headers: { Authorization: `Bearer ${authToken}` },
     }
@@ -20,7 +18,7 @@ async function fetchInvitation(
     throw new Error(`Failed to fetch invitation with ID ${invitation_id}`);
   }
 
-  return res.json();
+  return await res.json();
 }
 
 const useInvitation = (team_id: string, invitation_id: string) => {

@@ -4,9 +4,7 @@ import { useAuth } from "@clerk/clerk-react";
 
 async function putRevokeInvitation(authToken: string, team_id: string, invitation_id: string) {
   return await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}/members/invitations/${invitation_id}`,
+    `/api/teams/${team_id}/members/invitations/${invitation_id}`,
     {
       method: "DELETE",
       headers: { Authorization: `Bearer ${authToken}` },

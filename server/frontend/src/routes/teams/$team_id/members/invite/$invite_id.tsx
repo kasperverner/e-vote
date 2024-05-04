@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import useAcceptInvitation from "../../../../../hooks/useAcceptInvitation";
-import useDeclineInvitation from "../../../../../hooks/useDeclineInvitation";
-import useInvitation from "../../../../../hooks/useInvitation";
-import Button from "../../../../../components/form/button";
+import useAcceptInvitation from "@/hooks/useAcceptInvitation";
+import useDeclineInvitation from "@/hooks/useDeclineInvitation";
+import useInvitation from "@/hooks/useInvitation";
+import Button from "@/components/form/button";
 
-export const Route = createFileRoute("/teams/$team_id/members/invite/$invite_id")({
+export const Route = createFileRoute(
+  "/teams/$team_id/members/invite/$invite_id"
+)({
   component: () => {
     const team_id = useParams({
       from: "/teams/$team_id/members/invite/$invite_id",

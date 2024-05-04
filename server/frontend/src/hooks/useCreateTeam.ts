@@ -14,7 +14,7 @@ async function postCreateTeam(authToken: string, name: string) {
 
   if (!res.ok) throw new Error("Failed to create team");
 
-  return res.json();
+  return await res.json();
 }
 
 const useCreateTeam = () => {

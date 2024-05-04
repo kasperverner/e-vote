@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Navigate, createFileRoute, useParams } from '@tanstack/react-router'
-import useTeam from '../../../hooks/useTeam';
-import MembersList from '../../../components/team-admin-page/MembersList';
-import CreateInvitationForm from '../../../components/team-admin-page/CreateInvitationForm';
-import InvitationsList from '../../../components/team-admin-page/InvitationsList';
-import ActionsForm from '../../../components/team-admin-page/ActionsForm';
-import Button from '../../../components/form/button';
-import ElectionsList from '../../../components/team-admin-page/ElectionsList';
+import { Navigate, createFileRoute, useParams } from "@tanstack/react-router";
+import useTeam from "@/hooks/useTeam";
+import MembersList from "@/components/team-admin-page/MembersList";
+import CreateInvitationForm from "@/components/team-admin-page/CreateInvitationForm";
+import InvitationsList from "@/components/team-admin-page/InvitationsList";
+import ActionsForm from "@/components/team-admin-page/ActionsForm";
+import Button from "@/components/form/button";
+import ElectionsList from "@/components/team-admin-page/ElectionsList";
 
-export const Route = createFileRoute('/teams/$team_id/admin')({
+export const Route = createFileRoute("/teams/$team_id/admin")({
   component: () => {
     const team_id = useParams({
       from: "/teams/$team_id/admin",
@@ -73,5 +73,5 @@ export const Route = createFileRoute('/teams/$team_id/admin')({
         </div>
       </div>
     );
-  }
-})
+  },
+});

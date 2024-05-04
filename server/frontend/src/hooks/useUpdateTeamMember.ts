@@ -7,19 +7,14 @@ async function updateTeamMember(
   member_id: string,
   is_admin: boolean
 ) {
-  return await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}/members/${member_id}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`,
-      },
-      body: JSON.stringify({ isAdmin: is_admin }),
-    }
-  );
+  return await fetch(`/api/teams/${team_id}/members/${member_id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({ isAdmin: is_admin }),
+  });
 }
 
 const useUpdateTeamMember = (team_id: string) => {

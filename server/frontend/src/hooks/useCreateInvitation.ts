@@ -18,7 +18,7 @@ async function postCreateInvitation(
 
   if (!res.ok) throw new Error("Failed to create invitation");
 
-  return res.json();
+  return await res.json();
 }
 
 const useCreateInvitation = (team_id: string) => {

@@ -9,7 +9,7 @@ async function putAcceptInvitation(authToken: string, team_id: string, invitatio
       headers: { Authorization: `Bearer ${authToken}` },
     }
   );
-  return res.json();
+  return await res.json();
 }
 
 const useAcceptInvitation = (team_id: string, invitation_id: string) => {

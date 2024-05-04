@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
-import { Team } from "../types/Team";
+import { Team } from "@/types/Team";
 
 async function fetchTeams(authToken: string) {
   const res = await fetch(`/api/teams`, {
     headers: { Authorization: `Bearer ${authToken}` },
   });
-  return res.json();
+  
+  return await res.json();
 }
 
 const useTeams = () => {
@@ -16,6 +17,7 @@ const useTeams = () => {
     queryKey: ["teams"],
     queryFn: async () => {
       const token = await getToken();
+
       return fetchTeams(token as string);
     },
   });

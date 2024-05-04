@@ -5,7 +5,7 @@ async function fetchCurrentUser(authToken: string) {
   const res = await fetch(`/api/users`, {
     headers: { Authorization: `Bearer ${authToken}` },
   });
-  return res.json();
+  return await res.json();
 }
 
 const useCurrentUser = () => {

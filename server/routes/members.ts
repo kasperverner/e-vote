@@ -63,17 +63,38 @@ const router = new Hono<Environment>()
       },
     });
 
-    if (!teamMember)
-      return c.notFound()
+    if (!teamMember) return c.notFound();
 
-    return c.status(204);
+    return c.body(null, 204);
+  })
+  // Leave a team
+  .delete("/leave", isMemberOfTeam, async (c) => {
+    const { team_id } = c.req.param();
+    const { user_id, db } = c.var;
+
+    await db.teamMembers.updateMany({
+      where: {
+        team_id,
+        user_id,
+        is_deleted: {
+          not: true,
+        },
+      },
+      data: {
+        is_deleted: true,
+      },
+    });
+
+    return c.body(null, 204);
   })
   // Delete a team member
   .delete("/:member_id", isAdminOfTeam, async (c) => {
     const { member_id } = c.req.param();
     const { db } = c.var;
 
-    await db.teamMembers.update({
+    console.log("member_id", member_id);
+
+    await db.teamMembers.updateMany({
       where: {
         id: member_id,
         is_deleted: {
@@ -85,30 +106,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
-  })
-  // Leave a team
-  .delete("/leave", isMemberOfTeam, async (c) => {
-    const { team_id } = c.req.param();
-    const { user_id, db } = c.var;
-
-    const teamMember = await db.teamMembers.findFirst({
-      where: {
-        team_id,
-        user_id,
-      },
-    });
-
-    if (!teamMember)
-      return c.json({ message: "Team member not found" }, 404);
-
-    await db.teamMembers.delete({
-      where: {
-        id: teamMember.id,
-      },
-    });
-
-    return c.status(204);
+    return c.body(null, 204);
   })
   // Get all invitations for a team
   .get("/invitations", isAdminOfTeam, async (c) => {
@@ -164,8 +162,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    if (!member)
-      return c.notFound();
+    if (!member) return c.notFound();
 
     const invitation = await db.invitations.create({
       data: {
@@ -193,6 +190,9 @@ const router = new Hono<Environment>()
           members: {
             none: {
               user_id,
+              is_deleted: {
+                not: true,
+              }
             },
           },
         },
@@ -225,8 +225,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    if (!invitation)
-      return c.notFound();
+    if (!invitation) return c.notFound();
 
     return c.json(invitation);
   })
@@ -249,10 +248,9 @@ const router = new Hono<Environment>()
       },
     });
 
-    if (!invitation)
-      return c.notFound();
+    if (!invitation) return c.notFound();
 
-    return c.status(204);
+    return c.body(null, 204);
   })
   // Delete a specific invitation for a team
   .delete("/invitations/:invitation_id", isAdminOfTeam, async (c) => {
@@ -272,10 +270,10 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
+    return c.body(null, 204);
   })
   // Accept an invitation
-  .post("/invitations/:invitation_id/accept", async (c) => {
+  .put("/invitations/:invitation_id/accept", async (c) => {
     const { invitation_id } = c.req.param();
     const { user_id, db } = c.var;
 
@@ -289,8 +287,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    if (!invitation)
-      return c.json({ message: "Invitation not found" }, 404);
+    if (!invitation) return c.json({ message: "Invitation not found" }, 404);
 
     const existingMember = await db.teamMembers.findFirst({
       where: {
@@ -325,7 +322,7 @@ const router = new Hono<Environment>()
     return c.json({ teamMember }, 201);
   })
   // Decline an invitation
-  .post("/invitations/:invitation_id/decline", async (c) => {
+  .put("/invitations/:invitation_id/decline", async (c) => {
     const { invitation_id } = c.req.param();
     const { db } = c.var;
 
@@ -339,8 +336,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    if (!invitation)
-      return c.json({ message: "Invitation not found" }, 404);
+    if (!invitation) return c.json({ message: "Invitation not found" }, 404);
 
     await db.invitations.update({
       where: {
@@ -351,7 +347,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
+    return c.body(null, 204);
   });
 
 export default router;

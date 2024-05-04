@@ -19,15 +19,15 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@hookform/resolvers": "^3.3.4",
     "@tanstack/react-query": "^5.32.1",
     "@tanstack/react-router": "^1.31.13",
-    "@tanstack/router-vite-plugin": "^1.30.0",
     "@tanstack/router-devtools": "^1.31.13",
-    "react-hook-form": "^7.51.3",
-    "@hookform/resolvers": "^3.3.4",
-    "zod": "^3.22.4",
+    "@tanstack/router-vite-plugin": "^1.30.0",
+    "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react": "^18.3.1"
+    "react-hook-form": "^7.51.3",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",

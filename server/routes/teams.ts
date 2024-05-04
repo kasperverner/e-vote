@@ -12,6 +12,9 @@ const router = new Hono<Environment>()
         members: {
           some: {
             user_id,
+            is_deleted: {
+              not: true,
+            },
           },
         },
         is_deleted: {
@@ -62,6 +65,14 @@ const router = new Hono<Environment>()
         is_deleted: {
           not: true,
         },
+        members: {
+          some: {
+            user_id,
+            is_deleted: {
+              not: true,
+            },
+          },
+        },
       },
       select: {
         id: true,
@@ -105,7 +116,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
+    return c.body(null, 204);
   })
   // Delete a team
   .delete("/:team_id", isAdminOfTeam, async (c) => {
@@ -121,7 +132,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
+    return c.body(null, 204);
   });
 
 export default router;
