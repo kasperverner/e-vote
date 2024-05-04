@@ -8,14 +8,12 @@ async function fetchResults(
   election_id: string
 ) {
   const res = await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}/elections/${election_id}/results`,
+    `/api/teams/${team_id}/elections/${election_id}/results`,
     {
       headers: { Authorization: `Bearer ${authToken}` },
     }
   );
-  return res.json();
+  return await res.json();
 }
 
 const useResults = (team_id: string, election_id: string) => {

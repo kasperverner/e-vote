@@ -6,7 +6,7 @@ async function fetchTeam(authToken: string, teamId: string) {
   const res = await fetch(`/api/teams/${teamId}`, {
     headers: { Authorization: `Bearer ${authToken}` },
   });
-  return res.json();
+  return await res.json();
 }
 
 const useTeam = (teamId: string) => {

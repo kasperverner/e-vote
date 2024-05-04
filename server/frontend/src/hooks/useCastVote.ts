@@ -9,9 +9,7 @@ async function putCastVote(
   proposition_id: string
 ) {
   const res = await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}/elections/${election_id}/vote`,
+    `/api/teams/${team_id}/elections/${election_id}/vote`,
     {
       method: "POST",
       headers: {
@@ -26,7 +24,7 @@ async function putCastVote(
     throw new Error("Failed to cast vote");
   }
 
-  return res.json();
+  return await res.json();
 }
 
 const useCastVote = (team_id: string, election_id: string) => {

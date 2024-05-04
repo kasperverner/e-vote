@@ -134,7 +134,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
+    return c.body(null, 204);
   })
   // Delete a specific election for a team
   .delete("/:election_id", isAdminOfTeam, async (c) => {
@@ -208,7 +208,7 @@ const router = new Hono<Environment>()
         404
       );
 
-    return c.status(204);
+    return c.body(null, 204);
   })
   // Get the vote for an election
   .get("/:election_id/vote", isMemberOfTeam, async (c) => {
@@ -242,6 +242,8 @@ const router = new Hono<Environment>()
       },
     });
 
+    console.log('election', election)
+
     if (!election)
       return c.json(
         { message: `Election with ID ${election_id} is not found` },
@@ -268,6 +270,8 @@ const router = new Hono<Environment>()
         is_used: true,
       },
     });
+
+    console.log('ballot', ballot)
 
     const ballotProof = await ballotClient.api.proofs[":value"].$get({
       param: {
@@ -338,7 +342,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
+    return c.body(null, 204);
   })
   // Stop an active election
   .put("/:election_id/stop", isAdminOfTeam, async (c) => {
@@ -382,7 +386,7 @@ const router = new Hono<Environment>()
       },
     });
 
-    return c.status(204);
+    return c.body(null, 204);
   });
 
 export default router;

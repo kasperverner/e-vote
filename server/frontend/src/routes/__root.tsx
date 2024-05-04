@@ -1,26 +1,48 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Navigate, Outlet, useNavigate } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import Navbar from "../components/layout/Navbar";
-import Container from "../components/layout/Container";
-import Footer from "../components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Container from "@/components/layout/Container";
+import Footer from "@/components/layout/Footer";
+import { useSession } from "@clerk/clerk-react";
 
 export const Route = createRootRoute({
-  component: () => (
-    <div className="bg-neutral-50 min-h-screen flex flex-col justify-between">
-      <div>
-        <Navbar />
-        <Container>
-          <section className="py-4">
-            {/* <BreadCrumbs /> */}
-            {/* The Outlet is where the router will place the page content */}
-            <Outlet />
-          </section>
-        </Container>
-        <TanStackRouterDevtools />
+  loader: async () => {
+
+  },
+  component: () => {
+    const { isLoaded, isSignedIn } = useSession();
+
+    if (!isLoaded) return <p>"Loading session..."</p>;
+
+    const path = document.location.pathname;
+
+    if (path.includes("/teams") && !isSignedIn)
+      return (
+        <Navigate
+          to="/sign-in"
+          search={{
+            redirectTo: document.location.pathname,
+          }}
+        />
+      );
+
+    return (
+      <div className="bg-neutral-50 min-h-screen flex flex-col justify-between">
+        <div>
+          <Navbar />
+          <Container>
+            <section className="py-4">
+              {/* <BreadCrumbs /> */}
+              {/* The Outlet is where the router will place the page content */}
+              <Outlet />
+            </section>
+          </Container>
+          <TanStackRouterDevtools />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  ),
+    );
+  },
   notFoundComponent: () => {
     const path = document.location.pathname;
 

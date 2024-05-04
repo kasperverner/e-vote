@@ -6,7 +6,7 @@ async function fetchElections(authToken: string, team_id: string) {
   const res = await fetch(`/api/teams/${team_id}/elections`, {
     headers: { Authorization: `Bearer ${authToken}` },
   });
-  return res.json();
+  return await res.json();
 }
 
 const useElections = (team_id: string) => {

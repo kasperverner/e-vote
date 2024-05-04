@@ -35,7 +35,7 @@ async function postCreateElection(
 
   if (!res.ok) throw new Error("Failed to create invitation");
 
-  return res.json();
+  return await res.json();
 }
 
 const useCreateElection = (team_id: string) => {

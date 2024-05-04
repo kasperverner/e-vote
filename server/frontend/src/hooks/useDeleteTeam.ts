@@ -6,15 +6,10 @@ async function deleteTeam(
   authToken: string,
   team_id: string
 ) {
-  return await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}`,
-    {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${authToken}` },
-    }
-  );
+  return await fetch(`/api/teams/${team_id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
 }
 
 const useDeleteTeam = (team_id: string) => {

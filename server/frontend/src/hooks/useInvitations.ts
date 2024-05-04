@@ -9,7 +9,7 @@ async function fetchInvitations(
   const res = await fetch(`/api/teams/${team_id}/members/invitations`, {
     headers: { Authorization: `Bearer ${authToken}` },
   });
-  return res.json();
+  return await res.json();
 }
 
 const useInvitations = (team_id: string) => {

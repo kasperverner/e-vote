@@ -22,7 +22,7 @@ const Navbar = () => {
           </div>
           <div className="flex gap-6 align-middle">
             <SignedOut>
-              <SignInButton afterSignInUrl="/">
+              <SignInButton forceRedirectUrl="/">
                 <button className="font-bold text-lg hover:underline">
                   Sign in
                 </button>

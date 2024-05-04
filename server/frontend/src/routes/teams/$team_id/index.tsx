@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { createFileRoute, useParams } from '@tanstack/react-router'
-import useTeam from '../../../hooks/useTeam';
-import useTeamMembers from '../../../hooks/useTeamMembers';
-import useLeaveTeam from '../../../hooks/useLeaveTeam';
-import Info from '../../../components/team-details-page/Info';
-import Button from '../../../components/form/button';
-import AdminView from '../../../components/team-details-page/AdminView';
-import Elections from '../../../components/team-details-page/Elections';
+import { Navigate, createFileRoute, useParams } from "@tanstack/react-router";
+import useTeam from "@/hooks/useTeam";
+import useTeamMembers from "@/hooks/useTeamMembers";
+import useLeaveTeam from "@/hooks/useLeaveTeam";
+import Info from "@/components/team-details-page/Info";
+import Button from "@/components/form/button";
+import AdminView from "@/components/team-details-page/AdminView";
+import Elections from "@/components/team-details-page/Elections";
 
-export const Route = createFileRoute('/teams/$team_id/')({
+export const Route = createFileRoute("/teams/$team_id/")({
   component: () => {
     const team_id = useParams({
       from: "/teams/$team_id/",
@@ -18,13 +18,12 @@ export const Route = createFileRoute('/teams/$team_id/')({
     const { data: memberInfo } = useTeamMembers(team_id);
     const leaveTeam = useLeaveTeam(team_id);
 
-    if (isLoading) {
+    if (isLoading)
       return <p>Loading...</p>;
-    }
 
-    if (!team) {
-      return <p>Team not found</p>;
-    }
+    // if the current user is not a member of the team, redirect to the teams page
+    if (!team)
+      return <Navigate to="/teams" />;
 
     const admins = memberInfo?.filter((member) => member.isAdmin)?.length ?? 0;
 
@@ -63,5 +62,5 @@ export const Route = createFileRoute('/teams/$team_id/')({
         <Elections team_id={team_id} />
       </div>
     );
-  }
-})
+  },
+});

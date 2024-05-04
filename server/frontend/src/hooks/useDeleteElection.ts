@@ -6,15 +6,10 @@ async function deleteDeleteElection(
   team_id: string,
   election_id: string
 ) {
-  return await fetch(
-    `${
-      import.meta.env.VITE_API_BASE_URL
-    }/teams/${team_id}/elections/${election_id}`,
-    {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${authToken}` },
-    }
-  );
+  return await fetch(`/api/teams/${team_id}/elections/${election_id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
 }
 
 const useDeleteElection = (team_id: string) => {

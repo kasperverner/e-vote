@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { createFileRoute } from '@tanstack/react-router'
-import useCreateTeam from '../../hooks/useCreateTeam';
-import { z, ZodType } from 'zod';
+import { createFileRoute } from "@tanstack/react-router";
+import useCreateTeam from "@/hooks/useCreateTeam";
+import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from '../../components/form/button';
+import Button from "@/components/form/button";
 
 type FormValues = {
   name: string;
@@ -14,7 +14,7 @@ const FormSchema: ZodType<FormValues> = z.object({
   name: z.string().min(4).max(64),
 });
 
-export const Route = createFileRoute('/teams/create')({
+export const Route = createFileRoute("/teams/create")({
   component: () => {
     const createTeam = useCreateTeam();
 
@@ -51,5 +51,5 @@ export const Route = createFileRoute('/teams/create')({
         </form>
       </>
     );
-  }
-})
+  },
+});

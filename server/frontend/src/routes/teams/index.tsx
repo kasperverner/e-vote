@@ -1,7 +1,7 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import useTeams from '../../hooks/useTeams';
-import { Team } from '../../types/Team';
-import Button from '../../components/form/button';
+import { Link, createFileRoute } from "@tanstack/react-router";
+import useTeams from "@/hooks/useTeams";
+import { Team } from "@/types/Team";
+import Button from "@/components/form/button";
 
 const CreateTeamButton = () => (
   <Link to="/teams/create" className="mt-4 text-blue-500 hover:underline">
@@ -10,9 +10,8 @@ const CreateTeamButton = () => (
   </Link>
 );
 
-export const Route = createFileRoute('/teams/')({
+export const Route = createFileRoute("/teams/")({
   component: () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { data: teams, isLoading, isError } = useTeams();
 
     if (isLoading) {
@@ -57,5 +56,5 @@ export const Route = createFileRoute('/teams/')({
         <CreateTeamButton />
       </>
     );
-  }
-})
+  },
+});
