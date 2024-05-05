@@ -216,13 +216,15 @@ const router = new Hono<Environment>()
 
     const { hash: proofHash } = await proofRequest.json();
 
+    const { proof, ...rest } = electionValidation;
+
     // If the proof does not match the validation proof, return an error
     if (proofHash !== electionValidation.proof)
       return c.text( `Proof for election with ID ${election_id} is invalid`,
         400
       );
 
-    return c.json(electionValidation);
+    return c.json(rest);
   })
   // Vote on a proposition for an election
   .post("/:election_id/vote", isMemberOfTeam, isElegibleToVote, async (c) => {
