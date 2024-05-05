@@ -29,9 +29,9 @@ const router = new Hono<Environment>()
       },
     });
 
-    // If no votes are found, return an error
+    // If no votes are found, return no content
     if (!votes.length)
-      return c.json({ message: `No votes found for election with ID ${election_id}` }, 400);
+      return c.body(null, 204);
 
     // Validate each vote
     for (let i = 0; i < votes.length; i++) {
@@ -40,13 +40,13 @@ const router = new Hono<Environment>()
       // Generate a proof for the vote
       const proof = hasher(ballot_proof + proposition_proof, secret);
 
-      // If the validation proof does not match the generated proof, return an error
+      // If the validation proof does not match the generated proof, return an error message
       if (proof !== validation_proof)
-        return c.json({ message: `Validation failed for election with ID ${election_id}` }, 400);
+        return c.text(`Validation failed for election with ID ${election_id}`, 400);
     }
 
-    // If all votes are valid, return a success message
-    return c.json({ message: `Validation passed for election with ID ${election_id}` });
+    // If all votes are valid, return no content
+    return c.body(null, 204);
   });
 
 export default router;

@@ -8,6 +8,23 @@ const router = new Hono<Environment>()
     const { election_id } = c.req.param();
     const { db } = c.var;
 
+    // Find all votes for the election
+    const votes = await db.votes.groupBy({
+      by: ["proposition_proof"],
+      _count: {
+        proposition_proof: true,
+      },
+      where: {
+        election_id,
+      },
+    });
+
+    // Create a map to store the vote count for each proposition to be able to use the Map.get() method
+    const tally = votes.reduce((map, { proposition_proof, _count }) => {
+      return map.set(proposition_proof, _count.proposition_proof);
+    }, new Map<string, number>());
+
+    // Find all propositions for the election
     const propositions = await db.propositions.findMany({
       where: {
         election_id,
@@ -16,37 +33,6 @@ const router = new Hono<Environment>()
         id: true,
       },
     });
-
-    // If no propositions are found, return an error
-    if (!propositions.length)
-      return c.json({ message: `No propositions found for election with ID ${election_id}` }, 400);
-
-    // Find all votes for the election
-    const votes = await db.votes.findMany({
-      where: {
-        election_id,
-      },
-      select: {
-        proposition_proof: true,
-      },
-    });
-
-    // If no votes are found, return an error
-    if (!votes.length)
-      return c.json({ message: `No votes found for election with ID ${election_id}` }, 400);
-
-    // Create a map to tally the votes
-    const tally = new Map<string, number>();
-
-    // Iterate over each vote in the votes array
-    for (const vote of votes) {
-      const { proposition_proof } = vote;
-
-      // Increment the count for the proposition proof in the tally.
-      // If it doesn't exist, start with 1.
-      const currentCount = tally.get(proposition_proof) ?? 0;
-      tally.set(proposition_proof, currentCount + 1);
-    }
 
     // Create a map to store the results of the election
     // Mapping over the propositions array, to use the proposition ID as the key and the vote count as the value

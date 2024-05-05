@@ -138,17 +138,54 @@ const router = new Hono<Environment>()
   })
   // Delete a specific election for a team
   .delete("/:election_id", isAdminOfTeam, async (c) => {
+    const { election_id, team_id } = c.req.param();
+    const { db } = c.var;
+
+    // check if the election exists
+    const election = await db.elections.findUnique({
+      where: {
+        id: election_id,
+        team_id,
+        is_deleted: {
+          not: true,
+        },
+      },
+    });
+
+    if (!election)
+      return c.json(
+        { message: `Election with ID ${election_id} not found` },
+        404
+      );
+
+    await db.elections.update({
+      where: {
+        id: election.id,
+      },
+      data: {
+        is_deleted: true,
+      },
+    });
+
+    return c.body(null, 204);
+  })
+  // Get the result for an election
+  .get("/:election_id/result", isMemberOfTeam, async (c) => {
     const { election_id } = c.req.param();
 
-    const request = await propositionClient.api.results.election[":election_id"].$get({
+    const request = await propositionClient.api.results.election[
+      ":election_id"
+    ].$get({
       param: {
         election_id,
-      }
+      },
     });
 
     if (!request.ok)
       return c.json(
-        { message: `Election with ID ${election_id} could not generate result` },
+        {
+          message: `Election with ID ${election_id} could not generate result`,
+        },
         404
       );
 
@@ -161,70 +198,31 @@ const router = new Hono<Environment>()
     const { election_id, team_id } = c.req.param();
     const { db } = c.var;
 
-    const election = await db.elections.findUnique({
+    const electionValidation = await db.electionValidation.findFirst({
       where: {
-        id: election_id,
-        is_deleted: {
-          not: true,
-        },
+        election_id,
       },
     });
 
-    if (!election) return c.notFound();
+    // If no validation is found, return not found
+    if (!electionValidation)
+      return c.notFound();
 
-    const validationRequest = await validationClient.api.proofs.election[":election_id"].$get({
+    const proofRequest = await ballotClient.api.proofs[":value"].$get({
       param: {
-        election_id,
+        value: electionValidation.election_id + electionValidation.is_votes_valid + electionValidation.is_propositions_valid + electionValidation.is_ballots_valid,
       }
     });
 
-    if (!validationRequest.ok)
-      return c.json(
-        { message: `Validation for election with ID ${election_id} is not valid` },
-        404
+    const { hash: proofHash } = await proofRequest.json();
+
+    // If the proof does not match the validation proof, return an error
+    if (proofHash !== electionValidation.proof)
+      return c.text( `Proof for election with ID ${election_id} is invalid`,
+        400
       );
 
-    const propositionRequest = await propositionClient.api.results.election[":election_id"].$get({
-      param: {
-        election_id,
-      }
-    });
-
-    if (!propositionRequest.ok)
-      return c.json(
-        { message: `Propositions for election with ID ${election_id} is not valid` },
-        404
-      );
-
-    const ballotRequest = await ballotClient.api.proofs.election[":election_id"].$get({
-      param: {
-        election_id,
-      }
-    });
-
-    if (!ballotRequest.ok)
-      return c.json(
-        { message: `Ballots for election with ID ${election_id} is not valid` },
-        404
-      );
-
-    return c.body(null, 204);
-  })
-  // Get the vote for an election
-  .get("/:election_id/vote", isMemberOfTeam, async (c) => {
-    const { election_id } = c.req.param();
-    const { user_id, db } = c.var;
-
-    const ballot = await db.ballots.findFirst({
-      where: {
-        election_id,
-        user_id,
-      },
-    });
-
-    if (!ballot) return c.notFound();
-
-    return c.json(ballot);
+    return c.json(electionValidation);
   })
   // Vote on a proposition for an election
   .post("/:election_id/vote", isMemberOfTeam, isElegibleToVote, async (c) => {
@@ -239,10 +237,11 @@ const router = new Hono<Environment>()
         is_deleted: {
           not: true,
         },
+        end_at: {
+          lte: new Date(),
+        }
       },
     });
-
-    console.log('election', election)
 
     if (!election)
       return c.json(
@@ -270,8 +269,6 @@ const router = new Hono<Environment>()
         is_used: true,
       },
     });
-
-    console.log('ballot', ballot)
 
     const ballotProof = await ballotClient.api.proofs[":value"].$get({
       param: {

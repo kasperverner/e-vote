@@ -12,7 +12,6 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignInImport } from './routes/sign-in'
-import { Route as TeamsImport } from './routes/_teams'
 import { Route as IndexImport } from './routes/index'
 import { Route as TeamsIndexImport } from './routes/teams/index'
 import { Route as TeamsCreateImport } from './routes/teams/create'
@@ -26,11 +25,6 @@ import { Route as TeamsTeamidMembersInviteInviteidImport } from './routes/teams/
 
 const SignInRoute = SignInImport.update({
   path: '/sign-in',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const TeamsRoute = TeamsImport.update({
-  id: '/_teams',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -84,10 +78,6 @@ declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_teams': {
-      preLoaderRoute: typeof TeamsImport
       parentRoute: typeof rootRoute
     }
     '/sign-in': {

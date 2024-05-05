@@ -27,10 +27,9 @@ const router = new Hono<Environment>()
       },
     });
 
+    // If no ballots are found, return no content
     if (!ballots.length)
-      return c.json({
-        message: `No ballots found for election with ID ${election_id}`
-      }, 400);
+      return c.body(null, 204);
 
     const votes = await db.votes.findMany({
       where: {
@@ -41,17 +40,17 @@ const router = new Hono<Environment>()
       },
     });
 
+    // If no votes are found, return no content
     if (!votes.length)
-      return c.json({
-        message: `No votes found for election with ID ${election_id}`
-      }, 400);
+      return c.body(null, 204);
 
     // To save iterations, we can check if the number of votes is equal to the number of ballots
     // If the number of votes does not match the number of ballots, return an error
     if (votes.length !== ballots.length)
-      return c.json({
-        message: `Not all ballots have been voted on for election with ID ${election_id}`
-      }, 400);
+      return c.text(
+        `Validation failed for election with ID ${election_id}`,
+        400
+      );
 
     // Generate a list of valid ballot proofs
     const ballotProofs = ballots.map(({ id }) => hasher(id, secret));
@@ -62,14 +61,15 @@ const router = new Hono<Environment>()
 
       // If the ballot proof is not in the list of valid proofs, return an error
       if (!ballotProofs.includes(ballot_proof)) {
-        return c.json({
-          message: `Validation failed for election with ID ${election_id}`
-        }, 400);
+        return c.text(
+          `Validation failed for election with ID ${election_id}`,
+          400
+        );
       }
     }
 
-    // If all votes are valid, return a success message
-    return c.json({ message: `Validation passed for election with ID ${election_id}` });
+    // If all votes are valid, return no content
+    return c.body(null, 204);
   });
 
 export default router;

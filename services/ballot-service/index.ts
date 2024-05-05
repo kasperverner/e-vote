@@ -13,9 +13,7 @@ app.use(logger(), injectDb, async (c, next) => {
   await next();
 });
 
-const ballotApiRoutes = app
-  .basePath("/api")
-  .route("/proofs", proofsRouter);
+const ballotApiRoutes = app.basePath("/api").route("/proofs", proofsRouter);
 
 export type BallotApiRoutes = typeof ballotApiRoutes;
 

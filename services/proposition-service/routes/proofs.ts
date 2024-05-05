@@ -25,9 +25,9 @@ const router = new Hono<Environment>()
       },
     });
 
-    // If no propositions are found, return an error
+    // If no propositions are found, return no content
     if (!propositions.length)
-      return c.json({ message: `No propositions found for election with ID ${election_id}` }, 400);
+      return c.body(null, 204)
 
     // Find all votes for the election
     const votes = await db.votes.findMany({
@@ -39,9 +39,9 @@ const router = new Hono<Environment>()
       },
     });
 
-    // If no votes are found, return an error
+    // If no votes are found, return no content
     if (!votes.length)
-      return c.json({ message: `No votes found for election with ID ${election_id}` }, 400);
+      return c.body(null, 204);
 
     // Generate a list of valid proposition proofs
     const propositionProofs = propositions.map(({ id }) => hasher(id, secret));
@@ -52,12 +52,15 @@ const router = new Hono<Environment>()
 
       // If the proposition proof is not in the list of valid proofs, return an error
       if (!propositionProofs.includes(proposition_proof)) {
-        return c.json({ message: `Validation failed for election with ID ${election_id}` }, 400);
+        return c.text(
+          `Validation failed for election with ID ${election_id}`,
+          400
+        );
       }
     }
 
-    // If all votes are valid, return a success message
-    return c.json({ message: `Validation passed for election with ID ${election_id}` });
+    // If all votes are valid, return no content
+    return c.body(null, 204)
   });
 
 

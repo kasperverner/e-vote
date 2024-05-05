@@ -8,18 +8,32 @@ datasource db {
 }
 
 model Elections {
-  id           String         @id @default(uuid())
-  team         Teams          @relation(fields: [team_id], references: [id])
-  team_id      String
-  name         String
-  description  String?
-  is_deleted   Boolean        @default(false)
-  created_at   DateTime       @default(now())
-  start_at     DateTime
-  end_at       DateTime
-  propositions Propositions[]
-  ballots      Ballots[]
-  votes        Votes[]
+  id            String              @id @default(uuid())
+  team          Teams               @relation(fields: [team_id], references: [id])
+  team_id       String
+  name          String
+  description   String?
+  is_deleted    Boolean             @default(false)
+  created_at    DateTime            @default(now())
+  updated_at    DateTime?           @updatedAt
+  start_at      DateTime
+  end_at        DateTime
+  propositions  Propositions[]
+  ballots       Ballots[]
+  votes         Votes[]
+  validations   ElectionValidation? @relation(fields: [validation_id], references: [id])
+  validation_id String?
+}
+
+model ElectionValidation {
+  id                    String      @id @default(uuid())
+  election_id           String
+  created_at            DateTime    @default(now())
+  is_ballots_valid      Boolean     @default(false)
+  is_propositions_valid Boolean     @default(false)
+  is_votes_valid        Boolean     @default(false)
+  proof                 String
+  Elections             Elections[]
 }
 
 model Teams {
