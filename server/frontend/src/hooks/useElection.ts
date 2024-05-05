@@ -4,8 +4,8 @@ import { Election } from "../types/Election";
 
 async function fetchElection(
   authToken: string,
-  team_id: string,
-  election_id: string
+  team_id: string | undefined,
+  election_id: string | undefined
 ) {
   const res = await fetch(
     `/api/teams/${team_id}/elections/${election_id}`,
@@ -17,7 +17,7 @@ async function fetchElection(
   return await res.json();
 }
 
-const useElection = (team_id: string, election_id: string) => {
+const useElection = (team_id: string | undefined, election_id: string | undefined) => {
   const { getToken } = useAuth();
 
   return useQuery<Election>({

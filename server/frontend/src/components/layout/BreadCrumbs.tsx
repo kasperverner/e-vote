@@ -1,6 +1,8 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useParams, useRouterState } from "@tanstack/react-router";
 import useTeam from "../../hooks/useTeam";
 import useElection from "../../hooks/useElection";
+import { Election } from '@/types/Election';
+import { Team } from '@/types/Team';
 
 const BuildBreadCumbLink = ({
   label,
@@ -32,67 +34,69 @@ const TruncateLabel = (label: string, maxLength: number) => {
   return label;
 }
 
-const GenerateLabel = (part: string, teamId: string, electionId: string) => {
-  if (part === teamId) return TruncateLabel(GetTeamName(teamId), 16);
-  if (part === electionId) return TruncateLabel(GetElectionName(teamId, electionId), 16);
-
-  return part;
+const GenerateLabel = (part: string, teamId: string | undefined, electionId: string | undefined, team: Team | undefined, election: Election | undefined) => {
+  switch (part) {
+    case teamId:
+      return team?.name ?? part;
+    case electionId:
+      return election?.name ?? part;
+    default:
+      return part;
+  }
 };
-
-const GetTeamName = (teamId: string) => {
-  const { data: team } = useTeam(teamId);
-  return team?.name ?? "loading...";
-}
-
-const GetElectionName = (teamId: string, electionId: string) => {
-  const { data: election } = useElection(teamId, electionId);
-  return election?.name ?? "loading...";
-}
 
 const BuildBreadCrumbs = ({
   parts,
   teamId,
   electionId,
+  team,
+  election
 }: {
   parts: string[];
-  teamId: string;
-  electionId: string;
+  teamId: string | undefined;
+  electionId: string | undefined;
+  team: Team | undefined;
+  election: Election | undefined;
 }) => {
   return (
     <>
-      {["home", ...parts].map((part, index) => (
+      {parts.map((part, index) => (
         <div key={index}>
-          {index < parts.length ? (
-            <>
-              <BuildBreadCumbLink
-                label={GenerateLabel(part, teamId, electionId)}
-                route={index === 0 ? "/" : parts.slice(0, index).join("/")}
-              />
-              <span className="text-sm mx-2">/</span>
-            </>
-          ) : (
-            <BuildBreadCrumsLabel
-              label={GenerateLabel(part, teamId, electionId)}
-            />
-          )}
-        </div>
-      ))}
+          {index < parts.length - 1 ? (
+              <>
+                {part === "elections" ? (
+                  <BuildBreadCrumsLabel
+                    label={GenerateLabel(part, teamId, electionId, team, election)}
+                  />
+                ) : (
+                  <BuildBreadCumbLink
+                    label={TruncateLabel(GenerateLabel(part, teamId, electionId, team, election), 16)}
+                    route={`/${parts.slice(0, index + 1).join("/")}`}
+                  />
+                )}
+                <span className="text-sm mx-2">/</span>
+              </>
+            ) : (
+                <BuildBreadCrumsLabel
+                  label={GenerateLabel(part, teamId, electionId, team, election)}
+                />
+              )}
+            </div>
+          ))}
     </>
   );
 };
 
 const BreadCrumbs = () => {
+  const { team_id, election_id } = useParams({
+    strict: false,
+  });
+  const { data: team } = useTeam(team_id);
+  const { data: election } = useElection(team_id, election_id);
+
   const routerState = useRouterState();
-  const match = routerState.matches.find(
-    (match) =>
-      match.pathname.toLowerCase() ==
-      routerState.resolvedLocation.pathname.toLowerCase()
-  );
-
-  const path = match?.pathname || "";
+  const path = routerState.resolvedLocation.pathname.toLowerCase();
   const parts = path.split("/").filter((part) => part !== "");
-
-  const { team_id, election_id } = match?.params || {};
 
   return (
     <div className="flex flex-row mt-2 mb-4">
@@ -100,6 +104,8 @@ const BreadCrumbs = () => {
         parts={parts}
         teamId={team_id}
         electionId={election_id}
+        team={team}
+        election={election}
       />
     </div>
   );

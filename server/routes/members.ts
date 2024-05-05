@@ -92,8 +92,6 @@ const router = new Hono<Environment>()
     const { member_id } = c.req.param();
     const { db } = c.var;
 
-    console.log("member_id", member_id);
-
     await db.teamMembers.updateMany({
       where: {
         id: member_id,
