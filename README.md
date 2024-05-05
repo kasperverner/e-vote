@@ -164,6 +164,5 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 - [ ] Dynamic titles
 - [ ] Add results view
 - [ ] Fix bug with breadcrumbs
-- [ ] Fix bugs with voting and results
 - [ ] Add unit tests?
 - [ ] Add e2e tests?

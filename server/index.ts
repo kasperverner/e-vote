@@ -7,6 +7,7 @@ import isAuthorized from "./middleware/isAuthorized";
 import electionsRouter from "./routes/elections";
 import membersRouter from "./routes/members";
 import teamsRouter from "./routes/teams";
+import configureElectionValidationJob from "./cronjobs/configureElectionValidationJob";
 
 const app = new Hono<Environment>();
 app.use(logger(), injectDb, isAuthorized);
@@ -20,7 +21,7 @@ const apiRoutes = app
 app.get("*", serveStatic({ root: "./frontend/dist" }));
 app.get("*", serveStatic({ path: "./frontend/dist/index.html" }));
 
-export type ApiRoutes = typeof apiRoutes;
+configureElectionValidationJob();
 
 export default {
   fetch: app.fetch,
