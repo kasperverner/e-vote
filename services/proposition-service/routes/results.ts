@@ -43,7 +43,7 @@ const router = new Hono<Environment>()
     }, new Map<string, number>());
 
     // If all votes are valid, return a success message
-    return c.json(results);
+    return c.json(Object.fromEntries(results.entries()));
   });
 
 export default router;

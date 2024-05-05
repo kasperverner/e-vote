@@ -4,9 +4,9 @@ import isMemberOfTeam from "../middleware/isMemberOfTeam";
 import isAdminOfTeam from "../middleware/isAdminOfTeam";
 import isElegibleToVote from "../middleware/isElegibleToVote";
 import isEligibleToEditElection from "../middleware/isEligibleToEditElection";
-import ballotClient from '@/services/ballot-service/client'
-import propositionClient from '@/services/proposition-service/client'
-import validationClient from '@/services/validation-service/client'
+import ballotClient from "@/services/ballot-service/client";
+import propositionClient from "@/services/proposition-service/client";
+import validationClient from "@/services/validation-service/client";
 
 const router = new Hono<Environment>()
   .basePath("/:team_id/elections")
@@ -205,13 +205,16 @@ const router = new Hono<Environment>()
     });
 
     // If no validation is found, return not found
-    if (!electionValidation)
-      return c.notFound();
+    if (!electionValidation) return c.notFound();
 
     const proofRequest = await ballotClient.api.proofs[":value"].$get({
       param: {
-        value: electionValidation.election_id + electionValidation.is_votes_valid + electionValidation.is_propositions_valid + electionValidation.is_ballots_valid,
-      }
+        value:
+          electionValidation.election_id +
+          electionValidation.is_votes_valid +
+          electionValidation.is_propositions_valid +
+          electionValidation.is_ballots_valid,
+      },
     });
 
     const { hash: proofHash } = await proofRequest.json();
@@ -220,7 +223,8 @@ const router = new Hono<Environment>()
 
     // If the proof does not match the validation proof, return an error
     if (proofHash !== electionValidation.proof)
-      return c.text( `Proof for election with ID ${election_id} is invalid`,
+      return c.text(
+        `Proof for election with ID ${election_id} is invalid`,
         400
       );
 
@@ -238,7 +242,7 @@ const router = new Hono<Environment>()
         team_id,
         is_deleted: {
           not: true,
-        }
+        },
       },
     });
 
@@ -272,22 +276,24 @@ const router = new Hono<Environment>()
     const ballotProof = await ballotClient.api.proofs[":value"].$get({
       param: {
         value: ballot.id,
-      }
+      },
     });
     const { hash: ballotHash } = await ballotProof.json();
 
     const propositionProof = await propositionClient.api.proofs[":value"].$get({
       param: {
         value: proposition_id,
-      }
+      },
     });
     const { hash: propositionHash } = await propositionProof.json();
 
-    const validationProof = await validationClient.api.proofs[":first"][":second"].$get({
+    const validationProof = await validationClient.api.proofs[":first"][
+      ":second"
+    ].$get({
       param: {
         first: ballotHash,
         second: propositionHash,
-      }
+      },
     });
     const { hash: validationHash } = await validationProof.json();
 

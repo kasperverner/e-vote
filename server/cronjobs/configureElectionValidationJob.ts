@@ -17,7 +17,7 @@ const db = new PrismaClient();
  */
 export default function configureElectionValidationJob() {
   new CronJob(
-    '* * * * * *', // cronTime
+    '0 * * * * *', // cronTime
     async function () {
       // Skip current run if job is already running
       if (isJobRunning)
