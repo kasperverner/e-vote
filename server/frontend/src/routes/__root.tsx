@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Container from "@/components/layout/Container";
 import Footer from "@/components/layout/Footer";
 import { useSession } from "@clerk/clerk-react";
+import BreadCrumbs from "@/components/layout/BreadCrumbs";
 
 export const Route = createRootRoute({
   loader: async () => {
@@ -32,7 +33,7 @@ export const Route = createRootRoute({
           <Navbar />
           <Container>
             <section className="py-4">
-              {/* <BreadCrumbs /> */}
+              <BreadCrumbs />
               {/* The Outlet is where the router will place the page content */}
               <Outlet />
             </section>

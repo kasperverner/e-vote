@@ -5,7 +5,7 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { DatasetType } from "node_modules/@mui/x-charts/models/seriesType/config";
 
 const ResultChat = (
-  { election, result } : { election: Election, result: Result }
+  { election, result } : { election: Election, result: Result | undefined }
 ) => {
   if (!result) return <p>No result found for the election...</p>;
 
