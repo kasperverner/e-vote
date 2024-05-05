@@ -21,7 +21,7 @@ const apiRoutes = app
 app.get("*", serveStatic({ root: "./frontend/dist" }));
 app.get("*", serveStatic({ path: "./frontend/dist/index.html" }));
 
-configureElectionValidationJob();
+// configureElectionValidationJob();
 
 export default {
   fetch: app.fetch,

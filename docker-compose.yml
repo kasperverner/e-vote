@@ -34,7 +34,7 @@ services:
     networks:
       - services
     env_file:
-      - ./services/ballot-service/.env
+      - ./environment/.env
     command: bun run --hot services/ballot-service/index.ts
 
   proposition-service:
@@ -48,7 +48,7 @@ services:
     networks:
       - services
     env_file:
-      - ./services/proposition-service/.env
+      - ./environment/.env
     command: bun run --hot services/proposition-service/index.ts
 
   validation-service:
@@ -62,7 +62,7 @@ services:
     networks:
       - services
     env_file:
-      - ./services/validation-service/.env
+      - ./environment/.env
     command: bun run --hot services/validation-service/index.ts
 
   server:
@@ -82,7 +82,7 @@ services:
       - services
       - default
     env_file:
-      - ./server/.env
+      - ./environment/.env
     command: bun run --hot server/index.ts
 
   frontend-setup:
@@ -106,6 +106,8 @@ services:
       - 4000:4000
     networks:
       - default
+    env_file:
+      - ./environment/.env
     command: bun dev --host
 
 

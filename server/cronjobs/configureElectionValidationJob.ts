@@ -75,13 +75,23 @@ export default function configureElectionValidationJob() {
         const { hash: proofHash } = await proofRequest.json();
 
         // save the validation results
-        await db.electionValidation.create({
+        const electionValidation = await db.electionValidation.create({
           data: {
             election_id: election.id,
             is_votes_valid: validationRequest.ok,
             is_propositions_valid: propositionRequest.ok,
             is_ballots_valid: ballotRequest.ok,
             proof: proofHash,
+          },
+        });
+
+        // update the election with the validation id
+        await db.elections.update({
+          where: {
+            id: election.id,
+          },
+          data: {
+            validation_id: electionValidation.id,
           },
         });
       }
