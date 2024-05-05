@@ -1,9 +1,12 @@
-import type { Environment } from "@/server/environment";
+import type { Environment } from "../environment";
 import { Hono } from "hono";
 import isMemberOfTeam from "../middleware/isMemberOfTeam";
 import isAdminOfTeam from "../middleware/isAdminOfTeam";
+import injectDb from "../../prisma/db.injector";
+import isAuthorized from "../middleware/isAuthorized";
 
 const router = new Hono<Environment>()
+  .use(injectDb, isAuthorized)
   .basePath("/:team_id/members")
   // Get all members of a team
   .get("/", isMemberOfTeam, async (c) => {
@@ -190,7 +193,7 @@ const router = new Hono<Environment>()
               user_id,
               is_deleted: {
                 not: true,
-              }
+              },
             },
           },
         },

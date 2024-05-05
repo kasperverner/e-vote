@@ -13,7 +13,9 @@ export default createMiddleware<Environment>(async (c, next) => {
   if (!tokenType || !token || tokenType.toLowerCase() !== "bearer")
     return c.json({ message: "Unauthorized" }, 401);
 
-  const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY as string, {
+  const publicKey = process.env.JWT_PUBLIC_KEY;
+
+  const payload = jwt.verify(token, publicKey as string, {
     algorithms: ["RS256"],
     issuer: process.env.JWT_ISSUER,
     ignoreExpiration: true,

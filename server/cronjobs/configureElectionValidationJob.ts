@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { CronJob } from "cron";
-import ballotClient from "@/services/ballot-service/client";
-import propositionClient from "@/services/proposition-service/client";
-import validationClient from "@/services/validation-service/client";
+import ballotClient from "../../services/ballot-service/client";
+import propositionClient from "../../services/proposition-service/client";
+import validationClient from "../../services/validation-service/client";
 
 let isJobRunning = false;
 const db = new PrismaClient();
