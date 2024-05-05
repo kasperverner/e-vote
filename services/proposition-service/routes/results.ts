@@ -6,7 +6,7 @@ const router = new Hono<Environment>()
   // get the results of an election
   .get("/election/:election_id", async (c) => {
     const { election_id } = c.req.param();
-    const { db } = c.var;
+    const { db, secret } = c.var;
 
     // Find all votes for the election
     const votes = await db.votes.groupBy({
@@ -37,7 +37,7 @@ const router = new Hono<Environment>()
     // Create a map to store the results of the election
     // Mapping over the propositions array, to use the proposition ID as the key and the vote count as the value
     const results = propositions.reduce((map, { id }) => {
-      const hash = hasher(id, process.env.SECRET as string);
+      const hash = hasher(id, secret);
 
       return map.set(id, tally.get(hash) || 0);
     }, new Map<string, number>());

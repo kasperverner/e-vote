@@ -3,7 +3,7 @@
 This is the monorepository for the E-Vote project. It contains the following packages:
 
 - server: Gateway api for the backend services.
-- server/frontend: application for the E-Vote project.
+- server/frontend: Single page application for the E-Vote project.
 - services/ballot: Zero Knowledge Proof service for the ballot proof.
 - services/proposition: Zero Knowledge Proof service for the proposition proof.
 - services/validation: Zero Knowledge Proof service for the validation proof.
