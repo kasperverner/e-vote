@@ -3,11 +3,11 @@ WORKDIR /usr/src/app
 
 FROM base AS install
 RUN mkdir -p /temp/server
-COPY package.json bun.lockb /temp/server/
+COPY package.json /temp/server/
 RUN cd /temp/server && bun install --frozen-lockfile --production
 
 RUN mkdir -p /temp/frontend
-COPY /server/frontend/package.json /server/frontend/bun.lockb /temp/frontend/
+COPY /server/frontend/package.json /temp/frontend/
 RUN cd /temp/frontend && bun install --frozen-lockfile --production
 
 FROM base AS build
