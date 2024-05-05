@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import injectDb from "@/prisma/db.injector";
+import injectDb from "../../prisma/db.injector";
 import type { Environment } from "./environment";
 import proofsRouter from "./routes/proofs";
 

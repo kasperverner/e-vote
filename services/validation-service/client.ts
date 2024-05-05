@@ -1,5 +1,5 @@
 import { hc } from "hono/client";
-import type { ValidationApiRoutes } from "@/services/validation-service";
+import type { ValidationApiRoutes } from "../validation-service";
 
 const client = hc<ValidationApiRoutes>("http://e-vote-validation-service:3000");
 

@@ -162,3 +162,15 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 - [ ] Fix bug with breadcrumbs
 - [ ] Add unit tests?
 - [ ] Add e2e tests?
+
+## Deployment
+
+- docker build -t kasperverner/e-vote-ballot-service:latest -f service_ballot.dockerfile .
+- docker build -t kasperverner/e-vote-proposition-service:latest -f service_proposition.dockerfile .
+- docker build -t kasperverner/e-vote-validation-service:latest -f service_validation.dockerfile .
+- docker build -t kasperverner/e-vote-server:latest -f server.dockerfile .
+
+- docker push kasperverner/e-vote-ballot-service:latest
+- docker push kasperverner/e-vote-proposition-service:latest
+- docker push kasperverner/e-vote-validation-service:latest
+- docker push kasperverner/e-vote-server:latest

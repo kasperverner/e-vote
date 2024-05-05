@@ -1,14 +1,17 @@
-import type { Environment } from "@/server/environment";
+import type { Environment } from "../environment";
 import { Hono } from "hono";
 import isMemberOfTeam from "../middleware/isMemberOfTeam";
 import isAdminOfTeam from "../middleware/isAdminOfTeam";
 import isElegibleToVote from "../middleware/isElegibleToVote";
 import isEligibleToEditElection from "../middleware/isEligibleToEditElection";
-import ballotClient from "@/services/ballot-service/client";
-import propositionClient from "@/services/proposition-service/client";
-import validationClient from "@/services/validation-service/client";
+import ballotClient from "../../services/ballot-service/client";
+import propositionClient from "../../services/proposition-service/client";
+import validationClient from "../../services/validation-service/client";
+import injectDb from '../../prisma/db.injector';
+import isAuthorized from "../middleware/isAuthorized";
 
 const router = new Hono<Environment>()
+  .use(injectDb, isAuthorized)
   .basePath("/:team_id/elections")
   // Get all elections for a team
   .get("/", isMemberOfTeam, async (c) => {

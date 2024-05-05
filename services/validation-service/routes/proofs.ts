@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { Environment } from "../environment";
-import hasher from "@/utilities/hasher";
+import hasher from "../../../utilities/hasher";
 
 const router = new Hono<Environment>()
   // generate a proof
