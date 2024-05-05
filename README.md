@@ -15,11 +15,7 @@ This is the monorepository for the E-Vote project. It contains the following pac
 
 ## Setting up the environment
 
-- [ ] Create an `.env` file in `/server/.env` as described in the `/server/.env.example` file.
-- [ ] Create an `.env` file in `/server/frontend/.env` as described in the `/server/frontend/.env.example` file.
-- [ ] Create an `.env` file in `/services/ballot-service/.env` as described in the `/services/ballot-service/.env.example` file.
-- [ ] Create an `.env` file in `/services/proposition-service/.env` as described in the `/services/proposition-service/.env.example` file.
-- [ ] Create an `.env` file in `/services/validation-service/.env` as described in the `/services/validation-service/.env.example` file.
+- [ ] Create an `.env` file in `/environment/.env` as described in the `/environment/.env.example` file.
 
 ## Getting started
 

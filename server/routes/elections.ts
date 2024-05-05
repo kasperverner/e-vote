@@ -238,9 +238,6 @@ const router = new Hono<Environment>()
         team_id,
         is_deleted: {
           not: true,
-        },
-        end_at: {
-          lte: new Date(),
         }
       },
     });
@@ -257,7 +254,7 @@ const router = new Hono<Environment>()
         400
       );
 
-    if (election.end_at && election.end_at < new Date())
+    if (election.end_at < new Date())
       return c.json(
         { message: `Election with ID ${election_id} has already ended` },
         400

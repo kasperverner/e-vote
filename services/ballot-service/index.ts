@@ -6,10 +6,10 @@ import proofsRouter from "./routes/proofs";
 
 const app = new Hono<Environment>();
 app.use(logger(), injectDb, async (c, next) => {
-  if (!process.env.PROOF_SECRET)
-    throw new Error("PROOF_SECRET is required in the environment");
+  if (!process.env.BALLOT_PROOF_SECRET)
+    throw new Error("BALLOT_PROOF_SECRET is required in the environment");
 
-  c.set("secret", String(process.env.PROOF_SECRET));
+  c.set("secret", String(process.env.BALLOT_PROOF_SECRET));
   await next();
 });
 
