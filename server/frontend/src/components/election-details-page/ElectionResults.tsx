@@ -8,7 +8,6 @@ import { faSquareMinus } from "@fortawesome/free-solid-svg-icons/faSquareMinus";
 import { ElectionValidation } from "@/types/ElectionValidation";
 import ResultChat from "./ResultChart";
 
-
 const ValidationTitle = ({
   electionValidation
 }: {
