@@ -207,8 +207,8 @@ const router = new Hono<Environment>()
       },
     });
 
-    // If no validation is found, return not found
-    if (!electionValidation) return c.notFound();
+    // If no validation is found, return no content
+    if (!electionValidation) return c.body(null, 204);
 
     const proofRequest = await ballotClient.api.proofs[":value"].$get({
       param: {
