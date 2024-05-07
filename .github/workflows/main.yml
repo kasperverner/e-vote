@@ -33,26 +33,26 @@ jobs:
           push: true
           tags: kasperverner/e-vote-server:latest
 
-      - name: Build and push Ballot Service
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: service_ballot.dockerfile
-          push: true
-          tags: kasperverner/e-vote-ballot-service:latest
+      # - name: Build and push Ballot Service
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: service_ballot.dockerfile
+      #     push: true
+      #     tags: kasperverner/e-vote-ballot-service:latest
 
-      - name: Build and push Propositotion Service
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: service_proposition.dockerfile
-          push: true
-          tags: kasperverner/e-vote-proposition-service:latest
+      # - name: Build and push Propositotion Service
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: service_proposition.dockerfile
+      #     push: true
+      #     tags: kasperverner/e-vote-proposition-service:latest
 
-      - name: Build and push Validation Service
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: service_validation.dockerfile
-          push: true
-          tags: kasperverner/e-vote-validation-service:latest
+      # - name: Build and push Validation Service
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: service_validation.dockerfile
+      #     push: true
+      #     tags: kasperverner/e-vote-validation-service:latest

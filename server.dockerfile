@@ -1,5 +1,18 @@
 FROM oven/bun:debian as base
 WORKDIR /usr/src/app
+RUN apt-get update -yq \
+  && apt-get -yq install curl \
+  && curl -L https://deb.nodesource.com/setup_20.x | bash \
+  && apt-get update -yq \
+  && apt-get install -yq \
+  nodejs \
+  npm
+
+RUN apt update
+# RUN apt upgrade
+# RUN apt install -y curl
+# RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+# RUN apt install nodejs npm -y
 
 FROM base AS server-install
 RUN mkdir -p /temp/server
