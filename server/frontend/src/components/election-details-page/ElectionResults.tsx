@@ -87,7 +87,7 @@ const ElectionResults = ({ election }: { election: Election }) => {
     election.id
   );
 
-  const { data: validation, isLoading: isLoadingValidation, isError: isErrorValidation } = useElectionValidation(
+  const { data: validation, isLoading: isLoadingValidation } = useElectionValidation(
     election.team_id,
     election.id
   );
@@ -97,8 +97,6 @@ const ElectionResults = ({ election }: { election: Election }) => {
   if (isErrorResult) return <p>Failed to load election results</p>;
 
   if (isLoadingValidation) return <p>Loading election validation...</p>;
-
-  if (isErrorValidation) return <p>Failed to load election validation</p>;
 
   if (new Date() < new Date(election.start_at))
     return <p>Election has not started yet</p>;
