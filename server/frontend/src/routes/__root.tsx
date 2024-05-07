@@ -34,11 +34,12 @@ export const Route = createRootRoute({
           <Container>
             <section className="py-4">
               <BreadCrumbs />
-              {/* The Outlet is where the router will place the page content */}
               <Outlet />
             </section>
           </Container>
-          <TanStackRouterDevtools />
+          {process.env.NODE_ENV === "development" &&
+            (<TanStackRouterDevtools />)
+          }
         </div>
         <Footer />
       </div>

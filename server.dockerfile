@@ -10,7 +10,7 @@ RUN cd /temp/server && npm install --production && npx prisma generate
 FROM base AS frontend-install
 RUN mkdir -p /temp/frontend
 COPY /server/frontend/package.json /temp/frontend/
-RUN cd /temp/frontend && bun install
+RUN cd /temp/frontend && bun install --production
 
 FROM base AS build
 RUN mkdir -p /temp/frontend

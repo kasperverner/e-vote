@@ -41,7 +41,10 @@ export const Route = createFileRoute("/teams/$team_id/elections/create")(
           description: undefined,
           start_at: undefined,
           end_at: undefined,
-          propositions: [{ name: undefined, description: undefined }],
+          propositions: [
+            { name: undefined, description: undefined },
+            { name: undefined, description: undefined },
+          ],
         },
         resolver: zodResolver(ElectionSchema),
       });
