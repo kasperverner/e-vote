@@ -5,7 +5,7 @@ FROM node:20 AS server-install
 RUN mkdir -p /temp/server
 COPY package.json /temp/server/
 COPY prisma /temp/server/prisma
-RUN cd /temp/server && npm install && npx prisma generate
+RUN cd /temp/server && npm install --production && npx prisma generate
 
 FROM base AS frontend-install
 RUN mkdir -p /temp/frontend
@@ -22,12 +22,14 @@ RUN cd /temp/frontend && bunx --bun vite build
 FROM base AS prerelease
 COPY . .
 RUN rm -Rf /usr/src/app/server/frontend
-
-FROM base as release
 COPY --from=server-install /temp/server/node_modules node_modules
 COPY --from=server-install /temp/server/prisma prisma
+COPY --from=build /temp/frontend/dist server/frontend/dist
+
+FROM base as release
+COPY --from=prerelease /usr/src/app/node_modules node_modules
+COPY --from=prerelease /usr/src/app/prisma prisma
 COPY --from=prerelease /usr/src/app/server server
 COPY --from=prerelease /usr/src/app/services services
-COPY --from=build /temp/frontend/dist server/frontend/dist
 
 ENTRYPOINT [ "bun", "run", "server/index.ts" ]
