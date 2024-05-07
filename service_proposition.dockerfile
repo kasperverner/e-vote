@@ -5,7 +5,7 @@ FROM node:20 AS install
 RUN mkdir -p /temp/prod
 COPY package.json /temp/prod/
 COPY prisma /temp/prod/prisma
-RUN cd /temp/prod && bun install --frozen-lockfile --production && npx prisma generate
+RUN cd /temp/prod && npm install --production && npx prisma generate
 
 FROM base AS prerelease
 COPY --from=install /temp/prod/node_modules node_modules
