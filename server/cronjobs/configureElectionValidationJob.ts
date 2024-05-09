@@ -98,9 +98,5 @@ export default function configureElectionValidationJob() {
 
       // Set job as not running
       isJobRunning = false;
-    }, // onTick
-    null, // onComplete
-    true, // start
-    'utc'
-  );
+    }, null, true, 'utc');
 }

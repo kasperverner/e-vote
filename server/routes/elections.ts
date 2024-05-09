@@ -11,7 +11,7 @@ import injectDb from '../../prisma/db.injector';
 import isAuthorized from "../middleware/isAuthorized";
 
 /**
- * The router for the teams endpoint.
+ * The router for the elections endpoints.
  * injectDb middleware is used to inject the db into the context
  * isAuthorized middleware is used to check if the user is authenticated and inject the user_id into the context
  * @param {Environment} c The Hono context with the db and user_id
