@@ -2,81 +2,46 @@ import type { Environment } from "../environment";
 import { Hono } from "hono";
 import isMemberOfTeam from "../middleware/isMemberOfTeam";
 import isAdminOfTeam from "../middleware/isAdminOfTeam";
-import injectDb from "../../prisma/db.injector";
-import isAuthorized from "../middleware/isAuthorized";
 
 /**
  * The router for the members endpoints.
- * injectDb middleware is used to inject the db into the context
- * isAuthorized middleware is used to check if the user is authenticated and inject the user_id into the context
  * @param {Environment} c The Hono context with the db and user_id
  * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const router = new Hono<Environment>()
-  .use(injectDb, isAuthorized)
-  .basePath("/:team_id/members");
+const router = new Hono<Environment>().basePath("/:team_id/members");
 
-  // Get all members of a team
+// Get all members of a team
 router.get("/", isMemberOfTeam, async (c) => {
   const { team_id } = c.req.param();
-  const { user_id, db } = c.var;
+  const { user_id, data } = c.var;
 
   // Find all members of the team that are not deleted if the current user is a member
-  const members = await db.teamMembers.findMany({
-    where: {
-      team_id,
-      is_deleted: {
-        not: true,
-      },
-    },
-    select: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
-      id: true,
-      is_admin: true,
-      created_at: true,
-    },
+  const members = await data.members.findMany(team_id);
+
+  const response = members.map(async (member) => {
+    const user = await data.users.findFirst(member.user_id);
+    return {
+      id: member.id,
+      name: user?.name,
+      email: user?.email,
+      is_admin: member.is_admin,
+      is_user: member.user_id === user_id,
+      created_at: member.created_at,
+    };
   });
 
   // Return the list of members
-  return c.json(
-    members?.map((member) => ({
-      name: member.user.name,
-      email: member.user.email,
-      isAdmin: member.is_admin,
-      isUser: member.user.id === user_id,
-      createdAt: member.created_at,
-      id: member.id,
-    }))
-  );
+  return c.json(response);
 });
 
 // Update the role of a member
 router.put("/:member_id", isAdminOfTeam, async (c) => {
   const { member_id } = c.req.param();
   const { isAdmin } = await c.req.json();
-  const { user_id, db } = c.var;
+  const { user_id, data } = c.var;
 
   // Update the role of the member if the current user is an admin
-  const teamMember = await db.teamMembers.update({
-    where: {
-      id: member_id,
-      user_id: {
-        not: user_id,
-      },
-      is_deleted: {
-        not: true,
-      },
-    },
-    data: {
-      is_admin: isAdmin,
-    },
-  });
+  const teamMember = await data.members.update(member_id, user_id, isAdmin);
 
   // Return not found status if the member is not found
   if (!teamMember) return c.notFound();
@@ -88,226 +53,138 @@ router.put("/:member_id", isAdminOfTeam, async (c) => {
 // Leave a team
 router.delete("/leave", isMemberOfTeam, async (c) => {
   const { team_id } = c.req.param();
-  const { user_id, db } = c.var;
+  const { user_id, data } = c.var;
+
+  const member = await data.members.findFirst(team_id, user_id);
+
+  if (!member) return c.notFound();
 
   // Mark the the team member as deleted if the current user is a member
-  await db.teamMembers.updateMany({
-    where: {
-      team_id,
-      user_id,
-      is_deleted: {
-        not: true,
-      },
-    },
-    data: {
-      is_deleted: true,
-    },
-  });
+  await data.members.delete(member.id);
 
   // Return no content status
   return c.body(null, 204);
-})
+});
 
 // Delete a team member
 router.delete("/:member_id", isAdminOfTeam, async (c) => {
   const { member_id } = c.req.param();
-  const { db } = c.var;
+  const { data } = c.var;
 
-
-  await db.teamMembers.updateMany({
-    where: {
-      id: member_id,
-      is_deleted: {
-        not: true,
-      },
-    },
-    data: {
-      is_deleted: true,
-    },
-  });
+  // Mark the team member as deleted if the current user is an admin
+  await data.members.delete(member_id);
 
   // Return no content status
   return c.body(null, 204);
-})
+});
 
 // Get all invitations for a team
 router.get("/invitations", isAdminOfTeam, async (c) => {
   const { team_id } = c.req.param();
-  const { db } = c.var;
+  const { data } = c.var;
+
+  const team = await data.teams.findFirst(team_id);
 
   // Find all invitations for the team that are not deleted
-  const invitations = await db.invitations.findMany({
-    where: {
-      team_id,
-      is_deleted: {
-        not: true,
-      },
-    },
-    select: {
-      id: true,
-      email: true,
-      is_admin: true,
-      created_at: true,
-      updated_at: true,
-      state: true,
-      team: {
-        select: {
-          name: true,
-        },
-      },
-      invited_by_member: {
-        select: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
+  const invitations = await data.invitations.findMany(team_id);
+
+  const response = invitations.map(async (invitation) => {
+    const invited_by_member = await data.members.findById(invitation.invited_by_member_id);
+    const invited_by_user = await data.users.findFirst(invited_by_member!.user_id);
+
+    return {
+      id: invitation.id,
+      email: invitation.email,
+      is_admin: invitation.is_admin,
+      state: invitation.state,
+      created_at: invitation.created_at,
+      updated_at: invitation.updated_at,
+      team_name: team?.name,
+      invited_by_member_name: invited_by_user?.name,
+    };
   });
 
-  // Return the list of invitations
-  return c.json(invitations);
-})
+  return c.json(response);
+});
 
 // Invite a user to a team
 router.post("/invitations", isAdminOfTeam, async (c) => {
   const { team_id } = c.req.param();
   const { email, isAdmin } = await c.req.json();
-  const { user_id, db } = c.var;
+  const { user_id, data } = c.var;
 
   // Find the member that is creating the invitation
-  const member = await db.teamMembers.findFirst({
-    where: {
-      team_id,
-      user_id,
-      is_deleted: {
-        not: true,
-      },
-    },
-  });
+  const member = await data.members.findFirst(team_id, user_id);
 
   // return not found status if the member is not found
   if (!member) return c.notFound();
 
   // Create an invitation for the team
-  const invitation = await db.invitations.create({
-    data: {
-      team_id: team_id,
-      invited_by_member_id: member.id,
-      email,
-      is_admin: isAdmin,
-    },
-  });
+  const invitation = await data.invitations.create(team_id, member.id, email, isAdmin);
 
   // TODO: Send an email to the invited user
 
   // Return the invitation
   return c.json(invitation);
-})
+});
 
 // Get a specific invitation for a team
 router.get("/invitations/:invitation_id", async (c) => {
   const { team_id, invitation_id } = c.req.param();
-  const { user_id, db } = c.var;
+  const { user_id, data } = c.var;
+
+  const team = await data.teams.findFirst(team_id);
+
+  const member = await data.members.findFirst(team_id, user_id);
+
+  if (!member) return c.text("User is already a member of the team", 400);
 
   // Find the invitation for the team that is not deleted
-  const invitation = await db.invitations.findFirst({
-    where: {
-      team_id,
-      team: {
-        id: team_id,
-        members: {
-          none: {
-            user_id,
-            is_deleted: {
-              not: true,
-            },
-          },
-        },
-      },
-      id: invitation_id,
-      is_deleted: {
-        not: true,
-      },
-    },
-    select: {
-      id: true,
-      email: true,
-      is_admin: true,
-      created_at: true,
-      updated_at: true,
-      state: true,
-      team: {
-        select: {
-          name: true,
-        },
-      },
-      invited_by_member: {
-        select: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const invitation = await data.invitations.findFirst(team_id, invitation_id);
 
-  // Return not found status if the invitation is not found
   if (!invitation) return c.notFound();
 
+  const invited_by_member = await data.members.findById(invitation.invited_by_member_id);
+  const invited_by_user = await data.users.findFirst(invited_by_member!.user_id);
+
+  const reaponse = {
+    id: invitation.id,
+    email: invitation.email,
+    is_admin: invitation.is_admin,
+    state: invitation.state,
+    created_at: invitation.created_at,
+    updated_at: invitation.updated_at,
+    team_name: team?.name,
+    invited_by_member_name: invited_by_user?.name,
+  };
+
   // Return the invitation
-  return c.json(invitation);
-})
+  return c.json(reaponse);
+});
 
 // Update a specific invitation for a team
 router.put("/invitations/:invitation_id", isAdminOfTeam, async (c) => {
   const { invitation_id } = c.req.param();
   const { isAdmin } = await c.req.json();
-  const { db } = c.var;
+  const { data } = c.var;
 
   // Update the invitation if the current user is an admin
-  const invitation = await db.invitations.update({
-    where: {
-      id: invitation_id,
-      state: "PENDING",
-      is_deleted: {
-        not: true,
-      },
-    },
-    data: {
-      is_admin: isAdmin,
-    },
-  });
+  const invitation = await data.invitations.update(invitation_id, isAdmin);
 
   // Return not found status if the invitation is not found
   if (!invitation) return c.notFound();
 
   // Return no content status
   return c.body(null, 204);
-})
+});
 
 // Delete a specific invitation for a team
 router.delete("/invitations/:invitation_id", isAdminOfTeam, async (c) => {
   const { invitation_id } = c.req.param();
-  const { db } = c.var;
+  const { data } = c.var;
 
   // Mark the invitation as deleted if the current user is an admin
-  await db.invitations.update({
-    where: {
-      id: invitation_id,
-      state: "PENDING",
-      is_deleted: {
-        not: true,
-      },
-    },
-    data: {
-      is_deleted: true,
-    },
-  });
+  await data.invitations.delete(invitation_id);
 
   // Return no content status
   return c.body(null, 204);
@@ -315,56 +192,27 @@ router.delete("/invitations/:invitation_id", isAdminOfTeam, async (c) => {
 
 // Accept an invitation
 router.put("/invitations/:invitation_id/accept", async (c) => {
-  const { invitation_id } = c.req.param();
-  const { user_id, db } = c.var;
+  const { team_id, invitation_id } = c.req.param();
+  const { user_id, data } = c.var;
 
   // Find the invitation that is pending and not deleted
-  const invitation = await db.invitations.findUnique({
-    where: {
-      id: invitation_id,
-      state: "PENDING",
-      is_deleted: {
-        not: true,
-      },
-    },
-  });
+  const invitation = await data.invitations.findFirstPending(team_id, invitation_id);
 
   // Return not found status if the invitation is not found
   if (!invitation) return c.notFound();
 
   // Find if the user is already a member of the team
-  const existingMember = await db.teamMembers.findFirst({
-    where: {
-      team_id: invitation.team_id,
-      user_id,
-      is_deleted: {
-        not: true,
-      },
-    },
-  });
+  const existingMember = await data.members.findFirst(team_id, user_id);
 
   // Return bad request status if the user is already a member of the team
   if (existingMember)
     return c.json({ message: "User is already a member of the team" }, 400);
 
   // Create a team member for the user
-  const teamMember = await db.teamMembers.create({
-    data: {
-      team_id: invitation.team_id,
-      user_id: user_id,
-      is_admin: invitation.is_admin,
-    },
-  });
+  const teamMember = await data.members.create(team_id, user_id, invitation.is_admin);
 
   // Update the invitation to accepted
-  await db.invitations.update({
-    where: {
-      id: invitation.id,
-    },
-    data: {
-      state: "ACCEPTED",
-    },
-  });
+  await data.invitations.accept(invitation.id);
 
   // Return the team member
   return c.json({ teamMember }, 201);
@@ -372,32 +220,17 @@ router.put("/invitations/:invitation_id/accept", async (c) => {
 
 // Decline an invitation
 router.put("/invitations/:invitation_id/decline", async (c) => {
-  const { invitation_id } = c.req.param();
-  const { db } = c.var;
+  const {team_id, invitation_id } = c.req.param();
+  const { data } = c.var;
 
   // Find the invitation that is pending and not deleted
-  const invitation = await db.invitations.findUnique({
-    where: {
-      id: invitation_id,
-      state: "PENDING",
-      is_deleted: {
-        not: true,
-      },
-    },
-  });
+  const invitation = await data.invitations.findFirstPending(team_id, invitation_id);
 
   // Return not found status if the invitation is not found
   if (!invitation) return c.notFound();
 
   // Update the invitation to declined
-  await db.invitations.update({
-    where: {
-      id: invitation.id,
-    },
-    data: {
-      state: "DECLINED",
-    },
-  });
+  await data.invitations.decline(invitation.id);
 
   // Return no content status
   return c.body(null, 204);

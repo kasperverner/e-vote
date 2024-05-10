@@ -3,15 +3,9 @@ import type { Environment } from "../environment";
 
 export default createMiddleware<Environment>(async (c, next) => {
   const { election_id } = c.req.param();
-  const { user_id } = c.var;
+  const { user_id, data } = c.var;
 
-  const ballot = await c.var.db.ballots.findFirst({
-    where: {
-      user_id,
-      is_used: true,
-      election_id,
-    },
-  });
+  const ballot = await data.ballots.findFirst(user_id, election_id);
 
   if (ballot)
     return c.json({ message: "Forbidden" }, 403);

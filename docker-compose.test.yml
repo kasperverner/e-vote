@@ -1,0 +1,88 @@
+networks:
+  default:
+    name: server
+  services:
+    name: services
+
+services:
+  server-setup:
+    image: oven/bun:debian
+    container_name: e-vote-api-setup
+    working_dir: /usr/src/api
+    volumes:
+      - ./:/usr/src/api
+    command: bun install
+
+  prisma-setup:
+    image: node:20
+    container_name: e-vote-prisma-setup
+    working_dir: /usr/src/prisma
+    depends_on:
+      - server-setup
+    volumes:
+      - ./:/usr/src/prisma
+    command: npx prisma generate
+
+  ballot-service:
+    image: oven/bun:debian
+    container_name: e-vote-ballot-service
+    depends_on:
+      - prisma-setup
+    working_dir: /usr/src/api
+    volumes:
+      - ./:/usr/src/api
+    networks:
+      - services
+    env_file:
+      - ./environment/.env
+    command: bun run --hot services/ballot-service/index.ts
+
+  proposition-service:
+    image: oven/bun:debian
+    container_name: e-vote-proposition-service
+    depends_on:
+      - prisma-setup
+    working_dir: /usr/src/api
+    volumes:
+      - ./:/usr/src/api
+    networks:
+      - services
+    env_file:
+      - ./environment/.env
+    command: bun run --hot services/proposition-service/index.ts
+
+  validation-service:
+    image: oven/bun:debian
+    container_name: e-vote-validation-service
+    depends_on:
+      - prisma-setup
+    working_dir: /usr/src/api
+    volumes:
+      - ./:/usr/src/api
+    networks:
+      - services
+    env_file:
+      - ./environment/.env
+    command: bun run --hot services/validation-service/index.ts
+
+  server-test:
+    image: oven/bun:debian
+    container_name: e-vote-server-test
+    depends_on:
+      - server-setup
+      - ballot-service
+      - proposition-service
+      - validation-service
+    working_dir: /usr/src/api
+    volumes:
+      - ./:/usr/src/api
+    ports:
+      - 3000:3000
+    networks:
+      - services
+      - default
+    env_file:
+      - ./environment/.env
+    command: bun test server/index.test.ts
+
+

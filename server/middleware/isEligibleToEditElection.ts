@@ -2,27 +2,18 @@ import { createMiddleware } from "hono/factory";
 import type { Environment } from "../environment";
 
 export default createMiddleware<Environment>(async (c, next) => {
-  const { election_id } = c.req.param();
-  const { user_id } = c.var;
+  const { team_id, election_id } = c.req.param();
+  const { user_id, data } = c.var;
 
-  var election = await c.var.db.elections.findFirst({
-    where: {
-      id: election_id,
-      team: {
-        members: {
-          some: {
-            user_id,
-            is_admin: true,
-          },
-        },
-      },
-      start_at: {
-        gt: new Date(),
-      },
-    },
-  });
+  const election = await data.elections.findFirst(team_id, election_id);
 
-  if (!election) return c.json({ message: "Forbidden" }, 403);
+  if (!election || election.start_at > new Date())
+    return c.json({ message: "Forbidden" }, 403);
+
+  const member = await data.members.findFirst(team_id, user_id);
+
+  if (!member || !member.is_admin)
+    return c.json({ message: "Forbidden" }, 403);
 
   await next();
 });

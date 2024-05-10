@@ -1,0 +1,469 @@
+openapi: 3.1.0
+info:
+  title: e-vote API
+  description: Gateway for e-vote API
+  version: 2.0.0,
+  contact:
+    name: CS24SW201
+    email: cs24sw201@student.aau.dk
+servers:
+  - description: Development server
+  - url: http://localhost:3000/
+  - description: Production server
+  - url: https://e-vote.vern.dk/
+tags:
+  - name: Teams
+  - name: Members
+  - name: Elections
+security:
+  - BearerAuth: []
+paths:
+  /api/teams:
+    get:
+      tags:
+        - Teams
+      summary: Get all teams
+      responses:
+        "200":
+          description: An array of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Team"
+    post:
+      tags:
+        - Teams
+      summary: Create a new team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Team"
+      responses:
+        "201":
+          description: Created team
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+  /api/teams/{team_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Teams
+      summary: Get a team by id
+      responses:
+        "200":
+          description: A team object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+    put:
+      tags:
+        - Teams
+      summary: Update a team by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Team"
+      responses:
+        "200":
+          description: Updated team
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+    delete:
+      tags:
+        - Teams
+      summary: Delete a team by id
+      responses:
+        "204":
+          description: Team deleted
+  /api/teams/{team_id}/members:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Members
+      summary: Get all members of a team
+      responses:
+        "200":
+          description: An array of team members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Member"
+  /api/teams/{team_id}/members/{member_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: member_id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - Members
+      summary: Update a member of a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+      responses:
+        '200':
+          description: Member updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+    delete:
+      tags:
+        - Members
+      summary: Delete a member from a team
+      responses:
+        "204":
+          description: Member deleted
+  /api/teams/{team_id}/members/leave:
+    delete:
+      tags:
+        - Members
+      summary: Leave a team
+      responses:
+        "204":
+          description: Successfully left the team
+  /api/teams/{team_id}/members/invitations:
+    get:
+      tags:
+        - Members
+      summary: Get all invitations of a team
+      responses:
+        "200":
+          description: An array of invitations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invitation"
+    post:
+      tags:
+        - Members
+      summary: Create a new invitation for a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invitation"
+      responses:
+        "201":
+          description: Invitation created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invitation"
+  /api/teams/{team_id}/members/invitations/{invitation_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: invitation_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Members
+      summary: Get an invitation by id
+      responses:
+        "200":
+          description: An invitation object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invitation"
+    put:
+      tags:
+        - Members
+      summary: Update an invitation by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invitation"
+      responses:
+        "200":
+          description: Updated invitation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invitation"
+    delete:
+      tags:
+        - Members
+      summary: Delete an invitation by id
+      responses:
+        "204":
+          description: Invitation deleted
+  /api/teams/{team_id}/members/{member_id}/accept:
+    put:
+      tags:
+        - Members
+      summary: Accept an invitation
+      responses:
+        "200":
+          description: Invitation accepted
+  /api/teams/{team_id}/members/{member_id}/decline:
+    put:
+      tags:
+        - Members
+      summary: Decline an invitation
+      responses:
+        "200":
+          description: Invitation declined
+  /api/teams/{team_id}/elections:
+    get:
+      tags:
+        - Elections
+      summary: Get all elections of a team
+      responses:
+        "200":
+          description: An array of elections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Election"
+    post:
+      tags:
+        - Elections
+      summary: Create a new election for a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Election"
+      responses:
+        "201":
+          description: Election created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Election"
+  /api/teams/{team_id}/elections/{election_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: election_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Elections
+      summary: Get an election by id
+      responses:
+        "200":
+          description: An election object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Election"
+    put:
+      tags:
+        - Elections
+      summary: Update an election by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Election"
+      responses:
+        "200":
+          description: Updated election
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Election"
+    delete:
+      tags:
+        - Elections
+      summary: Delete an election by id
+      responses:
+        "204":
+          description: Election deleted
+  /api/teams/{team_id}/elections/{election_id}/result:
+    get:
+      tags:
+        - Elections
+      summary: Get the result of an election
+      responses:
+        "200":
+          description: Election result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionResult"
+  /api/teams/{team_id}/elections/{election_id}/validation:
+    get:
+      tags:
+        - Elections
+      summary: Get the validation of an election
+      responses:
+        "200":
+          description: Election validation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionValidation"
+  /api/teams/{team_id}/elections/{election_id}/vote:
+    post:
+      tags:
+        - Elections
+      summary: Vote in an election
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                candidateId:
+                  type: string
+                  description: ID of the candidate voted for
+      responses:
+        "200":
+          description: Vote registered
+  /api/teams/{team_id}/elections/{election_id}/start:
+    put:
+      tags:
+        - Elections
+      summary: Start an election
+      responses:
+        "200":
+          description: Election started
+  /api/teams/{team_id}/elections/{election_id}/stop:
+    put:
+      tags:
+        - Elections
+      summary: Stop an election
+      responses:
+        "200":
+          description: Election stopped
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the team
+        name:
+          type: string
+          description: Name of the team
+    Member:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the member
+        name:
+          type: string
+          description: Name of the member
+        role:
+          type: string
+          description: Role of the member in the team
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the invitation
+        teamId:
+          type: string
+          description: ID of the team that issued the invitation
+        memberId:
+          type: string
+          description: ID of the member invited
+        status:
+          type: string
+          description: Current status of the invitation (e.g., pending, accepted, declined)
+    Election:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the election
+        name:
+          type: string
+          description: Name of the election
+        status:
+          type: string
+          description: Current status of the election (e.g., open, closed)
+    ElectionResult:
+      type: object
+      properties:
+        electionId:
+          type: string
+          description: ID of the election
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              candidateId:
+                type: string
+                description: Candidate ID
+              votes:
+                type: integer
+                description: Number of votes received
+    ElectionValidation:
+      type: object
+      properties:
+        electionId:
+          type: string
+          description: ID of the election
+        isValid:
+          type: boolean
+          description: Indicates if the election results are validated

@@ -3,23 +3,12 @@ import type { Environment } from "../environment";
 
 export default createMiddleware<Environment>(async (c, next) => {
   const { team_id } = c.req.param();
-  const { user_id } = c.var;
+  const { user_id, data } = c.var;
 
-  const team = await c.var.db.teams.findFirst({
-    where: {
-      id: team_id,
-      members: {
-        some: {
-          user_id,
-          is_deleted: {
-            not: true,
-          },
-        },
-      },
-    },
-  });
+  const member = await data.members.findFirst(team_id, user_id);
 
-  if (!team) return c.json({ message: "Forbidden" }, 403);
+  if (!member)
+    return c.json({ message: "Forbidden" }, 403);
 
   await next();
 });
