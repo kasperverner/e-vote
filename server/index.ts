@@ -5,7 +5,6 @@ import electionsRouter from "./routes/elections";
 import membersRouter from "./routes/members";
 import teamsRouter from "./routes/teams";
 import configureElectionValidationJob from "./cronjobs/configureElectionValidationJob";
-import isAuthorized from "./middleware/isAuthorized";
 import factory from "./factory";
 
 /**
@@ -15,6 +14,14 @@ import factory from "./factory";
 const app = factory.createApp();
 // Add the logger middleware to the application
 app.use(logger());
+
+app
+  // Set the base path for the API
+  .basePath("/api")
+  // Add the routers for the teams, elections, and members endpoints
+  .route("/teams", electionsRouter)
+  .route("/teams", membersRouter)
+  .route("/teams", teamsRouter);
 
 // Serve the OpenAPI spec
 app.get(
@@ -47,17 +54,6 @@ app.get(
     path: "./server/frontend/dist/index.html",
   })
 );
-
-app
-  // Add the injectDb and isAuthorized middleware to the application
-  // This will inject the db and user_id into the context
-  .use(isAuthorized)
-  // Set the base path for the API
-  .basePath("/api")
-  // Add the routers for the teams, elections, and members endpoints
-  .route("/teams", electionsRouter)
-  .route("/teams", membersRouter)
-  .route("/teams", teamsRouter);
 
 // Configure the election validation job
 configureElectionValidationJob();
