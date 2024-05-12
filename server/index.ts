@@ -18,22 +18,6 @@ const app = factory.createApp();
 // Add the logger middleware to the application
 app.use(logger());
 
-// Serve the frontend
-app.get(
-  "*",
-  serveStatic({
-    root: "./server/frontend/dist",
-  })
-);
-
-// Serve the index.html file for all unknown routes
-app.get(
-  "*",
-  serveStatic({
-    path: "./server/frontend/dist/index.html",
-  })
-);
-
 // Serve the OpenAPI spec
 app.get(
   "/openapi",
@@ -60,6 +44,22 @@ app
   .route("/teams", electionsRouter)
   .route("/teams", membersRouter)
   .route("/teams", teamsRouter);
+
+// Serve the frontend
+app.get(
+  "*",
+  serveStatic({
+    root: "./server/frontend/dist",
+  })
+);
+
+// Serve the index.html file for all unknown routes
+app.get(
+  "*",
+  serveStatic({
+    path: "./server/frontend/dist/index.html",
+  })
+);
 
 // Configure the election validation job
 configureElectionValidationJob();
