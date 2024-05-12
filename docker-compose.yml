@@ -8,8 +8,6 @@ services:
   ballot-service:
     image: oven/bun:debian
     container_name: e-vote-ballot-service
-    depends_on:
-      - prisma-setup
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
@@ -22,8 +20,6 @@ services:
   proposition-service:
     image: oven/bun:debian
     container_name: e-vote-proposition-service
-    depends_on:
-      - prisma-setup
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
@@ -36,8 +32,6 @@ services:
   validation-service:
     image: oven/bun:debian
     container_name: e-vote-validation-service
-    depends_on:
-      - prisma-setup
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
@@ -70,7 +64,6 @@ services:
     image: oven/bun:debian
     container_name: e-vote-frontend
     depends_on:
-      - frontend-setup
       - server
     working_dir: /usr/src/app
     volumes:

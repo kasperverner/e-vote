@@ -46,7 +46,7 @@ export const Route = createFileRoute("/teams/")({
               <div>
                 <h2 className="text-xl font-bold">{team.name}</h2>
                 <p className="text-sm text-gray-500">
-                  {team._count.members} members
+                  {team.member_count} members
                 </p>
               </div>
               <Button to={`/teams/${team.id}`}>See details</Button>

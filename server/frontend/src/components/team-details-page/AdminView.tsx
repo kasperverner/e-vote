@@ -8,7 +8,7 @@ const Members = ({memberInfo}: { memberInfo: TeamMember[] }) => {
             </div>
             <div>
                 <ul>
-                    {memberInfo?.filter(member => member.isAdmin).map((member) => (
+                    {memberInfo?.filter(member => member.is_admin).map((member) => (
                         <li key={member.email} className="flex items-center space-x-4 py-2">
                             <div>
                                 <p className="text-lg font-medium text-gray-800">{member.name}</p>

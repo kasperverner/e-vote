@@ -6,7 +6,7 @@ const Info = ({ team } : { team: Team }) => {
             {team ? (
                 <div>
                     <h1 className="text-3xl font-bold text-gray-800">{team.name}</h1>
-                    <p className="text-xl text-gray-600">Total Members: {team._count.members}</p>
+                    <p className="text-xl text-gray-600">Total Members: {team.member_count}</p>
                     <p className="text-l text-gray-600">Created At: {new Date(team.created_at).toLocaleDateString()}</p>
                 </div>
             ) : (

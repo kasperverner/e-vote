@@ -1,312 +1,41 @@
-import type { Environment } from "../environment";
-import { Hono } from "hono";
-import isMemberOfTeam from "../middleware/isMemberOfTeam";
-import isAdminOfTeam from "../middleware/isAdminOfTeam";
-import isElegibleToVote from "../middleware/isElegibleToVote";
-import isEligibleToEditElection from "../middleware/isEligibleToEditElection";
-import ballotClient from "../../services/ballot-service/client";
-import propositionClient from "../../services/proposition-service/client";
-import validationClient from "../../services/validation-service/client";
+import factory from "../factory";
+import { createElectionHandler, createVoteHandler, deleteElectionHandler, endElectionHandler, getElectionHandler, getElectionsHandler, getResultsHandler, getValidationHandler, startElectionHandler, updateElectionHandler } from "../services/elections";
 
 /**
  * The router for the elections endpoints.
- * @param {Environment} c The Hono context with the db and user_id
  * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const router = new Hono<Environment>()
+const router = factory.createApp()
   .basePath("/:team_id/elections");
 
 // Get all elections for a team
-router.get("/", isMemberOfTeam, async (c) => {
-  const { team_id } = c.req.param();
-  const { user_id, data } = c.var;
-
-  // Find all elections for the team that are not deleted if the current user is a member
-  const elections = await data.elections
-    .findMany(team_id);
-
-  // Find all votes for the user
-  const response =  elections.map(async (election) => {
-    const has_voted = await data.ballots.findFirst(election.id, user_id);
-    return {
-      ...election,
-      has_voted: !!has_voted ? true : false,
-    };
-  })
-
-
-  // Return the list of elections
-  return c.json(response);
-});
+router.get("/", ...getElectionsHandler);
 
 // Create a new election for a team
-router.post("/", isAdminOfTeam, async (c) => {
-  const { team_id } = c.req.param();
-  const { name, description, start_at, end_at, propositions } =
-    await c.req.json();
-  const { data } = c.var;
-
-  // Create a new election for the team if the current user is an admin
-  const election = await data.elections.create(
-    team_id,
-    name,
-    description,
-    start_at,
-    end_at,
-    propositions);
-
-  // Return the new election
-  return c.json(election, 201);
-});
+router.post("/", ...createElectionHandler);
 
 // Get a specific election for a team
-router.get("/:election_id", isMemberOfTeam, async (c) => {
-  const { election_id, team_id } = c.req.param();
-  const { user_id, data } = c.var;
-
-  // Find a specific election for the team that is not deleted if the current user is a member
-  const election = await data.elections.findFirst(team_id, election_id);
-
-  if (!election)
-    return c.notFound();
-
-  const ballot = await data.ballots.findFirst(election.id, user_id);
-
-  // Return the election with a flag indicating if the user has voted
-  return c.json({
-    ...election,
-    has_voted: !!ballot ? true : false,
-  });
-})
+router.get("/:election_id", ...getElectionHandler)
 
 // Update a specific election for a team
-router.put("/:election_id", isAdminOfTeam, isEligibleToEditElection, async (c) => {
-  const { election_id, team_id } = c.req.param();
-  const { name, description, start_at, end_at, propositions } =
-    await c.req.json();
-  const { data } = c.var;
-
-  // check if the election exists and has not started
-  const election = await data.elections.findFirst(team_id, election_id);
-
-  // Return not found status if the election is not found
-  if (!election) return c.notFound();
-
-  // Update the election with the new data
-  await data.elections.update(election_id, team_id, name, description, start_at, end_at, propositions);
-
-  // Return no content status
-  return c.body(null, 204);
-})
+router.put("/:election_id", ...updateElectionHandler)
 
 // Delete a specific election for a team
-router.delete("/:election_id", isAdminOfTeam, async (c) => {
-  const { election_id, team_id } = c.req.param();
-  const { data } = c.var;
-
-  // check if the election exists
-  const election = await data.elections.findFirst(team_id, election_id);
-
-  // Return not found status if the election is not found
-  if (!election)
-    return c.notFound();
-
-  // Mark the election as deleted if it is not already deleted
-  await data.elections.delete(election_id);
-
-  // Return no content status
-  return c.body(null, 204);
-})
+router.delete("/:election_id", ...deleteElectionHandler)
 
 // Get the result for an election
-router.get("/:election_id/result", isMemberOfTeam, async (c) => {
-  const { election_id } = c.req.param();
-
-  // Get election result from the proposition service
-  const request = await propositionClient.api.results.election[
-    ":election_id"
-  ].$get({
-    param: {
-      election_id,
-    },
-  });
-
-  // Return an error if the request is not successful
-  if (!request.ok)
-    return c.json(
-      {
-        message: `Election with ID ${election_id} could not generate result`,
-      },
-      400
-    );
-
-  const response = await request.json();
-
-  // Return the election result
-  return c.json(response);
-})
+router.get("/:election_id/result", ...getResultsHandler)
 
 // Get the validation for an election
-router.get("/:election_id/validation", isMemberOfTeam, async (c) => {
-  const { election_id, team_id } = c.req.param();
-  const { data } = c.var;
-
-  // Find the validation for the election
-  const electionValidation = await data.validations.findFirst(election_id);
-
-  // If no validation is found, return no content
-  if (!electionValidation) return c.body(null, 204);
-
-  // Generate a proof for the election validation,
-  // to compare with the stored proof to verify the validation is valid
-  const proofRequest = await ballotClient.api.proofs[":value"].$get({
-    param: {
-      value:
-        electionValidation.election_id +
-        electionValidation.is_votes_valid +
-        electionValidation.is_propositions_valid +
-        electionValidation.is_ballots_valid,
-    },
-  });
-
-  // Extract the hash from the proof
-  const { hash: proofHash } = await proofRequest.json();
-
-  // Extract the stored proof from the validation
-  const { proof, ...rest } = electionValidation;
-
-  // If the proof does not match the validation proof, return an error
-  if (proofHash !== electionValidation.proof)
-    return c.text(
-      `Proof for election with ID ${election_id} is invalid`,
-      400
-    );
-
-  // Return the election validation without the proof
-  return c.json(rest);
-})
+router.get("/:election_id/validation", ...getValidationHandler)
 
 // Vote on a proposition for an election
-router.post("/:election_id/vote", isMemberOfTeam, isElegibleToVote, async (c) => {
-  const { election_id, team_id } = c.req.param();
-  const { proposition_id } = await c.req.json();
-  const { user_id, data } = c.var;
-
-  // Check if the election exists and is active
-  const election = await data.elections.findFirst(team_id, election_id);
-
-  // Return not found status if the election is not found
-  if (!election)
-    return c.notFound();
-
-  // Check if the election has started and return an error if it has not
-  if (election.start_at > new Date())
-    return c.json(
-      { message: `Election with ID ${election_id} has not started yet` },
-      400
-    );
-
-  // Check if the election has ended and return an error if it has
-  if (election.end_at < new Date())
-    return c.json(
-      { message: `Election with ID ${election_id} has already ended` },
-      400
-    );
-
-  // Create a new ballot for the user and election
-  const ballot = await data.ballots.create(user_id, election_id);
-
-  // Generate the ballot proof using the ballot service
-  const ballotProof = await ballotClient.api.proofs[":value"].$get({
-    param: {
-      value: ballot.id,
-    },
-  });
-  const { hash: ballotHash } = await ballotProof.json();
-
-  // Generate the proposition proof using the proposition service
-  const propositionProof = await propositionClient.api.proofs[":value"].$get({
-    param: {
-      value: proposition_id,
-    },
-  });
-  const { hash: propositionHash } = await propositionProof.json();
-
-  // Generate the validation proof using the validation service
-  const validationProof = await validationClient.api.proofs[":first"][
-    ":second"
-  ].$get({
-    param: {
-      first: ballotHash,
-      second: propositionHash,
-    },
-  });
-  const { hash: validationHash } = await validationProof.json();
-
-  // Create a new vote with the proofs
-  await data.votes.create(election_id, ballotHash, propositionHash, validationHash);
-
-  // Return the ballot
-  return c.json(ballot);
-})
+router.post("/:election_id/vote", ...createVoteHandler)
 
 // Start a pending election
-router.put("/:election_id/start", isAdminOfTeam, async (c) => {
-  const { election_id, team_id } = c.req.param();
-  const { data } = c.var;
+router.put("/:election_id/start", ...startElectionHandler)
 
-  // Fin the sepcific election if the user is an admin of the team
-  const election = await data.elections.findFirst(team_id, election_id);
-
-  // Return not found status if the election is not found
-  if (!election)
-    return c.notFound();
-
-  // Return an error if the election has already started
-  if (election.start_at < new Date())
-    return c.json(
-      { message: `Election with ID ${election_id} has already started` },
-      400
-    );
-
-  // Update the election to start now
-  await data.elections.start(election_id);
-
-  // Return no content status
-  return c.body(null, 204);
-})
-
-// Stop an active election
-router.put("/:election_id/stop", isAdminOfTeam, async (c) => {
-  const { election_id, team_id } = c.req.param();
-  const { data } = c.var;
-
-  // Find the specific election if the user is an admin of the team
-  const election = await data.elections.findFirst(team_id, election_id);
-
-  // Return not found status if the election is not found
-  if (!election)
-    return c.notFound();
-
-  // Return an error if the election has not started
-  if (election.start_at > new Date())
-    return c.json(
-      { message: `Election with ID ${election_id} has not started yet` },
-      400
-    );
-
-  // Return an error if the election has already ended
-  if (election.end_at > new Date())
-    return c.json(
-      { message: `Election with ID ${election_id} has already ended` },
-      400
-    );
-
-  // Update the election to end now
-  await data.elections.end(election_id);
-
-  // Return no content status
-  return c.body(null, 204);
-});
+// End an active election
+router.put("/:election_id/end", ...endElectionHandler);
 
 export default router;

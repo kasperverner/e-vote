@@ -7,15 +7,14 @@ import electionsRouter from "./routes/elections";
 import membersRouter from "./routes/members";
 import teamsRouter from "./routes/teams";
 import configureElectionValidationJob from "./cronjobs/configureElectionValidationJob";
-import injectStore from "./data/app.store"
 import isAuthorized from "./middleware/isAuthorized";
+import factory from "./factory";
 
 /**
  * The Hono application for the server.
- * @param {Environment} c The Hono context with the db and user_id
  * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const app = new Hono<Environment>();
+const app = factory.createApp();
 // Add the logger middleware to the application
 app.use(logger());
 
@@ -55,7 +54,7 @@ app.get(
 app
   // Add the injectDb and isAuthorized middleware to the application
   // This will inject the db and user_id into the context
-  .use(injectStore, isAuthorized)
+  .use(isAuthorized)
   // Set the base path for the API
   .basePath("/api")
   // Add the routers for the teams, elections, and members endpoints

@@ -78,7 +78,7 @@ export const Route = createFileRoute(
       <div className="flex flex-col mt-8">
         <h1 className="text-3xl">
           You have been invited to join{" "}
-          <span className="font-bold">{invitation.team.name}</span>
+          <span className="font-bold">{invitation.team_name}</span>
           {invitation.is_admin && " as an admin"}
         </h1>
         <small className="text-xs font-light mb-4">
@@ -86,7 +86,7 @@ export const Route = createFileRoute(
         </small>
         <p>
           This invitation was created by{" "}
-          <b>{invitation.invited_by_member.user.name}</b> and sent to the email
+          <b>{invitation.invited_by}</b> and sent to the email
           address <b>{invitation.email}</b>
         </p>
         <div className="flex mt-8 space-x-2">

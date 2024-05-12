@@ -11,7 +11,7 @@ import {
   leaveTeamHandler,
   updateInvitationHandler,
   updateMemberHandler,
-} from "../services/members";
+} from "../services/members.test";
 
 /**
  * The router for the members endpoints.

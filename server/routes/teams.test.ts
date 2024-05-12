@@ -1,5 +1,5 @@
 import factory from "../factory";
-import { getTeamsHandler, createTeamHandler, getTeamHandler, updateTeamHandler, deleteTeamHandler } from "../services/teams";
+import { getTeamsHandler, createTeamHandler, getTeamHandler, updateTeamHandler, deleteTeamHandler } from "../services/teams.test";
 
 /**
  * The router for the teams endpoints.

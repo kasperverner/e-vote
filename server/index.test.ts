@@ -1,7 +1,7 @@
-import { Hono } from "hono";
-import type { Environment } from "./environment";
-import teamsRouter from "./routes/teams";
-import injectStore, { appStore } from "./data/app.store.test";
+import factory from "./factory";
+import electionsRouter from "./routes/elections.test";
+import membersRouter from "./routes/members.test";
+import teamsRouter from "./routes/teams.test";
 import isAuthorized from "./middleware/isAuthorized.test";
 import { describe, expect, it, afterAll } from "bun:test";
 import ballotClient from "../services/ballot-service/client";
@@ -10,14 +10,14 @@ import validationClient from "../services/validation-service/client";
 
 /**
  * The Hono application for the tests.
- * @param {Environment} c The Hono context with the db and user_id
- * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const app = new Hono<Environment>();
+const app = factory.createApp()
 
 app
-  .use(injectStore, isAuthorized)
+  .use(isAuthorized)
   .basePath("/api")
+  .route("/teams", electionsRouter)
+  .route("/teams", membersRouter)
   .route("/teams", teamsRouter);
 
 const headers = {
@@ -543,5 +543,3 @@ describe("Test validation service proof generation", () => {
     expect(data.hash).toBeString();
   });
 });
-
-afterAll(appStore.mockReset);

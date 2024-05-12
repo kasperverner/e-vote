@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
-import { useNavigate } from "@tanstack/react-router";
+// import { useNavigate } from "@tanstack/react-router";
 
 async function putCastVote(
   authToken: string,
@@ -29,7 +29,7 @@ async function putCastVote(
 
 const useCastVote = (team_id: string, election_id: string) => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { getToken } = useAuth();
 
   return useMutation({
@@ -42,10 +42,10 @@ const useCastVote = (team_id: string, election_id: string) => {
       queryClient.invalidateQueries({
         queryKey: ["elections", team_id, election_id],
       });
-      navigate({
-        to: "/teams/$team_id",
-        params: { team_id },
-      });
+      // navigate({
+      //   to: "/teams/$team_id",
+      //   params: { team_id },
+      // });
     },
     onError: (error) => {
       console.error(error);

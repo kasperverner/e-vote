@@ -5,7 +5,7 @@ async function postCreateInvitation(
   authToken: string,
   team_id: string,
   email: string,
-  isAdmin: boolean
+  is_admin: boolean
 ) {
   const res = await fetch(`/api/teams/${team_id}/members/invitations`, {
     method: "POST",
@@ -13,7 +13,7 @@ async function postCreateInvitation(
       "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
     },
-    body: JSON.stringify({ email, isAdmin }),
+    body: JSON.stringify({ email, is_admin }),
   });
 
   if (!res.ok) throw new Error("Failed to create invitation");
@@ -29,13 +29,13 @@ const useCreateInvitation = (team_id: string) => {
     mutationKey: ["invitations", team_id],
     mutationFn: async ({
       email,
-      isAdmin = false,
+      is_admin = false,
     }: {
       email: string;
-      isAdmin?: boolean;
+      is_admin?: boolean;
     }) => {
       const token = await getToken();
-      return postCreateInvitation(token as string, team_id, email, isAdmin);
+      return postCreateInvitation(token as string, team_id, email, is_admin);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["invitations", team_id] });

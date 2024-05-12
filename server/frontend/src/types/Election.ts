@@ -11,5 +11,4 @@ export type Election = {
   has_voted?: boolean;
   is_deleted: boolean;
   propositions?: Proposition[];
-  // ballots: Ballot[];
 };

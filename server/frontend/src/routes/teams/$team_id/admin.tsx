@@ -26,7 +26,7 @@ export const Route = createFileRoute("/teams/$team_id/admin")({
     }
 
     // if the current user is not an admin, redirect to the team page
-    if (team.isAdmin === false) {
+    if (team.is_admin === false) {
       return (
         <Navigate
           to={`/teams/$team_id`}
