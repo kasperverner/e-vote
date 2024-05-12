@@ -1,4 +1,4 @@
-import { db } from "@/prisma/db.injector";
+import { db } from "../../prisma/db.injector";
 import factory from "../factory";
 
 export default factory.createMiddleware(async (c, next) => {

@@ -1,5 +1,5 @@
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import { db } from "@/prisma/db.injector";
+import { db } from "../../prisma/db.injector";
 import factory from "../factory";
 
 const cache = new Map<string, string>();
