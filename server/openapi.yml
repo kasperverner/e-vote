@@ -1,0 +1,1261 @@
+openapi: 3.1.0
+info:
+  title: e-vote API
+  description: Gateway for e-vote API
+  version: 2.0.0,
+  contact:
+    name: CS24SW201
+    email: cs24sw201@student.aau.dk
+servers:
+  - description: Development server
+  - url: http://localhost:3000/
+  - description: Production server
+  - url: https://e-vote.vern.dk/
+tags:
+  - name: Teams
+  - name: Members
+  - name: Elections
+security:
+  - BearerAuth: []
+paths:
+  /api/teams:
+    get:
+      tags:
+        - Teams
+      summary: Get all teams
+      responses:
+        "200":
+          description: An array of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Team"
+    post:
+      tags:
+        - Teams
+      summary: Create a new team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTeam"
+      responses:
+        "201":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+  /api/teams/{team_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Teams
+      summary: Get a team by id
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+    put:
+      tags:
+        - Teams
+      summary: Update a team by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Team"
+      responses:
+        "204":
+          description: Success response
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+    delete:
+      tags:
+        - Teams
+      summary: Delete a team by id
+      responses:
+        "204":
+          description: Success response
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/members:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Members
+      summary: Get all members of a team
+      responses:
+        "200":
+          description: An array of team members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Member"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+  /api/teams/{team_id}/members/{member_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: member_id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - Members
+      summary: Update a member of a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Member"
+      responses:
+        "204":
+          description: Success response
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+    delete:
+      tags:
+        - Members
+      summary: Delete a member from a team
+      responses:
+        "204":
+          description: Success response
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/members/leave:
+    delete:
+      tags:
+        - Members
+      summary: Leave a team
+      responses:
+        "204":
+          description: Success response
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/members/invitations:
+    get:
+      tags:
+        - Members
+      summary: Get all invitations of a team
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invitation"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+    post:
+      tags:
+        - Members
+      summary: Create a new invitation for a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInvitation"
+
+      responses:
+        "201":
+          description: Invitation created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invitation"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+
+  /api/teams/{team_id}/members/invitations/{invitation_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: invitation_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Members
+      summary: Get an invitation by id
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invitation"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+
+    put:
+      tags:
+        - Members
+      summary: Update an invitation by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invitation"
+      responses:
+        "204":
+          description: Success response
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+    delete:
+      tags:
+        - Members
+      summary: Delete an invitation by id
+      responses:
+        "204":
+          description: Invitation deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/members/{member_id}/accept:
+    put:
+      tags:
+        - Members
+      summary: Accept an invitation
+      responses:
+        "201":
+          description: Invitation accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/members/{member_id}/decline:
+    put:
+      tags:
+        - Members
+      summary: Decline an invitation
+      responses:
+        "204":
+          description: Success response
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/elections:
+    get:
+      tags:
+        - Elections
+      summary: Get all elections of a team
+      responses:
+        "200":
+          description: An array of elections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Election"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+    post:
+      tags:
+        - Elections
+      summary: Create a new election for a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateElection"
+      responses:
+        "201":
+          description: Election created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Election"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+
+  /api/teams/{team_id}/elections/{election_id}:
+    parameters:
+      - name: team_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: election_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Elections
+      summary: Get an election by id
+      responses:
+        "200":
+          description: An election object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Election"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+    put:
+      tags:
+        - Elections
+      summary: Update an election by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateElection"
+      responses:
+        "204":
+          description: Updated election
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+    delete:
+      tags:
+        - Elections
+      summary: Delete an election by id
+      responses:
+        "204":
+          description: Election deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/elections/{election_id}/result:
+    get:
+      tags:
+        - Elections
+      summary: Get the result of an election
+      responses:
+        "200":
+          description: Election result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionResult"
+        "204"
+          description: Election result not available
+        "400"
+          description: Election result not available due to invalid ballots, propositions or votes
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/elections/{election_id}/validation:
+    get:
+      tags:
+        - Elections
+      summary: Get the validation of an election
+      responses:
+        "200":
+          description: Election validation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionValidation"
+        "204"
+          description: Election validation not available
+        "400"
+          description: Election validation not available due to invalid ballots, propositions or votes
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "You do not have permission to perform this action."
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "The requested resource was not found."
+  /api/teams/{team_id}/elections/{election_id}/vote:
+    post:
+      tags:
+        - Elections
+      summary: Vote in an election
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                proposition_id:
+                  type: string
+                  format: uuid
+                  example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+                  description: ID of the proposition voted for
+      responses:
+        "200":
+          description: Vote registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ballot"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/teams/{team_id}/elections/{election_id}/start:
+    put:
+      tags:
+        - Elections
+      summary: Start an election
+      responses:
+        "204":
+          description: Election started
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/teams/{team_id}/elections/{election_id}/end:
+    put:
+      tags:
+        - Elections
+      summary: Stop an election
+      responses:
+        "204":
+          description: Election stopped
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message describing the error.
+    CreateTeam:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Team Name"
+          description: The name of the team.
+      required:
+        - name
+    Team:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the object was created.
+        id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: The unique identifier for the object.
+        is_admin:
+          type: boolean
+          example: true
+          description: Indicates whether the subject is an administrator.
+        member_count:
+          type: integer
+          example: 1
+          description: The count of members associated with the object.
+        name:
+          type: string
+          example: "prod test"
+          description: The name of the object.
+      required:
+        - created_at
+        - id
+        - is_admin
+        - member_count
+        - name
+    Member:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-05-05T08:24:19.190Z"
+          description: The ISO 8601 date and time at which the member record was created.
+        email:
+          type: string
+          format: email
+          example: "user@domain.tld"
+          description: The email address of the member.
+        id:
+          type: string
+          format: uuid
+          example: "e57cf453-3a54-4e5b-a608-6b1e92da3a92"
+          description: The unique identifier for the member.
+        is_admin:
+          type: boolean
+          example: true
+          description: Indicates whether the member has administrative privileges.
+        is_current_user:
+          type: boolean
+          example: false
+          description: Indicates whether the member is the user currently logged in.
+        name:
+          type: string
+          example: "User Name"
+          description: The name or username of the member.
+      required:
+        - created_at
+        - email
+        - id
+        - is_admin
+        - is_current_user
+        - name
+    CreateInvitation:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@domain.tld"
+          description: The email address of the invitee.
+        is_admin:
+          type: boolean
+          example: true
+          description: Indicates whether the invitee will be an administrator.
+      required:
+        - email
+        - is_admin
+    UpdateInvitation:
+      type: object
+      properties:
+        is_admin:
+          type: boolean
+          example: true
+          description: Indicates whether the invitee will be an administrator.
+      required:
+        - is_admin
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: Unique identifier for the invitation
+        state:
+          type: string
+          example: "PENDING"
+          description: State of the invitation
+        email:
+          type: string
+          format: email
+          example: "user@domain.tld"
+          description: Email address of the invitee
+        is_admin:
+          type: boolean
+          example: true
+          description: Indicates whether the invitee will be an administrator
+        team_name:
+          type: string
+          example: "Team Name"
+          description: Name of the team that issued the invitation
+        invited_by:
+          type: string
+          example: "User Name"
+          description: Name of the member that issued the invitation
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the invitation was created
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the invitation was last updated
+      required:
+        - id
+        - state
+        - email
+        - is_admin
+        - team_name
+        - invited_by
+        - created_at
+    CreateProposition:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Proposition name"
+          description: Name of the proposition
+        description:
+          type: string
+          example: "Proposition description"
+          description: Description of the proposition
+      required:
+        - name
+    Proposition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: Unique identifier for the proposition
+        electionId:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: ID of the election
+        name:
+          type: string
+          example: "Proposition name"
+          description: Name of the proposition
+        description:
+          type: string
+          example: "Proposition description"
+          description: Description of the proposition
+      required:
+        - id
+        - electionId
+        - name
+    CreateElection:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Election name"
+          description: Name of the election
+        description:
+          type: string
+          example: "Election description"
+          description: Description of the election
+        start_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the election will start
+        end_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the election will end
+        ropositions:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateProposition"
+      required:
+        - name
+        - start_at
+        - end_at
+        - propositions
+    Election:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: Unique identifier for the election
+        team_id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: ID of the team that issued the election
+        name:
+          type: string
+          example: "Election name"
+          description: Name of the election
+        description:
+          type: string
+          example: "Election description"
+          description: Description of the election
+        is_deleted:
+          type: boolean
+          example: false
+          description: Indicates whether the election has been deleted
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the election was created
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the election was last updated
+        start_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the election will start
+        end_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the election will end
+        validation_id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: ID of the validation object
+        has_voted:
+          type: boolean
+          example: false
+          description: Indicates whether the member has voted in the election
+        propositions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Proposition"
+      required:
+        - id
+        - team_id
+        - name
+        - description
+        - is_deleted
+        - created_at
+        - updated_at
+        - start_at
+        - end_at
+        - validation_id
+        - has_voted
+    ElectionResult:
+      type: object
+      description: An object where each property is a UUID representing an entity and the value is the count of votes for that entity.
+      additionalProperties:
+        type: integer
+        format: int32
+        description: The count of votes for the entity identified by the UUID key.
+    ElectionValidation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: Unique identifier for the validation object
+        election_id:
+          type: string
+          format: uuid
+          example: "8553c71f-5462-4ed4-a719-15ec1ac9a00a"
+          description: ID of the election
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-05-07T08:25:47.115Z"
+          description: The ISO 8601 date and time at which the validation object was created
+        is_ballots_valid:
+          type: boolean
+          example: true
+          description: Indicates whether the ballots are valid
+        is_propositions_valid:
+          type: boolean
+          example: true
+          description: Indicates whether the propositions are valid
+        is_votes_valid:
+          type: boolean
+          example: true
+          description: Indicates whether the votes are valid
+      required:
+        - id
+        - election_id
+        - created_at
+        - is_ballots_valid
+        - is_propositions_valid
+        - is_votes_valid

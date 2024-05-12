@@ -46,7 +46,7 @@ const InvitationsList = () => {
         >
           <div>
             <h3 className="text-lg">{invitation.email}</h3>
-            <p>Invited by: {invitation.invited_by_member.user.name}</p>{" "}
+            <p>Invited by: {invitation.invited_by}</p>{" "}
             {/* Added line */}
           </div>
           {invitation.state === "PENDING" && (

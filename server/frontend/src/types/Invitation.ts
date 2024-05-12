@@ -1,16 +1,10 @@
 export type Invitation = {
   id: string;
+  state: 'PENDING' | 'ACCEPTED' | 'DECLINED';
   email: string;
   is_admin: boolean;
-  created_at: string;
-  updated_at: string;
-  state: 'PENDING' | 'ACCEPTED' | 'DECLINED';
-  team: {
-    name: string;
-  },
-  invited_by_member: {
-    user: {
-      name: string;
-    };
-  };
+  created_at: Date;
+  updated_at: Date | null;
+  team_name: string;
+  invited_by: string;
 };

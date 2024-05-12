@@ -41,9 +41,9 @@ services:
       - ./environment/.env
     command: bun run --hot services/validation-service/index.ts
 
-  server:
+  server-test:
     image: oven/bun:debian
-    container_name: e-vote-server
+    container_name: e-vote-server-test
     depends_on:
       - ballot-service
       - proposition-service
@@ -58,23 +58,6 @@ services:
       - default
     env_file:
       - ./environment/.env
-    command: bun run --hot server/index.ts
-
-  frontend:
-    image: oven/bun:debian
-    container_name: e-vote-frontend
-    depends_on:
-      - server
-    working_dir: /usr/src/app
-    volumes:
-      - ./server/frontend:/usr/src/app
-    ports:
-      - 4000:4000
-    networks:
-      - default
-    env_file:
-      - ./environment/.env
-    command: bun dev --host
-
+    command: bun test server/index.test.ts
 
 

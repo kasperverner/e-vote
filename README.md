@@ -19,6 +19,12 @@ This is the monorepository for the E-Vote project. It contains the following pac
 
 ## Getting started
 
+Install the dependencies and setup the PrismaClient with the following command:
+
+```bash
+docker-compose -f docker-compose.setup.yml up
+```
+
 Start the application with the following command:
 
 ```bash
@@ -157,20 +163,10 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 ### Missing
 
-- [ ] Dynamic titles
-- [ ] Add results view
-- [ ] Fix bug with breadcrumbs
-- [ ] Add unit tests?
-- [ ] Add e2e tests?
-
-## Deployment
-
-- docker build -t kasperverner/e-vote-ballot-service:latest -f service_ballot.dockerfile --platform linux/amd64 .
-- docker build -t kasperverner/e-vote-proposition-service:latest -f service_proposition.dockerfile --platform linux/amd64 .
-- docker build -t kasperverner/e-vote-validation-service:latest -f service_validation.dockerfile --platform linux/amd64 .
-- docker build -t kasperverner/e-vote-server:latest -f server.dockerfile --platform linux/amd64 .
-
-- docker push kasperverner/e-vote-ballot-service:latest
-- docker push kasperverner/e-vote-proposition-service:latest
-- docker push kasperverner/e-vote-validation-service:latest
-- docker push kasperverner/e-vote-server:latest
+- [x] Add results view
+- [x] Fix bug with breadcrumbs
+- [x] Add comments
+- [x] Add Swagger documentation
+- [x] Add unit tests
+- [x] Add integration tests
+- [ ] Add dynamic titles

@@ -2,7 +2,7 @@ export type TeamMember = {
   id: string;
   name: string;
   email: string;
-  isAdmin: boolean;
-  isUser: boolean;
+  is_admin: boolean;
+  is_current_user: boolean;
   created_at: string;
 };

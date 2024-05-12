@@ -1,8 +1,7 @@
-import type { PrismaClient } from "@prisma/client";
+import type { AppStore } from "./data/app.store";
 
 export type Environment = {
   Variables: {
-    db: PrismaClient;
     user_id: string;
   };
 };

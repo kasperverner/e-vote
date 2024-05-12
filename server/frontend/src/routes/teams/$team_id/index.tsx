@@ -25,14 +25,14 @@ export const Route = createFileRoute("/teams/$team_id/")({
     if (!team)
       return <Navigate to="/teams" />;
 
-    const admins = memberInfo?.filter((member) => member.isAdmin)?.length ?? 0;
+    const admins = memberInfo?.filter((member) => member.is_admin)?.length ?? 0;
 
     return (
       <div className="flex flex-col space-y-6">
         <div className="bg-gray-100 p-6 rounded-lg shadow-md flex justify-between">
           <div className="flex flex-col space-y-4 w-1/2">
             <Info team={team} />
-            {team.isAdmin && (
+            {team.is_admin && (
               <Button
                 to={`/teams/${team_id}/admin`}
                 className="mt-1 bg-green-500 w-1/2"
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/teams/$team_id/")({
             <Button
               className="mt-3 bg-orange-500 disabled:bg-gray-400 w-1/2"
               onClick={leaveTeam.mutate}
-              disabled={team.isAdmin && admins === 1}
+              disabled={team.is_admin && admins === 1}
             >
               Leave team
             </Button>
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/teams/$team_id/")({
             <AdminView
               memberInfo={
                 memberInfo?.filter((member) => {
-                  return member.isAdmin;
+                  return member.is_admin;
                 }) ?? []
               }
             />

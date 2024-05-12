@@ -1,26 +1,23 @@
-import { createMiddleware } from "hono/factory";
-import type { Environment } from "../environment";
+import { db } from "@/prisma/db.injector";
+import factory from "../factory";
 
-export default createMiddleware<Environment>(async (c, next) => {
+export default factory.createMiddleware(async (c, next) => {
   const { team_id } = c.req.param();
   const { user_id } = c.var;
 
-  const team = await c.var.db.teams.findFirst({
-    where: {
-      id: team_id,
-      members: {
-        some: {
-          user_id,
-          is_admin: true,
-          is_deleted: {
-            not: true,
-          },
+    const member = await db.teamMembers.findFirst({
+      where: {
+        team_id,
+        user_id,
+        is_deleted: {
+          not: true,
         },
+        is_admin: true,
       },
-    },
-  });
+    }).finally(() => db.$disconnect());
 
-  if (!team) return c.json({ message: "Forbidden" }, 403);
+  if (!member || !member.is_admin)
+    return c.json({ message: "Forbidden" }, 403);
 
   await next();
 });

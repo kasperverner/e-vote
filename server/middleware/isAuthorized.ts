@@ -1,13 +1,15 @@
-import { createMiddleware } from "hono/factory";
-import type { Environment } from "../environment";
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import type { PrismaClient } from "@prisma/client/extension";
+import { db } from "@/prisma/db.injector";
+import factory from "../factory";
 
 const cache = new Map<string, string>();
 
-export default createMiddleware<Environment>(async (c, next) => {
-  const { db } = c.var;
+export default factory.createMiddleware(async (c, next) => {
   const { authorization } = c.req.header();
+
+  if (!authorization)
+    return c.json({ message: "Unauthorized" }, 401);
+
   const [tokenType, token] = authorization?.split(" ");
 
   if (!tokenType || !token || tokenType.toLowerCase() !== "bearer")
@@ -27,8 +29,7 @@ export default createMiddleware<Environment>(async (c, next) => {
   const user_id = await getUserId(
     String(payload.sub),
     String(payload.name ?? payload.email.split("@")[0]),
-    String(payload.email),
-    db);
+    String(payload.email));
 
   c.set("user_id", user_id);
 
@@ -38,19 +39,20 @@ export default createMiddleware<Environment>(async (c, next) => {
 const getUserId = async (
   principalId: string,
   name: string,
-  email: string,
-  db: PrismaClient
+  email: string
 ): Promise<string> => {
   // Check if the user ID is stored in the memory cache
   if (cache.has(principalId))
     return String(cache.get(principalId));
 
   // Check if the user ID is stored in the database
-  const user = await db.users.findFirst({
-    where: {
-      principal_id: principalId,
-    },
-  });
+  const user = await db.users
+    .findFirst({
+      where: {
+        principal_id: principalId,
+      },
+    })
+    .finally(() => db.$disconnect());
 
   // If the user is found in the database, store the ID in the memory cache
   if (user) {
@@ -59,13 +61,15 @@ const getUserId = async (
   }
 
   // Create a new user in the database
-  const newUser = await db.users.create({
-    data: {
-      principal_id: principalId,
-      name,
-      email,
-    },
-  });
+  const newUser = await db.users
+    .create({
+      data: {
+        principal_id: principalId,
+        name,
+        email,
+      },
+    })
+    .finally(() => db.$disconnect());
 
   // Store the new user ID in the memory cache
   cache.set(principalId, newUser.id);

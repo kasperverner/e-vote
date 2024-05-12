@@ -1,0 +1,32 @@
+networks:
+  default:
+    name: server
+  services:
+    name: services
+
+services:
+  server-setup:
+    image: oven/bun:debian
+    container_name: e-vote-api-setup
+    working_dir: /usr/src/api
+    volumes:
+      - ./:/usr/src/api
+    command: bun install
+
+  prisma-setup:
+    image: oven/bun:debian
+    container_name: e-vote-prisma-setup
+    working_dir: /usr/src/prisma
+    depends_on:
+      - server-setup
+    volumes:
+      - ./:/usr/src/prisma
+    command: bunx prisma generate
+
+  frontend-setup:
+    image: oven/bun:debian
+    container_name: e-vote-frontend-setup
+    working_dir: /usr/src/app
+    volumes:
+      - ./server/frontend:/usr/src/app
+    command: bun install

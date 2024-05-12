@@ -27,15 +27,17 @@ export default function configureElectionValidationJob() {
       isJobRunning = true;
 
       // Find all elections that have ended and have not been validated
-      const elections = await db.elections.findMany({
-        where: {
-          validation_id: null,
-          is_deleted: false,
-          end_at: {
-            lte: new Date(),
+      const elections = await db.elections
+        .findMany({
+          where: {
+            validation_id: null,
+            is_deleted: false,
+            end_at: {
+              lte: new Date(),
+            },
           },
-        },
-      });
+        })
+        .finally(() => db.$disconnect());
 
       // Validate each election
       for (const election of elections) {
@@ -75,32 +77,32 @@ export default function configureElectionValidationJob() {
         const { hash: proofHash } = await proofRequest.json();
 
         // save the validation results
-        const electionValidation = await db.electionValidation.create({
-          data: {
-            election_id: election.id,
-            is_votes_valid: validationRequest.ok,
-            is_propositions_valid: propositionRequest.ok,
-            is_ballots_valid: ballotRequest.ok,
-            proof: proofHash,
-          },
-        });
+        const electionValidation = await db.electionValidation
+          .create({
+            data: {
+              election_id: election.id,
+              is_votes_valid: validationRequest.ok,
+              is_propositions_valid: propositionRequest.ok,
+              is_ballots_valid: ballotRequest.ok,
+              proof: proofHash,
+            },
+          })
+          .finally(() => db.$disconnect());
 
         // update the election with the validation id
-        await db.elections.update({
-          where: {
-            id: election.id,
-          },
-          data: {
-            validation_id: electionValidation.id,
-          },
-        });
+        await db.elections
+          .update({
+            where: {
+              id: election.id,
+            },
+            data: {
+              validation_id: electionValidation.id,
+            },
+          })
+          .finally(() => db.$disconnect());
       }
 
       // Set job as not running
       isJobRunning = false;
-    }, // onTick
-    null, // onComplete
-    true, // start
-    'utc'
-  );
+    }, null, true, 'utc');
 }
