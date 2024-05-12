@@ -747,9 +747,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ElectionResult"
-        "204"
+        "204":
           description: Election result not available
-        "400"
+        "400":
           description: Election result not available due to invalid ballots, propositions or votes
         "401":
           description: Unauthorized
@@ -787,9 +787,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ElectionValidation"
-        "204"
+        "204":
           description: Election validation not available
-        "400"
+        "400":
           description: Election validation not available due to invalid ballots, propositions or votes
         "401":
           description: Unauthorized
@@ -915,7 +915,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-                
+
 components:
   securitySchemes:
     BearerAuth:
