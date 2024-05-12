@@ -1,8 +1,6 @@
-import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
 import { logger } from "hono/logger";
 import { swaggerUI } from "@hono/swagger-ui";
-import type { Environment } from "./environment";
 import electionsRouter from "./routes/elections";
 import membersRouter from "./routes/members";
 import teamsRouter from "./routes/teams";
@@ -34,17 +32,6 @@ app.get(
   })
 );
 
-app
-  // Add the injectDb and isAuthorized middleware to the application
-  // This will inject the db and user_id into the context
-  .use(isAuthorized)
-  // Set the base path for the API
-  .basePath("/api")
-  // Add the routers for the teams, elections, and members endpoints
-  .route("/teams", electionsRouter)
-  .route("/teams", membersRouter)
-  .route("/teams", teamsRouter);
-
 // Serve the frontend
 app.get(
   "*",
@@ -60,6 +47,17 @@ app.get(
     path: "./server/frontend/dist/index.html",
   })
 );
+
+app
+  // Add the injectDb and isAuthorized middleware to the application
+  // This will inject the db and user_id into the context
+  .use(isAuthorized)
+  // Set the base path for the API
+  .basePath("/api")
+  // Add the routers for the teams, elections, and members endpoints
+  .route("/teams", electionsRouter)
+  .route("/teams", membersRouter)
+  .route("/teams", teamsRouter);
 
 // Configure the election validation job
 configureElectionValidationJob();
