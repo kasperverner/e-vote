@@ -5,29 +5,9 @@ networks:
     name: services
 
 services:
-  server-setup:
-    image: oven/bun:debian
-    container_name: e-vote-api-setup
-    working_dir: /usr/src/api
-    volumes:
-      - ./:/usr/src/api
-    command: bun install
-
-  prisma-setup:
-    image: node:20
-    container_name: e-vote-prisma-setup
-    working_dir: /usr/src/prisma
-    depends_on:
-      - server-setup
-    volumes:
-      - ./:/usr/src/prisma
-    command: npx prisma generate
-
   ballot-service:
     image: oven/bun:debian
     container_name: e-vote-ballot-service
-    depends_on:
-      - prisma-setup
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
@@ -40,8 +20,6 @@ services:
   proposition-service:
     image: oven/bun:debian
     container_name: e-vote-proposition-service
-    depends_on:
-      - prisma-setup
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
@@ -54,8 +32,6 @@ services:
   validation-service:
     image: oven/bun:debian
     container_name: e-vote-validation-service
-    depends_on:
-      - prisma-setup
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
@@ -69,7 +45,6 @@ services:
     image: oven/bun:debian
     container_name: e-vote-server-test
     depends_on:
-      - server-setup
       - ballot-service
       - proposition-service
       - validation-service

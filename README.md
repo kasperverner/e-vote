@@ -19,6 +19,12 @@ This is the monorepository for the E-Vote project. It contains the following pac
 
 ## Getting started
 
+Install the dependencies and setup the PrismaClient with the following command:
+
+```bash
+docker-compose -f docker-compose.setup.yml up
+```
+
 Start the application with the following command:
 
 ```bash
@@ -159,7 +165,8 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 
 - [x] Add results view
 - [x] Fix bug with breadcrumbs
-- [ ] Add comments
-- [ ] Add Swagger documentation
+- [x] Add comments
+- [x] Add Swagger documentation
+- [x] Add unit tests
+- [x] Add integration tests
 - [ ] Add dynamic titles
-- [ ] Add unit tests

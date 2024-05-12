@@ -5,74 +5,55 @@ networks:
     name: services
 
 services:
-  server-setup:
+  ballot-service:
     image: oven/bun:debian
-    container_name: e-vote-api-setup
+    container_name: e-vote-ballot-service
+    depends_on:
+      - prisma-setup
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
-    command: bun install
+    networks:
+      - services
+    env_file:
+      - ./environment/.env
+    command: bun run --hot services/ballot-service/index.ts
 
-  prisma-setup:
+  proposition-service:
     image: oven/bun:debian
-    container_name: e-vote-prisma-setup
-    working_dir: /usr/src/prisma
+    container_name: e-vote-proposition-service
     depends_on:
-      - server-setup
+      - prisma-setup
+    working_dir: /usr/src/api
     volumes:
-      - ./:/usr/src/prisma
-    command: bunx prisma generate
+      - ./:/usr/src/api
+    networks:
+      - services
+    env_file:
+      - ./environment/.env
+    command: bun run --hot services/proposition-service/index.ts
 
-  # ballot-service:
-  #   image: oven/bun:debian
-  #   container_name: e-vote-ballot-service
-  #   depends_on:
-  #     - prisma-setup
-  #   working_dir: /usr/src/api
-  #   volumes:
-  #     - ./:/usr/src/api
-  #   networks:
-  #     - services
-  #   env_file:
-  #     - ./environment/.env
-  #   command: bun run --hot services/ballot-service/index.ts
-
-  # proposition-service:
-  #   image: oven/bun:debian
-  #   container_name: e-vote-proposition-service
-  #   depends_on:
-  #     - prisma-setup
-  #   working_dir: /usr/src/api
-  #   volumes:
-  #     - ./:/usr/src/api
-  #   networks:
-  #     - services
-  #   env_file:
-  #     - ./environment/.env
-  #   command: bun run --hot services/proposition-service/index.ts
-
-  # validation-service:
-  #   image: oven/bun:debian
-  #   container_name: e-vote-validation-service
-  #   depends_on:
-  #     - prisma-setup
-  #   working_dir: /usr/src/api
-  #   volumes:
-  #     - ./:/usr/src/api
-  #   networks:
-  #     - services
-  #   env_file:
-  #     - ./environment/.env
-  #   command: bun run --hot services/validation-service/index.ts
+  validation-service:
+    image: oven/bun:debian
+    container_name: e-vote-validation-service
+    depends_on:
+      - prisma-setup
+    working_dir: /usr/src/api
+    volumes:
+      - ./:/usr/src/api
+    networks:
+      - services
+    env_file:
+      - ./environment/.env
+    command: bun run --hot services/validation-service/index.ts
 
   server:
     image: oven/bun:debian
     container_name: e-vote-server
     depends_on:
-      - prisma-setup
-      # - ballot-service
-      # - proposition-service
-      # - validation-service
+      - ballot-service
+      - proposition-service
+      - validation-service
     working_dir: /usr/src/api
     volumes:
       - ./:/usr/src/api
@@ -84,14 +65,6 @@ services:
     env_file:
       - ./environment/.env
     command: bun run --hot server/index.ts
-
-  frontend-setup:
-    image: oven/bun:debian
-    container_name: e-vote-frontend-setup
-    working_dir: /usr/src/app
-    volumes:
-      - ./server/frontend:/usr/src/app
-    command: bun install
 
   frontend:
     image: oven/bun:debian
