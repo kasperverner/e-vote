@@ -54,7 +54,7 @@ describe("Test isAuthorized with valid authorization header", () => {
   it("Should return 200 Response", async () => {
     const req = new Request("http://localhost:3000/api/teams", {
       method: "GET",
-      headers
+      headers,
     });
 
     const res = await app.fetch(req);
@@ -69,7 +69,7 @@ describe("Test get teams with with invalid authentication header", () => {
       method: "GET",
       headers: {
         authorization: "basic test_user_token",
-      }
+      },
     });
 
     const res = await app.fetch(req);
@@ -86,8 +86,17 @@ describe("Test get teams with with valid authentication header", () => {
 
     const res = await app.fetch(req);
     expect(res.status).toBe(200);
+  });
+
+  it("Should return empty array", async () => {
+    const req = new Request("http://localhost:3000/api/teams", {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
     const data = await res.json();
-    expect(data).toBeArray();
+    expect(data).toBeArrayOfSize(0);
   });
 });
 
@@ -122,10 +131,57 @@ describe("Test create team with valid authentication header", () => {
 
     const res = await app.fetch(req);
     expect(res.status).toBe(201);
+  });
+
+  it("Should return af team", async () => {
+    const req = new Request("http://localhost:3000/api/teams", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "Test Team",
+      }),
+    });
+
+    const res = await app.fetch(req);
     const data = await res.json();
     expect(data).toBeObject();
-    expect(data).toContainKeys(["id", "name", "is_deleted", "created_at", "updated_at" ]);
     team_id = data.id;
+  });
+
+  it("Should return team with correct format", async () => {
+    const req = new Request("http://localhost:3000/api/teams", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "Test Team",
+      }),
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+
+    expect(data).toContainKeys([
+      "id",
+      "name",
+      "is_deleted",
+      "created_at",
+      "updated_at",
+    ]);
+  });
+
+  it("Should return team with correct name", async () => {
+    const req = new Request("http://localhost:3000/api/teams", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "Test Team",
+      }),
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+
+    expect(data.name).toBe("Test Team");
   });
 });
 
@@ -136,7 +192,7 @@ describe("Test get teams with with invalid authentication header", () => {
       method: "GET",
       headers: {
         authorization: "basic test_user_token",
-      }
+      },
     });
 
     const res = await app.fetch(req);
@@ -153,7 +209,17 @@ describe("Test get teams with with valid authentication header", () => {
 
     const res = await app.fetch(req);
     expect(res.status).toBe(200);
+  });
+
+  it("Should return 1 team", async () => {
+    const req = new Request("http://localhost:3000/api/teams", {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
     const data = await res.json();
+
     expect(data).toBeArrayOfSize(1);
   });
 });
@@ -165,7 +231,7 @@ describe("Test get team with with invalid authentication header", () => {
       method: "GET",
       headers: {
         authorization: "basic test_user_token",
-      }
+      },
     });
 
     const res = await app.fetch(req);
@@ -182,15 +248,72 @@ describe("Test get team with with valid authentication header", () => {
 
     const res = await app.fetch(req);
     expect(res.status).toBe(200);
+  });
+
+  it("Should return team", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
     const data = await res.json();
     expect(data).toBeObject();
-    expect(data).toContainKeys([
-      "id",
-      "name",
-      "created_at",
-      "member_count",
-      "is_admin",
-    ]);
+  });
+
+  it("Should return team with correct format", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data).toContainKeys([ "id", "name", "created_at", "member_count", "is_admin" ]);
+  });
+
+  it("Should return team with correct name", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data.name).toBe("Test Team");
+  });
+
+  it("Should return team with correct member count", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data.member_count).toBe(1);
+  });
+
+  it("Should return team with correct admin status", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data.is_admin).toBe(true);
+  });
+
+  it("Should return team with correct id", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data.id).toBe(team_id);
   });
 });
 
@@ -234,7 +357,7 @@ describe("Test get team with with invalid authentication header", () => {
       method: "GET",
       headers: {
         authorization: "basic test_user_token",
-      }
+      },
     });
 
     const res = await app.fetch(req);
@@ -251,10 +374,73 @@ describe("Test get team with with valid authentication header", () => {
 
     const res = await app.fetch(req);
     expect(res.status).toBe(200);
+  });
+
+
+  it("Should return team", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
     const data = await res.json();
     expect(data).toBeObject();
+  });
+
+  it("Should return team with correct format", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
     expect(data).toContainKeys([ "id", "name", "created_at", "member_count", "is_admin" ]);
+  });
+
+  it("Should return team with correct name", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
     expect(data.name).toBe("Test Team Updated");
+  });
+
+  it("Should return team with correct member count", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data.member_count).toBe(1);
+  });
+
+  it("Should return team with correct admin status", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data.is_admin).toBe(true);
+  });
+
+  it("Should return team with correct id", async () => {
+    const req = new Request(`http://localhost:3000/api/teams/${team_id}`, {
+      method: "GET",
+      headers,
+    });
+
+    const res = await app.fetch(req);
+    const data = await res.json();
+    expect(data.id).toBe(team_id);
   });
 });
 
@@ -266,7 +452,7 @@ describe("Test delete team with invalid authentication header", () => {
       method: "DELETE",
       headers: {
         authorization: "basic test_user_token",
-      }
+      },
     });
 
     const res = await app.fetch(req);
@@ -296,6 +482,15 @@ describe("Test ballot client", () => {
     });
 
     expect(res.status).toBe(200);
+  });
+
+  it("Should return a hash", async () => {
+    const res = await ballotClient.api.proofs[":value"].$get({
+      param: {
+        value: team_id,
+      },
+    });
+
     const data = await res.json();
     expect(data.hash).toBeString();
   });
@@ -310,6 +505,15 @@ describe("Test proposition service proof generation", () => {
     });
 
     expect(res.status).toBe(200);
+  });
+
+  it("Should return a hash", async () => {
+    const res = await propositionClient.api.proofs[":value"].$get({
+      param: {
+        value: team_id,
+      },
+    });
+
     const data = await res.json();
     expect(data.hash).toBeString();
   });
@@ -325,6 +529,16 @@ describe("Test validation service proof generation", () => {
     });
 
     expect(res.status).toBe(200);
+  });
+
+  it("Should return a hash", async () => {
+    const res = await validationClient.api.proofs[":first"][":second"].$get({
+      param: {
+        first: team_id,
+        second: team_id,
+      },
+    });
+
     const data = await res.json();
     expect(data.hash).toBeString();
   });
