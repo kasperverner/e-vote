@@ -1,5 +1,5 @@
 import factory from "../factory";
-import { db } from "@/prisma/db.injector";
+import { db } from "../../prisma/db.injector";
 
 export default factory.createMiddleware(async (c, next) => {
   const { team_id, election_id } = c.req.param();
