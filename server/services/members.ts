@@ -1,5 +1,5 @@
 import factory from "../factory";
-import { db } from "@/prisma/db.injector";
+import { db } from "../../prisma/db.injector";
 import isMemberOfTeam from "../middleware/isMemberOfTeam";
 import isAdminOfTeam from "../middleware/isAdminOfTeam";
 
