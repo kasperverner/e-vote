@@ -32,6 +32,14 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Team"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: "Authentication credentials were not provided."
     post:
       tags:
         - Teams
@@ -504,7 +512,7 @@ paths:
                 $ref: "#/components/schemas/Error"
               example:
                 message: "The requested resource was not found."
-  /api/teams/{team_id}/members/{member_id}/accept:
+  /api/teams/{team_id}/members/invitations/{invitation_id}/accept:
     put:
       tags:
         - Members
@@ -532,7 +540,7 @@ paths:
                 $ref: "#/components/schemas/Error"
               example:
                 message: "The requested resource was not found."
-  /api/teams/{team_id}/members/{member_id}/decline:
+  /api/teams/{team_id}/members/invitations/{invitation_id}/decline:
     put:
       tags:
         - Members
@@ -1136,7 +1144,7 @@ components:
           format: date-time
           example: "2024-05-07T08:25:47.115Z"
           description: The ISO 8601 date and time at which the election will end
-        ropositions:
+        propositions:
           type: array
           items:
             $ref: "#/components/schemas/CreateProposition"
