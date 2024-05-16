@@ -1,9 +1,10 @@
 import factory from "./factory";
+import { describe, expect, it } from "bun:test";
+
 import electionsRouter from "./routes/elections.test";
 import membersRouter from "./routes/members.test";
 import teamsRouter from "./routes/teams.test";
-import isAuthorized from "./middleware/isAuthorized.test";
-import { describe, expect, it, afterAll } from "bun:test";
+
 import ballotClient from "../services/ballot-service/client";
 import propositionClient from "../services/proposition-service/client";
 import validationClient from "../services/validation-service/client";
@@ -14,7 +15,6 @@ import validationClient from "../services/validation-service/client";
 const app = factory.createApp()
 
 app
-  .use(isAuthorized)
   .basePath("/api")
   .route("/teams", electionsRouter)
   .route("/teams", membersRouter)
@@ -119,9 +119,13 @@ describe("Test create team with invalid authentication header", () => {
   });
 });
 
-describe("Test create team with valid authentication header", () => {
+describe("Test create team with valid authentication header", async () => {
+  let req: Request;
+
+  let res: Response;
+
   it("Should return 201 Response", async () => {
-    const req = new Request("http://localhost:3000/api/teams", {
+    req = new Request("http://localhost:3000/api/teams", {
       method: "POST",
       headers,
       body: JSON.stringify({
@@ -129,37 +133,20 @@ describe("Test create team with valid authentication header", () => {
       }),
     });
 
-    const res = await app.fetch(req);
+    res = await app.fetch(req);
+
     expect(res.status).toBe(201);
   });
 
+  let data: any
   it("Should return af team", async () => {
-    const req = new Request("http://localhost:3000/api/teams", {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        name: "Test Team",
-      }),
-    });
-
-    const res = await app.fetch(req);
-    const data = await res.json();
-    expect(data).toBeObject();
+    data = await res.json();
     team_id = data.id;
+    console.log('team', data)
+    expect(data).toBeObject();
   });
 
   it("Should return team with correct format", async () => {
-    const req = new Request("http://localhost:3000/api/teams", {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        name: "Test Team",
-      }),
-    });
-
-    const res = await app.fetch(req);
-    const data = await res.json();
-
     expect(data).toContainKeys([
       "id",
       "name",
@@ -170,17 +157,6 @@ describe("Test create team with valid authentication header", () => {
   });
 
   it("Should return team with correct name", async () => {
-    const req = new Request("http://localhost:3000/api/teams", {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        name: "Test Team",
-      }),
-    });
-
-    const res = await app.fetch(req);
-    const data = await res.json();
-
     expect(data.name).toBe("Test Team");
   });
 });

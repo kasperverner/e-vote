@@ -1,0 +1,19 @@
+networks:
+  default:
+    name: server
+  services:
+    name: services
+
+services:
+  pg:
+    image: postgres:latest
+    container_name: pg
+    networks:
+      - default
+      - services
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: e-vote
+    ports:
+      - 5432:5432

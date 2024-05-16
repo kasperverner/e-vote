@@ -46,6 +46,40 @@ Remove the containers with the following command:
 docker-compose down
 ```
 
+## Running the tests
+
+Setup the test database with the following command:
+
+```bash
+docker-compose -f docker-compose.test.db.yml up
+```
+
+In another terminal window install the dependencies, setup the PrismaClient and migrate the scheme to the test database with the following command:
+
+```bash
+docker-compose -f docker-compose.test.setup.yml up
+```
+
+Start the test suite with the following command:
+
+```bash
+docker-compose -f docker-compose.test.yml up
+```
+
+The tests will run and the results will be displayed in the terminal.
+
+Stop the application with the following command in all 3 terminal windows:
+
+```bash
+ctrl + c
+```
+
+Remove the containers with the following command or remove them using the Docker Desktop application:
+
+```bash
+docker-compose down
+```
+
 ## Frontend
 
 - Framework: React
