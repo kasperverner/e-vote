@@ -34,6 +34,7 @@ router.get("/election/:election_id", async (c) => {
     },
     select: {
       id: true,
+      user_id: true,
     },
   });
 
@@ -73,6 +74,16 @@ router.get("/election/:election_id", async (c) => {
       );
     }
   }
+
+  // Check if any users has voted more than once
+  const uniqueUsers = new Set(ballots.map(({ user_id }) => user_id));
+
+  // If the number of unique users does not match the number of ballots, return an error
+  if (uniqueUsers.size !== ballots.length)
+    return c.text(
+      `Validation failed for election with ID ${election_id}`,
+      400
+    );
 
   // If all votes are valid, return no content
   return c.body(null, 204);
