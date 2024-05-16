@@ -5,18 +5,6 @@ networks:
     name: services
 
 services:
-  pg:
-    image: postgres:latest
-    container_name: pg
-    networks:
-      - default
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: e-vote
-    ports:
-      - 5432:5432
-
   server-setup:
     image: oven/bun:debian
     container_name: e-vote-api-setup
@@ -36,4 +24,3 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:password@pg:5432/e-vote
     command: bunx prisma migrate deploy
-

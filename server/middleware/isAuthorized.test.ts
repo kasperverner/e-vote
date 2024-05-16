@@ -1,8 +1,7 @@
 import factory from "../factory";
-import type { User } from "../services/members.test";
+import { db } from '../../prisma/db.injector';
 
 const cache = new Map<string, string>();
-const db = new Set<User>();
 
 export default factory.createMiddleware(async (c, next) => {
   const { authorization } = c.req.header();
@@ -31,7 +30,13 @@ const get_user_id = async (
   if (cache.has(principalId)) return String(cache.get(principalId));
 
   // Check if the user ID is stored in the database
-  const user = Array.from(db).find((user) => user.principalId === principalId);
+  const user = await db.users
+    .findFirst({
+      where: {
+        principal_id: principalId,
+      },
+    })
+    .finally(() => db.$disconnect());
 
   // If the user is found in the database, store the ID in the memory cache
   if (user) {
@@ -39,21 +44,20 @@ const get_user_id = async (
     return user.id;
   }
 
-
-
   // Create a new user in the database
-  const new_user = {
-    id: `user-${db.size + 1}`,
-    principalId,
-    name,
-    email,
-  };
-
-  db.add(new_user);
+  const newUser = await db.users
+    .create({
+      data: {
+        principal_id: principalId,
+        name,
+        email,
+      },
+    })
+    .finally(() => db.$disconnect());
 
   // Store the new user ID in the memory cache
-  cache.set(principalId, new_user.id);
+  cache.set(principalId, newUser.id);
 
   // Return the user ID
-  return new_user.id;
+  return newUser.id;
 };

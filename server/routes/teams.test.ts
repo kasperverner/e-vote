@@ -1,11 +1,18 @@
 import factory from "../factory";
-import { getTeamsHandler, createTeamHandler, getTeamHandler, updateTeamHandler, deleteTeamHandler } from "../services/teams.test";
+import isAuthorized from "../middleware/isAuthorized.test";
+import {
+  getTeamsHandler,
+  createTeamHandler,
+  getTeamHandler,
+  updateTeamHandler,
+  deleteTeamHandler,
+} from "../services/teams";
 
 /**
  * The router for the teams endpoints.
  * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const router = factory.createApp();
+const router = factory.createApp().use(isAuthorized);
 
 // Get all teams
 router.get("/", ...getTeamsHandler);

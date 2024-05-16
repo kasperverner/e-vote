@@ -1,4 +1,5 @@
 import factory from "../factory";
+import isAuthorized from "../middleware/isAuthorized.test";
 import {
   createElectionHandler,
   createVoteHandler,
@@ -10,13 +11,16 @@ import {
   getValidationHandler,
   startElectionHandler,
   updateElectionHandler,
-} from "../services/elections.test";
+} from "../services/elections";
 
 /**
  * The router for the elections endpoints.
  * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const router = factory.createApp().basePath("/:team_id/elections");
+const router = factory
+  .createApp()
+  .basePath("/:team_id/elections")
+  .use(isAuthorized);
 
 // Get all elections for a team
 router.get("/", ...getElectionsHandler);

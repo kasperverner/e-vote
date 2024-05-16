@@ -1,4 +1,5 @@
 import factory from "../factory";
+import isAuthorized from "../middleware/isAuthorized.test";
 import {
   acceptInvitationHandler,
   createInvitationHandler,
@@ -11,13 +12,16 @@ import {
   leaveTeamHandler,
   updateInvitationHandler,
   updateMemberHandler,
-} from "../services/members.test";
+} from "../services/members";
 
 /**
  * The router for the members endpoints.
  * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const router = factory.createApp().basePath("/:team_id/members");
+const router = factory
+  .createApp()
+  .basePath("/:team_id/members")
+  .use(isAuthorized);
 
 // Get all members of a team
 router.get("/", ...getMembersHandler);
