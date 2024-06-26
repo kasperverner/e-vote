@@ -214,7 +214,6 @@ export const createInvitationHandler = factory.createHandlers(
 );
 
 export const getInvitationHandler = factory.createHandlers(
-  isAdminOfTeam,
   async (c) => {
     const { team_id, invitation_id } = c.req.param();
     const { user_id } = c.var;
