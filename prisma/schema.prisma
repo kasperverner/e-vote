@@ -114,6 +114,6 @@ model Votes {
   election_id       String
   created_at        DateTime  @default(now())
   ballot_proof      String    @unique
-  proposition_proof String    @unique
+  proposition_proof String
   validation_proof  String    @unique
 }
