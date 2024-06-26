@@ -35,7 +35,7 @@ export const Route = createFileRoute(
       return <p>Election not found</p>;
     }
 
-    if (election.has_voted) return <ElectionResults election={election} />;
+    if (election.has_voted || election.end_at > new Date()) return <ElectionResults election={election} />;
 
     return <CastVoteForm election={election} />;
   },
