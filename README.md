@@ -203,4 +203,4 @@ Assign a reviewer to the pull request for approval to have your changes merged i
 - [x] Add Swagger documentation
 - [x] Add unit tests
 - [x] Add integration tests
-- [ ] Add dynamic titles
+- [x] Add dynamic titles
